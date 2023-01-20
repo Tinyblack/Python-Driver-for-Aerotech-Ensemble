@@ -24,7 +24,9 @@ class AerotechEnsemble():
     controllerDllVersion:str=''
     controllerNET=None
     controllerAxes=None
-    
+    controllerAxisX=None
+    controllerAxisY=None
+    controllerAxisZ=None
     
     logger=GlobalLogger.logger_init()
     
@@ -32,12 +34,12 @@ class AerotechEnsemble():
         pass
     
     def enableAxes(self,axes):
-        Axis.X.Motion.Enable()
-        Axis.Y.Motion.Enable()
-        Axis.Z.Motion.Enable()
+        self.enableAxis(axes[0])
+        self.enableAxis(axes[1])
+        self.enableAxis(axes[2])
         
-    def enableAxis(self):
-        pass
+    def enableAxis(self,axis):
+        axis.Motion.Enable()
     
     def moveAxisRelative(self):
         pass
@@ -73,8 +75,11 @@ class AerotechEnsemble():
             clr.AddReference(cls.controllerDllName)
             from Aerotech.Ensemble import Controller
             Controller.Connect()
-            cls.controllerNET=Controller.ConnectedControllers.get_Item(index)
+            cls.controllerNET=Controller.ConnectedControllers[index]
             cls.controllerAxes=cls.controllerNET.Commands.Axes
+            cls.controllerAxisX=cls.controllerAxes[0]
+            cls.controllerAxisY=cls.controllerAxes[1]
+            cls.controllerAxisZ=cls.controllerAxes[2]
             cls.driverVersion=cls.getVersionNumber(os.path.join(libraryPath,cls.controllerDllName + '.dll'))
             cls.logger.info(f'|{cls.__name__}| Aerotech Ensemble Driver Successfully Loaded.')
             cls.logger.info(f'|{cls.__name__}| Aerotech Ensemble Driver version: {cls.driverVersion}.')
@@ -92,4 +97,7 @@ class AerotechEnsemble():
             
 if __name__=='__main__':
     stage=AerotechEnsemble.connect()
+    stage.enableAxis(stage.controllerAxisX)
+    stage.enableAxis(stage.controllerAxisY)
+    stage.enableAxis(stage.controllerAxisZ)
     a=1
