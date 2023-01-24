@@ -135,4 +135,4 @@ Results
 Experiment
 Temp
 *.code-workspace
-*.dll
+**/*.dll
