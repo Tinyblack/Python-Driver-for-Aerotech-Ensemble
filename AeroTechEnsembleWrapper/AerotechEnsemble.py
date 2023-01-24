@@ -41,14 +41,20 @@ class MotionSetupCommands():
     def __init__(self,controller:Controller):
         self.controller=controller
 
+class RootCommands():
+    def __init__(self,controller:Controller):
+        self.controller=controller
+        self.Motion=MotionCommands(controller)
+
+
 class MotionCommands():
     _Advanced=None
     _Setup=None
     
     def __init__(self,controller:Controller):
         self.controller=controller
-        self._Advanced=MotionAdvancedCommands()
-        self._Setup=MotionSetupCommands()
+        self._Advanced=MotionAdvancedCommands(controller)
+        self._Setup=MotionSetupCommands(controller)
 
     # ! Abort
     @multimethod  
@@ -650,17 +656,50 @@ class MyClass():
     def __len__(self):
         return len(self.L)
 
-class INamedConstantCollection(Sequence):
-    
-    def __init__(self,INamedConstant):
-        self.INamedConstant=INamedConstant
-        super().__init__()
+class AerotechCommonCollections():
+    class INamedCollection(Sequence):
+        def __init__(self,INamed):
+            self.INamed=INamed
+            super().__init__()
+
+        def __getitem__(self, i):
+            return AerotechEnsemble.Controller(self.INamed[i])
         
-    def __getitem__(self, i):
-        return AerotechEnsemble.Controller(self.INamedConstant[i])
-    
-    def __len__(self):
-        return len(self.INamedConstant)
+        def __len__(self):
+            return len(self.INamed)
+
+    class INamedConstantCollection(Sequence):
+        def __init__(self,INamedConstant):
+            self.INamedConstant=INamedConstant
+            super().__init__()
+
+        def __getitem__(self, i):
+            return AerotechEnsemble.Controller(self.INamedConstant[i])
+        
+        def __len__(self):
+            return len(self.INamedConstant)
+
+    class INamedMaskableConstantCollection(Sequence):
+        def __init__(self,INamedMaskableConstant):
+            self.INamedMaskableConstant=INamedMaskableConstant
+            super().__init__()
+
+        def __getitem__(self, i):
+            return AerotechEnsemble.Controller(self.INamedMaskableConstant[i])
+        
+        def __len__(self):
+            return len(self.INamedMaskableConstant)
+
+    class INamedMaskedConstantCollection(Sequence):
+        def __init__(self,INamedMaskedConstant):
+            self.INamedMaskedConstant=INamedMaskedConstant
+            super().__init__()
+
+        def __getitem__(self, i):
+            return AerotechEnsemble.Controller(self.INamedMaskedConstant[i])
+        
+        def __len__(self):
+            return len(self.INamedMaskedConstant)
     
 
 
@@ -701,15 +740,18 @@ class AerotechEnsemble():
         def Configuration(cls):
             return None
             
+        @property
+        def ConnectedControllers(cls):
+            return cls._ConnectedControllers
+
+        @ConnectedControllers.setter
+        def ConnectedControllers(cls,ConnectedControllers):
+           cls._ConnectedControllers=ConnectedControllers
+            
         @classmethod
         def Connect(cls):
-            return cls
-        
-        
-        @classmethod
-        @property   
-        def ConnectedControllers(cls):
-            return INamedConstantCollection(Controller.ConnectedControllers)
+            Controller.Connect()
+            cls.ConnectedControllers=AerotechCommonCollections.INamedConstantCollection(Controller.ConnectedControllers)
 
         @property
         def ControlCenter(self):
@@ -761,16 +803,7 @@ class AerotechEnsemble():
         @property
         def Tasks(self):
             pass # To collections
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
         
         @classmethod
         @property
@@ -797,6 +830,7 @@ class AerotechEnsemble():
         # @classmethod
         # @property
         # This is equivalent to [static public property] in a certain namespace
+
         @classmethod
         @property
         def BinDir(cls):
@@ -828,19 +862,32 @@ class AerotechEnsemble():
             return SoftwareEnvironment.Version 
             
 if __name__=='__main__':
-    stage=AerotechEnsemble()
-    print(stage.SoftwareEnvironment.BinDir)
-    print(stage.SoftwareEnvironment.InstallDir)
-    print(stage.SoftwareEnvironment.IsLoaderRunning)
-    print(stage.SoftwareEnvironment.NumberOfProcesses)
-    print(stage.SoftwareEnvironment.ProductKey)
-    print(stage.SoftwareEnvironment.Version)
+    #stage=AerotechEnsemble()
+    #print(stage.SoftwareEnvironment.BinDir)
+    #print(stage.SoftwareEnvironment.InstallDir)
+    #print(stage.SoftwareEnvironment.IsLoaderRunning)
+    #print(stage.SoftwareEnvironment.NumberOfProcesses)
+    #print(stage.SoftwareEnvironment.ProductKey)
+    #print(stage.SoftwareEnvironment.Version)
     #stage.enableAxis(stage.controllerAxisX)
     #stage.enableAxis(stage.controllerAxisY)
     #stage.enableAxis(stage.controllerAxisZ)
     #stage.enableAxes("X","Y","Z")
     #stage.moveAxesRelative("X","Y","Z",distance=[0.1,0.1,0.1],speed=1,wait=True)
     #stage.moveAxisRelative(stage.controllerAxisX.axisNET,distance=10,speed=0.1,wait=True)
-    stage.updateStatus()
-    print(stage.controllerAxisX.status.toString())
+
+    AerotechEnsemble.Controller.Connect()
+    controller=AerotechEnsemble.Controller.ConnectedControllers[0]
+    controller.Commands.Motion.Enable(0)
+    controller.Commands.Motion.Enable("Y")
+    controller.Commands.Motion.Enable(AerotechEnsemble.AxisMask.A2)
+
+    controller.Commands.Motion.Home(0)
+    controller.Commands.Motion.Home("Y")
+    controller.Commands.Motion.Home(AerotechEnsemble.AxisMask.A2)
+
+    controller.Commands.Motion.Disable(0)
+    controller.Commands.Motion.Disable("Y")
+    controller.Commands.Motion.Disable(AerotechEnsemble.AxisMask.A2)
+    
     a=1
