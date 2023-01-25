@@ -21,7 +21,6 @@ from multimethod import multimethod
 
 import AerotechCommonCollections
 
-
 DEFAULT_DLL_PATH:str=os.path.join(os.path.join(os.path.dirname(__file__),'Aerotech_DotNet_dll'),'')
 DEFAULT_DLL_NAME:str='Aerotech.Ensemble'
 if DEFAULT_DLL_PATH.upper() not in [path.upper() for path in sys.path]:

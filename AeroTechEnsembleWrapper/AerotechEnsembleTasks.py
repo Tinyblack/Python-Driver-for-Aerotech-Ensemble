@@ -9,6 +9,7 @@ sys.path.extend(glob.glob(f'{pathlib.Path(__file__).parents[0].resolve()}/*/**/'
 import clr
 clr.AddReference('System')
 from System import String, Char, Int32, IntPtr,Text, UInt32,Enum,Decimal,Double
+from System.ComponentModel import ProgressChangedEventHandler
 
 from copy import deepcopy
 from win32api import GetFileVersionInfo, LOWORD, HIWORD
@@ -21,6 +22,7 @@ from multimethod import multimethod
 
 from collections.abc import Sequence
 
+import AerotechCommonCollections
 
 DEFAULT_DLL_PATH:str=os.path.join(os.path.join(os.path.dirname(__file__),'Aerotech_DotNet_dll'),'')
 DEFAULT_DLL_NAME:str='Aerotech.Ensemble'
@@ -28,7 +30,7 @@ if DEFAULT_DLL_PATH.upper() not in [path.upper() for path in sys.path]:
     sys.path.extend(DEFAULT_DLL_PATH)
 try:
     clr.AddReference(DEFAULT_DLL_NAME)
-    from Aerotech.Ensemble import *
+    from Aerotech.Ensemble import Tasks
     from Aerotech.Ensemble.Tasks import TaskState,VariableScope,VariableType
 except:
     raise RuntimeError
@@ -36,12 +38,53 @@ except:
 ##################
 
 class DedicatedJoystick():
-    def __init__(self):
-        pass
+
+    @multimethod
+    def Start(self):
+        Tasks.DedicatedJoystick.Start()
+    @multimethod
+    def Start(self, pairNumber:int):
+        Tasks.DedicatedJoystick.Start(pairNumber)
+
+    def Stop(self):
+        Tasks.DedicatedJoystick.Stop()
  
 class Program():
-    def __init__(self):
+    def Debug(self):
         pass
+    
+    def Error(self):
+        pass
+    
+    @property
+    def FileName(self):
+        return Tasks.Program.FileName
+    
+    @multimethod
+    def Load(self,fileName:str):
+        return Tasks.Program.Load(fileName)
+
+    @multimethod
+    def Load(self,fileName:str, ProgressChangedEventHandler:ProgressChangedEventHandler):
+        return Tasks.Program.Load(fileName,ProgressChangedEventHandler)
+
+    @multimethod
+    def Run(self,FileInfo):
+        pass
+
+    @multimethod
+    def Run(self,fileName:str):
+        return Tasks.Program.Run(fileName)
+
+    @multimethod
+    def Run(self,fileName:str, ProgressChangedEventHandler:ProgressChangedEventHandler):
+        return Tasks.Program.Run(fileName,ProgressChangedEventHandler)
+
+    def Start():
+        Tasks.Program.Start()
+    
+    def Stop():
+        Tasks.Program.Stop()
  
 class Task():
     def __init__(self):
@@ -75,3 +118,6 @@ class VariableType():
     Struct=VariableType.Struct
     Array=VariableType.Array
 
+
+if __name__=='__main__':
+    a=1
