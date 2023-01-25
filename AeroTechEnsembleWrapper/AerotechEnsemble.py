@@ -33,48 +33,6 @@ try:
 except:
     raise RuntimeError
     
-class MotionAdvancedCommands():
-    def __init__(self,controller:Controller):
-        self.controller=controller
-        
-class MotionSetupCommands():
-    def __init__(self,controller:Controller):
-        self.controller=controller
-
-class RootCommands():
-    def __init__(self,controller:Controller):
-        self.controller=controller
-        #self.Motion=MotionCommands(controller)
-        self.Advanced=AdvancedCommands(controller)
-        self.Axes=AxesSelectionCommands(controller)
-        self.DataAcquisition=DataAcquisitionCommands(controller)
-        self.IO=IOCommands(controller)
-        self.PSO=PSOCommands(controller)
-        self.Register=RegisterCommands(controller)
-        self.Status=StatusCommands(controller)
-        self.Tuning=TuningCommands(controller)
-    
-    @property
-    def Motion(self):
-        return MotionCommands(self.controller)
- 
-    def AcknowledgeAll(self):
-        self.controller.Commands.AcknowledgeAll()
-        
-    def Execute(self,code:str):
-        self.controller.Commands.Execute(code)
- 
-    def ExecuteAsync(self,code:str):
-        self.controller.Commands.ExecuteAsync(code)
- 
-
- 
-
-
- 
-
-
-
 class AdvancedAnalogCommands():
     def __init__(self):
         pass
@@ -690,7 +648,28 @@ class RegisterType():
 class RootCommands():
     def __init__(self,controller:Controller):
         self.controller=controller
-        self.Motion=MotionCommands(controller)
+        #self.Motion=MotionCommands(controller)
+        #self.Advanced=AdvancedCommands(controller)
+        #self.Axes=AxesSelectionCommands(controller)
+        #self.DataAcquisition=DataAcquisitionCommands(controller)
+        #self.IO=IOCommands(controller)
+        #self.PSO=PSOCommands(controller)
+        #self.Register=RegisterCommands(controller)
+        #self.Status=StatusCommands(controller)
+        #self.Tuning=TuningCommands(controller)
+    
+    @property
+    def Motion(self):
+        return MotionCommands(self.controller)
+ 
+    def AcknowledgeAll(self):
+        self.controller.Commands.AcknowledgeAll()
+        
+    def Execute(self,code:str):
+        self.controller.Commands.Execute(code)
+ 
+    def ExecuteAsync(self,code:str):
+        self.controller.Commands.ExecuteAsync(code)
     
 class Semaphores():
     ModbusRegisters=Semaphores.ModbusRegisters
