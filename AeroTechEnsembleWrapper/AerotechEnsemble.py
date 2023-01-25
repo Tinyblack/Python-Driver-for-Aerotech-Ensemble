@@ -855,7 +855,6 @@ class AerotechCommonCollections():
     
 class AerotechEnsemble():
     _Controller=None
-    
     class AxisMask():
         NONE= getattr(AxisMask,'None')
         A0=AxisMask.A0
@@ -872,18 +871,15 @@ class AerotechEnsemble():
     
     class Controller():
         _Controller:Controller=None
-        _Commands:RootCommands=None
         def __init__(self,controller:Controller):
             self._Controller=controller
-            self._Commands=RootCommands(self._Controller)
-            
-        
+
         def ChangePassword(self,oldPassword:str,newPassword:str):
             self._Controller.ChangePassword(oldPassword,newPassword)
 
         @property
         def Commands(self):
-            return self._Commands
+            return RootCommands(self._Controller)
 
         @classmethod
         @property
@@ -891,17 +887,12 @@ class AerotechEnsemble():
             return None
             
         @property
-        def ConnectedControllers(cls):
-            return cls._ConnectedControllers
-
-        @ConnectedControllers.setter
-        def ConnectedControllers(cls,ConnectedControllers):
-           cls._ConnectedControllers=ConnectedControllers
+        def ConnectedControllers(self):
+            return AerotechCommonCollections.INamedConstantCollection(Controller.ConnectedControllers)
             
         @classmethod
         def Connect(cls):
             Controller.Connect()
-            cls.ConnectedControllers=AerotechCommonCollections.INamedConstantCollection(Controller.ConnectedControllers)
 
         @property
         def ControlCenter(self):
