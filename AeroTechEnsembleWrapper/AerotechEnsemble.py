@@ -885,19 +885,16 @@ class AerotechEnsemble():
         @property
         def Configuration(cls):
             return None
-            
+
+        @classmethod  
         @property
         def ConnectedControllers(cls):
-            return cls._ConnectedControllers
+            return AerotechCommonCollections.INamedConstantCollection(Controller.ConnectedControllers)
 
-        @ConnectedControllers.setter
-        def ConnectedControllers(cls,ConnectedControllers):
-           cls._ConnectedControllers=ConnectedControllers
-            
         @classmethod
         def Connect(cls):
             Controller.Connect()
-            cls.ConnectedControllers=AerotechCommonCollections.INamedConstantCollection(Controller.ConnectedControllers)
+
 
         @property
         def ControlCenter(self):
