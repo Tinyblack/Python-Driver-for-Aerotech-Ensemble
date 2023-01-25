@@ -909,7 +909,8 @@ class AerotechEnsemble():
         
         @classmethod
         def Disconnect(cls):
-            return cls
+            Controller.Connect()
+            cls.ConnectedControllers=None
         
         def EnumerateAxes(self):
             self._Controller.EnumerateAxes()
@@ -950,11 +951,6 @@ class AerotechEnsemble():
         def Tasks(self):
             pass # To collections
 
-        
-        @classmethod
-        @property
-        def ConnectedControllers(cls):
-            pass
     
     class ServoRateParameter():
         OnekHz=ServoRateParameter.OnekHz
