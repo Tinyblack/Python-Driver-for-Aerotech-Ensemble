@@ -29,7 +29,7 @@ if DEFAULT_DLL_PATH.upper() not in [path.upper() for path in sys.path]:
 try:
     clr.AddReference(DEFAULT_DLL_NAME)
     from Aerotech.Ensemble import Controller,AxisMask,ServoRateParameter,SoftwareEnvironment,TaskId 
-    from Aerotech.Ensemble.Commands import OnOff, WaitOption ,WaitType
+    from Aerotech.Ensemble.Commands import OnOff, WaitOption ,WaitType, EthernetStatus,LoopTransmissionMode,LoopTransmissionType,ModeType,PsoMode,RampMode,RampType,RegisterType,Semaphores
 except:
     raise RuntimeError
     
@@ -44,9 +44,116 @@ class MotionSetupCommands():
 class RootCommands():
     def __init__(self,controller:Controller):
         self.controller=controller
-        self.Motion=MotionCommands(controller)
+        #self.Motion=MotionCommands(controller)
+        self.Advanced=AdvancedCommands(controller)
+        self.Axes=AxesSelectionCommands(controller)
+        self.DataAcquisition=DataAcquisitionCommands(controller)
+        self.IO=IOCommands(controller)
+        self.PSO=PSOCommands(controller)
+        self.Register=RegisterCommands(controller)
+        self.Status=StatusCommands(controller)
+        self.Tuning=TuningCommands(controller)
+    
+    @property
+    def Motion(self):
+        return MotionCommands(self.controller)
+ 
+    def AcknowledgeAll(self):
+        self.controller.Commands.AcknowledgeAll()
+        
+    def Execute(self,code:str):
+        self.controller.Commands.Execute(code)
+ 
+    def ExecuteAsync(self,code:str):
+        self.controller.Commands.ExecuteAsync(code)
+ 
+
+ 
 
 
+ 
+
+
+
+class AdvancedAnalogCommands():
+    def __init__(self):
+        pass
+
+class AdvancedCommands():
+    def __init__(self):
+        pass
+
+class AxesIOCommands():
+    def __init__(self):
+        pass
+
+class AxesMotionCommands():
+    def __init__(self):
+        pass
+
+class AxesMotionSetupCommands():
+    def __init__(self):
+        pass
+
+class AxesRootCommands():
+    def __init__(self):
+        pass
+
+class AxesSelectionCommands():
+    def __init__(self):
+        pass
+
+class CommandCategory():
+    def __init__(self):
+        pass
+
+class DataAcquisitionCommands():
+    def __init__(self):
+        pass
+
+class EthernetStatus():
+    DataInTransmitter=EthernetStatus.DataInTransmitter
+    DataInReceiver=EthernetStatus.DataInReceiver
+
+class IOCommands():
+    def __init__(self):
+        pass
+    
+class LoopTransmissionMode():
+    Off=LoopTransmissionMode.Off
+    Sinusoid=LoopTransmissionMode.Sinusoid
+    SinusoidGantry=LoopTransmissionMode.SinusoidGantry
+    WhiteNoise=LoopTransmissionMode.WhiteNoise
+    WhiteNoiseGantry=LoopTransmissionMode.WhiteNoiseGantry
+
+class LoopTransmissionType():
+    OpenLoop=LoopTransmissionType.OpenLoop
+    ClosedLoop=LoopTransmissionType.ClosedLoop
+    CurrentLoop=LoopTransmissionType.CurrentLoop
+    AFOpenLoop=LoopTransmissionType.AFOpenLoop
+    AFClosedLoop=LoopTransmissionType.AFClosedLoop
+
+
+class ModeType():
+    MotionMode=ModeType.MotionMode
+    WaitMode=ModeType.WaitMode
+    RampMode=ModeType.RampMode
+    VelocityMode=ModeType.RampMode
+    ScurveValue=ModeType.ScurveValue
+    TimeScaleValue=ModeType.TimeScaleValue
+    DefaultVelocityValue=ModeType.DefaultVelocityValue
+    AccelRateValue=ModeType.AccelRateValue
+    AccelTimeValue=ModeType.AccelTimeValue
+    AccelDistValue=ModeType.AccelDistValue
+    DecelRateValue=ModeType.DecelRateValue
+    DecelTimeValue=ModeType.DecelTimeValue
+    DecelDistValue=ModeType.DecelDistValue
+    Plane=ModeType.Plane
+    
+class MotionAdvancedCommands():
+    def __init__(self,controller:Controller):
+        self.controller=controller
+    
 class MotionCommands():
     _Advanced=None
     _Setup=None
@@ -199,7 +306,7 @@ class MotionCommands():
     @multimethod
     def Disable(self,AxisMask:AxisMask):
         self.controller.Commands.Motion.Disable(AxisMask)
- 
+
     # ! Enable
     @multimethod
     def Enable(self,axis:int): 
@@ -485,7 +592,6 @@ class MotionCommands():
     def Start(self):
         self.controller.Commands.Start()
     
-    
     # ! WaitForMotionDone 
     @multimethod
     def WaitForMotionDone (self,waitOption:WaitOption,axis:int): 
@@ -529,7 +635,85 @@ class MotionCommands():
         
     def WaitMode(self,type:WaitType):
         self.controller.Commands.Motion.WaitMode(type)
-         
+    
+class MotionSetupCommands():
+    def __init__(self,controller:Controller):
+        self.controller=controller
+    
+class OnOff():
+    Off=OnOff.Off
+    On=OnOff.On
+
+class PSOCommands():
+    def __init__(self):
+        pass
+    
+class PsoMode():
+    Reset=PsoMode.Reset
+    Off=PsoMode.Off
+    Arm=PsoMode.Arm
+    Fire=PsoMode.Fire
+    On=PsoMode.On
+    FireContinuous=PsoMode. FireContinuous
+
+class RampMode():
+    Dist=RampMode.Dist
+    Rate=RampMode.Rate
+    Time=RampMode.Time
+
+class RampType():
+    Linear=RampType.Linear
+    Scurve=RampType.Scurve
+    Sine=RampType.Sine
+
+class RegisterCommands():
+    def __init__(self):
+        pass
+    
+class RegisterType():
+    GlobalIntegers=RegisterType.GlobalIntegers
+    GlobalDoubles=RegisterType.GlobalDoubles
+    ConversionRegisters=RegisterType.ConversionRegisters
+    ModbusMasterInputWords=RegisterType.ModbusMasterInputWords
+    ModbusMasterOutputWords=RegisterType.ModbusMasterOutputWords
+    ModbusMasterInputBits=RegisterType.ModbusMasterInputBits
+    ModbusMasterOutputBits=RegisterType.ModbusMasterOutputBits
+    ModbusMasterStatusWords=RegisterType.ModbusMasterStatusWords
+    ModbusMasterStatusBits=RegisterType.ModbusMasterStatusBits
+    ModbusMasterVirtualInputs=RegisterType.ModbusMasterVirtualInputs 
+    ModbusMasterVirtualOutputs=RegisterType.ModbusMasterVirtualOutputs
+    ModbusSlaveInputWords=RegisterType.ModbusSlaveInputWords
+    ModbusSlaveOutputWords=RegisterType.ModbusSlaveOutputWords
+    ModbusSlaveInputBits=RegisterType.ModbusSlaveInputBits
+    ModbusSlaveOutputBits=RegisterType.ModbusSlaveOutputBits
+
+class RootCommands():
+    def __init__(self,controller:Controller):
+        self.controller=controller
+        self.Motion=MotionCommands(controller)
+    
+class Semaphores():
+    ModbusRegisters=Semaphores.ModbusRegisters
+    GlobalIntegers=Semaphores.GlobalIntegers
+    GlobalDoubles=Semaphores.GlobalDoubles 
+
+class StatusCommands():
+    def __init__(self):
+        pass
+    
+class TuningCommands():
+    def __init__(self):
+        pass
+    
+class WaitOption():
+    InPosition=WaitOption.InPosition
+    MoveDone=WaitOption.MoveDone
+
+class WaitType():
+    NoWait=WaitType.NoWait
+    MoveDone=WaitType.MoveDone
+    InPos=WaitType.InPos
+       
 class AxisDiagPacket():
     AbsoluteFeedback=None
     AccelerationCommand=None
@@ -640,22 +824,11 @@ class AxisDiagPacket():
         self.VelocityFeedback=data.VelocityFeedback
         self.VelocityFeedbackCounts=data.VelocityFeedbackCounts
 
-
 class Axis():
     def __init__(self):
         self.status=AxisDiagPacket()
         self.axisNET=None
-
-
-class MyClass():
-    def __init__(self,L):
-        self.L = L
-        super().__init__()
-    def __getitem__(self, i):
-        return self.L[i]
-    def __len__(self):
-        return len(self.L)
-
+        
 class AerotechCommonCollections():
     class INamedCollection(Sequence):
         def __init__(self,INamed):
@@ -701,8 +874,6 @@ class AerotechCommonCollections():
         def __len__(self):
             return len(self.INamedMaskedConstant)
     
-
-
 class AerotechEnsemble():
     _Controller=None
     
@@ -862,19 +1033,6 @@ class AerotechEnsemble():
             return SoftwareEnvironment.Version 
             
 if __name__=='__main__':
-    #stage=AerotechEnsemble()
-    #print(stage.SoftwareEnvironment.BinDir)
-    #print(stage.SoftwareEnvironment.InstallDir)
-    #print(stage.SoftwareEnvironment.IsLoaderRunning)
-    #print(stage.SoftwareEnvironment.NumberOfProcesses)
-    #print(stage.SoftwareEnvironment.ProductKey)
-    #print(stage.SoftwareEnvironment.Version)
-    #stage.enableAxis(stage.controllerAxisX)
-    #stage.enableAxis(stage.controllerAxisY)
-    #stage.enableAxis(stage.controllerAxisZ)
-    #stage.enableAxes("X","Y","Z")
-    #stage.moveAxesRelative("X","Y","Z",distance=[0.1,0.1,0.1],speed=1,wait=True)
-    #stage.moveAxisRelative(stage.controllerAxisX.axisNET,distance=10,speed=0.1,wait=True)
 
     AerotechEnsemble.Controller.Connect()
     controller=AerotechEnsemble.Controller.ConnectedControllers[0]
