@@ -826,7 +826,7 @@ class AerotechCommonCollections():
             super().__init__()
 
         def __getitem__(self, i):
-            return AerotechEnsemble.Controller(self.INamedConstant[i])
+            return self.INamedConstant[i]
         
         def __len__(self):
             return len(self.INamedConstant)
@@ -869,10 +869,14 @@ class AerotechEnsemble():
         A9=AxisMask.A9
         ALL=AxisMask.All
     
-    class Controller():
+    class Controller(AerotechCommonCollections.INamedConstantCollection):
         _Controller:Controller=None
-        def __init__(self,controller:Controller):
-            self._Controller=controller
+        def __init__(self,controller):
+            super().__init__(controller)
+
+        def __getitem__(self, i):
+            self._Controller=self.INamedConstant[i]
+            return self
 
         def ChangePassword(self,oldPassword:str,newPassword:str):
             self._Controller.ChangePassword(oldPassword,newPassword)
@@ -889,12 +893,11 @@ class AerotechEnsemble():
         @classmethod  
         @property
         def ConnectedControllers(cls):
-            return AerotechCommonCollections.INamedConstantCollection(Controller.ConnectedControllers)
+            return cls(Controller.ConnectedControllers)
 
         @classmethod
         def Connect(cls):
             Controller.Connect()
-
 
         @property
         def ControlCenter(self):
