@@ -41,14 +41,10 @@ if DEFAULT_DLL_PATH.upper() not in [path.upper() for path in sys.path]:
 try:
     clr.AddReference(DEFAULT_DLL_NAME)
     import Aerotech.Ensemble as AerotechEnsembleNET
-
 except:
     raise RuntimeError
         
-
-class AxisMask():
-    _AxisMaskNET=None
-    
+class AxisMask():    
     NONE= getattr(AerotechEnsembleNET.AxisMask,'None')
     A0=AerotechEnsembleNET.AxisMask.A0
     A1=AerotechEnsembleNET.AxisMask.A1
@@ -61,14 +57,12 @@ class AxisMask():
     A8=AerotechEnsembleNET.AxisMask.A8
     A9=AerotechEnsembleNET.AxisMask.A9
     ALL=AerotechEnsembleNET.AxisMask.All
-    
-    def __init__(self,AxisMask):
-        self._AxisMaskNET=AxisMask
-    
+
 
 class Controller():
     _ControllerNET:AerotechEnsembleNET.Controller=None
     def __init__(self,controller):
+        # 
         self._ControllerNET=controller
 
     def ChangePassword(self,oldPassword:str,newPassword:str):
@@ -144,57 +138,60 @@ class Controller():
         pass # To collections
     
 class ServoRateParameter():
-    OnekHz=ServoRateParameter.OnekHz
-    TwokHz=ServoRateParameter.TwokHz
-    FourkHz=ServoRateParameter.FourkHz
-    FivekHz=ServoRateParameter.FivekHz
-    TenkHz=ServoRateParameter.TenkHz
-    TwentykHz=ServoRateParameter.TwentykHz
+    OnekHz=AerotechEnsembleNET.ServoRateParameter.OnekHz
+    TwokHz=AerotechEnsembleNET.ServoRateParameter.TwokHz
+    FourkHz=AerotechEnsembleNET.ServoRateParameter.FourkHz
+    FivekHz=AerotechEnsembleNET.ServoRateParameter.FivekHz
+    TenkHz=AerotechEnsembleNET.ServoRateParameter.TenkHz
+    TwentykHz=AerotechEnsembleNET.ServoRateParameter.TwentykHz
     
 class TaskId():
-    TLibrary=TaskId.TLibrary
-    T01=TaskId.T01
-    T02=TaskId.T02
-    T03=TaskId.T03
-    T04=TaskId.T04
-    TAuxiliary=TaskId.TAuxiliary
+    TLibrary=AerotechEnsembleNET.TaskId.TLibrary
+    T01=AerotechEnsembleNET.TaskId.T01
+    T02=AerotechEnsembleNET.TaskId.T02
+    T03=AerotechEnsembleNET.TaskId.T03
+    T04=AerotechEnsembleNET.TaskId.T04
+    TAuxiliary=AerotechEnsembleNET.TaskId.TAuxiliary
     
 class SoftwareEnvironment():
-        # @classmethod
-        # @property
-        # This is equivalent to [static public property] in a certain namespace
-
-        @classmethod
-        @property
-        def BinDir(cls):
-            return SoftwareEnvironment.BinDir 
-        
-        @classmethod
-        @property
-        def InstallDir(cls):
-            return SoftwareEnvironment.InstallDir 
-        
-        @classmethod
-        @property
-        def IsLoaderRunning(cls):
-            return SoftwareEnvironment.IsLoaderRunning 
-        
-        @classmethod
-        @property
-        def NumberOfProcesses(cls):
-            return SoftwareEnvironment.NumberOfProcesses 
-        
-        @classmethod
-        @property
-        def ProductKey(cls):
-            return SoftwareEnvironment.ProductKey 
-        
-        @classmethod
-        @property
-        def Version(cls):
-            return SoftwareEnvironment.Version 
+    @classmethod
+    @property
+    def BinDir(cls):
+        return AerotechEnsembleNET.SoftwareEnvironment.BinDir 
+    
+    @classmethod
+    @property
+    def InstallDir(cls):
+        return AerotechEnsembleNET.SoftwareEnvironment.InstallDir 
+    
+    @classmethod
+    @property
+    def IsLoaderRunning(cls):
+        return AerotechEnsembleNET.SoftwareEnvironment.IsLoaderRunning 
+    
+    @classmethod
+    @property
+    def NumberOfProcesses(cls):
+        return AerotechEnsembleNET.SoftwareEnvironment.NumberOfProcesses 
+    
+    @classmethod
+    @property
+    def ProductKey(cls):
+        return AerotechEnsembleNET.SoftwareEnvironment.ProductKey 
+    
+    @classmethod
+    @property
+    def Version(cls):
+        return AerotechEnsembleNET.SoftwareEnvironment.Version 
     
 if __name__=='__main__':
+    
+    print(SoftwareEnvironment.BinDir)
+    print(SoftwareEnvironment.InstallDir)
+    print(SoftwareEnvironment.IsLoaderRunning)
+    print(SoftwareEnvironment.NumberOfProcesses)
+    print(SoftwareEnvironment.ProductKey)
+    print(SoftwareEnvironment.Version)
 
     Controller.Connect()
     controller=Controller.ConnectedControllers[0]

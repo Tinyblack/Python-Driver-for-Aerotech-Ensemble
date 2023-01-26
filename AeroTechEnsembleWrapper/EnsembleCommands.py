@@ -27,8 +27,8 @@ if DEFAULT_DLL_PATH.upper() not in [path.upper() for path in sys.path]:
     sys.path.extend(DEFAULT_DLL_PATH)
 try:
     clr.AddReference(DEFAULT_DLL_NAME)
-    from Aerotech.Ensemble import Controller,AxisMask,ServoRateParameter,SoftwareEnvironment,TaskId 
-    from Aerotech.Ensemble.Commands import OnOff, WaitOption ,WaitType, EthernetStatus,LoopTransmissionMode,LoopTransmissionType,ModeType,PsoMode,RampMode,RampType,RegisterType,Semaphores
+    import Aerotech.Ensemble as AerotechEnsembleNET
+    import Aerotech.Ensemble.Commands as AerotechEnsembleCommandsNET
 except:
     raise RuntimeError
 
@@ -69,584 +69,608 @@ class DataAcquisitionCommands():
         pass
 
 class EthernetStatus():
-    DataInTransmitter=EthernetStatus.DataInTransmitter
-    DataInReceiver=EthernetStatus.DataInReceiver
+    DataInTransmitter=AerotechEnsembleCommandsNET.EthernetStatus.DataInTransmitter
+    DataInReceiver=AerotechEnsembleCommandsNET.EthernetStatus.DataInReceiver
 
 class IOCommands():
     def __init__(self):
         pass
     
 class LoopTransmissionMode():
-    Off=LoopTransmissionMode.Off
-    Sinusoid=LoopTransmissionMode.Sinusoid
-    SinusoidGantry=LoopTransmissionMode.SinusoidGantry
-    WhiteNoise=LoopTransmissionMode.WhiteNoise
-    WhiteNoiseGantry=LoopTransmissionMode.WhiteNoiseGantry
+    Off=AerotechEnsembleCommandsNET.LoopTransmissionMode.Off
+    Sinusoid=AerotechEnsembleCommandsNET.LoopTransmissionMode.Sinusoid
+    SinusoidGantry=AerotechEnsembleCommandsNET.LoopTransmissionMode.SinusoidGantry
+    WhiteNoise=AerotechEnsembleCommandsNET.LoopTransmissionMode.WhiteNoise
+    WhiteNoiseGantry=AerotechEnsembleCommandsNET.LoopTransmissionMode.WhiteNoiseGantry
 
 class LoopTransmissionType():
-    OpenLoop=LoopTransmissionType.OpenLoop
-    ClosedLoop=LoopTransmissionType.ClosedLoop
-    CurrentLoop=LoopTransmissionType.CurrentLoop
-    AFOpenLoop=LoopTransmissionType.AFOpenLoop
-    AFClosedLoop=LoopTransmissionType.AFClosedLoop
+    OpenLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.OpenLoop
+    ClosedLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.ClosedLoop
+    CurrentLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.CurrentLoop
+    AFOpenLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.AFOpenLoop
+    AFClosedLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.AFClosedLoop
 
 
 class ModeType():
-    MotionMode=ModeType.MotionMode
-    WaitMode=ModeType.WaitMode
-    RampMode=ModeType.RampMode
-    VelocityMode=ModeType.RampMode
-    ScurveValue=ModeType.ScurveValue
-    TimeScaleValue=ModeType.TimeScaleValue
-    DefaultVelocityValue=ModeType.DefaultVelocityValue
-    AccelRateValue=ModeType.AccelRateValue
-    AccelTimeValue=ModeType.AccelTimeValue
-    AccelDistValue=ModeType.AccelDistValue
-    DecelRateValue=ModeType.DecelRateValue
-    DecelTimeValue=ModeType.DecelTimeValue
-    DecelDistValue=ModeType.DecelDistValue
-    Plane=ModeType.Plane
+    MotionMode=AerotechEnsembleCommandsNET.ModeType.MotionMode
+    WaitMode=AerotechEnsembleCommandsNET.ModeType.WaitMode
+    RampMode=AerotechEnsembleCommandsNET.ModeType.RampMode
+    VelocityMode=AerotechEnsembleCommandsNET.ModeType.RampMode
+    ScurveValue=AerotechEnsembleCommandsNET.ModeType.ScurveValue
+    TimeScaleValue=AerotechEnsembleCommandsNET.ModeType.TimeScaleValue
+    DefaultVelocityValue=AerotechEnsembleCommandsNET.ModeType.DefaultVelocityValue
+    AccelRateValue=AerotechEnsembleCommandsNET.ModeType.AccelRateValue
+    AccelTimeValue=AerotechEnsembleCommandsNET.ModeType.AccelTimeValue
+    AccelDistValue=AerotechEnsembleCommandsNET.ModeType.AccelDistValue
+    DecelRateValue=AerotechEnsembleCommandsNET.ModeType.DecelRateValue
+    DecelTimeValue=AerotechEnsembleCommandsNET.ModeType.DecelTimeValue
+    DecelDistValue=AerotechEnsembleCommandsNET.ModeType.DecelDistValue
+    Plane=AerotechEnsembleCommandsNET.ModeType.Plane
     
 class MotionAdvancedCommands():
-    def __init__(self,controller:Controller):
-        self.controller=controller
+    _ControllerNET=None
+    def __init__(self,controller:AerotechEnsembleNET.Controller):
+        self._ControllerNET=controller
+        
+    @multimethod
+    def MoveOutLim(self,Axis:int):
+        self._ControllerNET.Commands.Motion.Advanced.MoveOutLim(Axis)
     
+    @multimethod
+    def MoveOutLim(self,Axis:str):
+        self._ControllerNET.Commands.Motion.Advanced.MoveOutLim(Axis)
+    
+    @multimethod
+    def MoveToLimCCW(self,Axis:int):
+        self._ControllerNET.Commands.Motion.Advanced.MoveToLimCCW(Axis)
+    
+    @multimethod
+    def MoveToLimCCW(self,Axis:str):
+        self._ControllerNET.Commands.Motion.Advanced.MoveToLimCCW(Axis)
+
+    @multimethod
+    def MoveToLimCW(self,Axis:int):
+        self._ControllerNET.Commands.Motion.Advanced.MoveToLimCW(Axis)
+    
+    @multimethod
+    def MoveToLimCW(self,Axis:str):
+        self._ControllerNET.Commands.Motion.Advanced.MoveToLimCW(Axis)
+
 class MotionCommands():
-    _Advanced=None
-    _Setup=None
+    _ControllerNET=None
     
-    def __init__(self,controller:Controller):
-        self.controller=controller
-        self._Advanced=MotionAdvancedCommands(controller)
+    def __init__(self,controller:AerotechEnsembleNET.Controller):
+        self._ControllerNET=controller
         self._Setup=MotionSetupCommands(controller)
 
     # ! Abort
     @multimethod  
     def Abort(self,axis:int):
-        self.controller.Commands.Montion.Abort(axis)
+        self._ControllerNET.Commands.Montion.Abort(axis)
 
     @multimethod
     def Abort(self,axes:list[int]):
-        self.controller.Commands.Montion.Abort(axes)
+        self._ControllerNET.Commands.Montion.Abort(axes)
         
     @multimethod
     def Abort(self,axis:str):
-        self.controller.Commands.Montion.Abort(axis)
+        self._ControllerNET.Commands.Montion.Abort(axis)
         
     @multimethod
     def Abort(self,axes:list[str]):
-        self.controller.Commands.Montion.Abort(axes)
+        self._ControllerNET.Commands.Montion.Abort(axes)
     
     @multimethod
-    def Abort(self,AxisMask:AxisMask):
-        self.controller.Commands.Montion.Abort(AxisMask)
+    def Abort(self,AxisMask:AerotechEnsembleNET.AxisMask):
+        self._ControllerNET.Commands.Montion.Abort(AxisMask)
         
     @property
     def Advanced(self):
-        return self._Advanced
+        return MotionAdvancedCommands(self._ControllerNET)
         
     # ! AutoFocus
     @multimethod
-    def AutoFocus(self,axis:int, OnOff:OnOff): 
-        self.controller.Commands.Motion.AutoFocus(axis,OnOff)
+    def AutoFocus(self,axis:int, OnOff:AerotechEnsembleCommandsNET.OnOff): 
+        self._ControllerNET.Commands.Motion.AutoFocus(axis,OnOff)
         
     @multimethod
-    def AutoFocus(self,axes:list[int], OnOff:OnOff): 
-        self.controller.Commands.Motion.AutoFocus(axes,OnOff)
+    def AutoFocus(self,axes:list[int], OnOff:AerotechEnsembleCommandsNET.OnOff): 
+        self._ControllerNET.Commands.Motion.AutoFocus(axes,OnOff)
     
     @multimethod
-    def AutoFocus(self,axis:str, OnOff:OnOff):
-        self.controller.Commands.Motion.AutoFocus(axis,OnOff)
+    def AutoFocus(self,axis:str, OnOff:AerotechEnsembleCommandsNET.OnOff):
+        self._ControllerNET.Commands.Motion.AutoFocus(axis,OnOff)
     
     @multimethod
-    def AutoFocus(self,axes:list[str], OnOff:OnOff):
-        self.controller.Commands.Motion.AutoFocus(axes,OnOff)
+    def AutoFocus(self,axes:list[str], OnOff:AerotechEnsembleCommandsNET.OnOff):
+        self._ControllerNET.Commands.Motion.AutoFocus(axes,OnOff)
     
     @multimethod
-    def AutoFocus(self,AxisMask:AxisMask, OnOff:OnOff):
-        self.controller.Commands.Motion.AutoFocus(AxisMask,OnOff)
+    def AutoFocus(self,AxisMask:AerotechEnsembleNET.AxisMask, OnOff:AerotechEnsembleCommandsNET.OnOff):
+        self._ControllerNET.Commands.Motion.AutoFocus(AxisMask,OnOff)
         
     # ! BlockMotion 
     @multimethod
-    def BlockMotion(self,axis:int, OnOff:OnOff): 
-        self.controller.Commands.Motion.BlockMotion(axis,OnOff)
+    def BlockMotion(self,axis:int, OnOff:AerotechEnsembleCommandsNET.OnOff): 
+        self._ControllerNET.Commands.Motion.BlockMotion(axis,OnOff)
         
     @multimethod
-    def BlockMotion(self,axes:list[int], OnOff:OnOff): 
-        self.controller.Commands.Motion.BlockMotion(axes,OnOff)
+    def BlockMotion(self,axes:list[int], OnOff:AerotechEnsembleCommandsNET.OnOff): 
+        self._ControllerNET.Commands.Motion.BlockMotion(axes,OnOff)
     
     @multimethod
-    def BlockMotion(self,axis:str, OnOff:OnOff):
-        self.controller.Commands.Motion.BlockMotion(axis,OnOff)
+    def BlockMotion(self,axis:str, OnOff:AerotechEnsembleCommandsNET.OnOff):
+        self._ControllerNET.Commands.Motion.BlockMotion(axis,OnOff)
     
     @multimethod
-    def BlockMotion(self,axes:list[str], OnOff:OnOff):
-        self.controller.Commands.Motion.BlockMotion(axes,OnOff)
+    def BlockMotion(self,axes:list[str], OnOff:AerotechEnsembleCommandsNET.OnOff):
+        self._ControllerNET.Commands.Motion.BlockMotion(axes,OnOff)
     
     @multimethod
-    def BlockMotion(self,AxisMask:AxisMask, OnOff:OnOff):
-        self.controller.Commands.Motion.BlockMotion(AxisMask,OnOff)
+    def BlockMotion(self,AxisMask:AerotechEnsembleNET.AxisMask, OnOff:AerotechEnsembleCommandsNET.OnOff):
+        self._ControllerNET.Commands.Motion.BlockMotion(AxisMask,OnOff)
         
     # ! CCWCenter
     @multimethod
     def CCWCenter(self,axis1:int, axis1End:float, axis2:int, axis2End:float, axis1Center:float, axis2Center:float):
-        self.controller.Commands.Motion.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
+        self._ControllerNET.Commands.Motion.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
     @multimethod
     def CCWCenter(self,axis1:str, axis1End:float, axis2:str, axis2End:float, axis1Center:float, axis2Center:float):
-        self.controller.Commands.Motion.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
+        self._ControllerNET.Commands.Motion.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
     @multimethod
     def CCWCenter(self,axis1:int, axis1End:float, axis2:int, axis2End:float, axis1Center:float, axis2Center:float,coordinatedSpeed:float):
-        self.controller.Commands.Motion.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
+        self._ControllerNET.Commands.Motion.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
     @multimethod
     def CCWCenter(self,axis1:str, axis1End:float, axis2:str, axis2End:float, axis1Center:float, axis2Center:float,coordinatedSpeed:float):
-        self.controller.Commands.Motion.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
+        self._ControllerNET.Commands.Motion.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
         
     # ! CCWRadius
     @multimethod
     def CCWRadius(self,axis1:int, axis1End:float, axis2:int, axis2End:float, radius:float):
-        self.controller.Commands.Motion.CCWRadius(axis1, axis1End, axis2, axis2End, radius)
+        self._ControllerNET.Commands.Motion.CCWRadius(axis1, axis1End, axis2, axis2End, radius)
     @multimethod
     def CCWRadius(self,axis1:str, axis1End:float, axis2:str, axis2End:float, radius:float):
-        self.controller.Commands.Motion.CCWRadius(axis1, axis1End, axis2, axis2End, radius)
+        self._ControllerNET.Commands.Motion.CCWRadius(axis1, axis1End, axis2, axis2End, radius)
     @multimethod
     def CCWRadius(self,axis1:int, axis1End:float, axis2:int, axis2End:float, radius:float,coordinatedSpeed:float):
-        self.controller.Commands.Motion.CCWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed)
+        self._ControllerNET.Commands.Motion.CCWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed)
     @multimethod
     def CCWRadius(self,axis1:str, axis1End:float, axis2:str, axis2End:float, radius:float,coordinatedSpeed:float):
-        self.controller.Commands.Motion.CCWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed)
+        self._ControllerNET.Commands.Motion.CCWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed)
         
     # ! CWCenter
     @multimethod
     def CWCenter(self,axis1:int, axis1End:float, axis2:int, axis2End:float, axis1Center:float, axis2Center:float):
-        self.controller.Commands.Motion.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
+        self._ControllerNET.Commands.Motion.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
     @multimethod
     def CWCenter(self,axis1:str, axis1End:float, axis2:str, axis2End:float, axis1Center:float, axis2Center:float):
-        self.controller.Commands.Motion.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
+        self._ControllerNET.Commands.Motion.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
     @multimethod
     def CWCenter(self,axis1:int, axis1End:float, axis2:int, axis2End:float, axis1Center:float, axis2Center:float,coordinatedSpeed:float):
-        self.controller.Commands.Motion.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
+        self._ControllerNET.Commands.Motion.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
     @multimethod
     def CWCenter(self,axis1:str, axis1End:float, axis2:str, axis2End:float, axis1Center:float, axis2Center:float,coordinatedSpeed:float):
-        self.controller.Commands.Motion.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
+        self._ControllerNET.Commands.Motion.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
         
     # ! CWRadius
     @multimethod
     def CWRadius(self,axis1:int, axis1End:float, axis2:int, axis2End:float, radius:float):
-        self.controller.Commands.Motion.CWRadius(axis1, axis1End, axis2, axis2End, radius)
+        self._ControllerNET.Commands.Motion.CWRadius(axis1, axis1End, axis2, axis2End, radius)
     @multimethod
     def CWRadius(self,axis1:str, axis1End:float, axis2:str, axis2End:float, radius:float):
-        self.controller.Commands.Motion.CWRadius(axis1, axis1End, axis2, axis2End, radius)
+        self._ControllerNET.Commands.Motion.CWRadius(axis1, axis1End, axis2, axis2End, radius)
     @multimethod
     def CWRadius(self,axis1:int, axis1End:float, axis2:int, axis2End:float, radius:float,coordinatedSpeed:float):
-        self.controller.Commands.Motion.CWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed)
+        self._ControllerNET.Commands.Motion.CWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed)
     @multimethod
     def CWRadius(self,axis1:str, axis1End:float, axis2:str, axis2End:float, radius:float,coordinatedSpeed:float):
-        self.controller.Commands.Motion.CWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed) 
+        self._ControllerNET.Commands.Motion.CWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed) 
 
     # ! Disable
     @multimethod
     def Disable(self,axis:int): 
-        self.controller.Commands.Motion.Disable(axis)
+        self._ControllerNET.Commands.Motion.Disable(axis)
         
     @multimethod
     def Disable(self,axes:list[int]): 
-        self.controller.Commands.Motion.Disable(axes)
+        self._ControllerNET.Commands.Motion.Disable(axes)
     
     @multimethod
     def Disable(self,axis:str):
-        self.controller.Commands.Motion.Disable(axis)
+        self._ControllerNET.Commands.Motion.Disable(axis)
     
     @multimethod
     def Disable(self,axes:list[str]):
-        self.controller.Commands.Motion.Disable(axes)
+        self._ControllerNET.Commands.Motion.Disable(axes)
     
     @multimethod
-    def Disable(self,AxisMask:AxisMask):
-        self.controller.Commands.Motion.Disable(AxisMask)
+    def Disable(self,AxisMask:AerotechEnsembleNET.AxisMask):
+        self._ControllerNET.Commands.Motion.Disable(AxisMask)
 
     # ! Enable
     @multimethod
     def Enable(self,axis:int): 
-        self.controller.Commands.Motion.Enable(axis)
+        self._ControllerNET.Commands.Motion.Enable(axis)
         
     @multimethod
     def Enable(self,axes:list[int]): 
-        self.controller.Commands.Motion.Enable(axes)
+        self._ControllerNET.Commands.Motion.Enable(axes)
     
     @multimethod
     def Enable(self,axis:str):
-        self.controller.Commands.Motion.Enable(axis)
+        self._ControllerNET.Commands.Motion.Enable(axis)
     
     @multimethod
     def Enable(self,axes:list[str]):
-        self.controller.Commands.Motion.Enable(axes)
+        self._ControllerNET.Commands.Motion.Enable(axes)
     
     @multimethod
-    def Enable(self,AxisMask:AxisMask):
-        self.controller.Commands.Motion.Enable(AxisMask)
+    def Enable(self,AxisMask:AerotechEnsembleNET.AxisMask):
+        self._ControllerNET.Commands.Motion.Enable(AxisMask)
         
     # ! FaultAck
     @multimethod
     def FaultAck(self,axis:int): 
-        self.controller.Commands.Motion.FaultAck(axis)
+        self._ControllerNET.Commands.Motion.FaultAck(axis)
         
     @multimethod
     def FaultAck(self,axes:list[int]): 
-        self.controller.Commands.Motion.FaultAck(axes)
+        self._ControllerNET.Commands.Motion.FaultAck(axes)
     
     @multimethod
     def FaultAck(self,axis:str):
-        self.controller.Commands.Motion.FaultAck(axis)
+        self._ControllerNET.Commands.Motion.FaultAck(axis)
     
     @multimethod
     def FaultAck(self,axes:list[str]):
-        self.controller.Commands.Motion.FaultAck(axes)
+        self._ControllerNET.Commands.Motion.FaultAck(axes)
     
     @multimethod
-    def FaultAck(self,AxisMask:AxisMask):
-        self.controller.Commands.Motion.FaultAck(AxisMask)
+    def FaultAck(self,AxisMask:AerotechEnsembleNET.AxisMask):
+        self._ControllerNET.Commands.Motion.FaultAck(AxisMask)
         
     # ! FreeRun
     @multimethod
     def FreeRun(self,axis:int,speed:float): 
-        self.controller.Commands.Motion.FreeRun(axis,speed)
+        self._ControllerNET.Commands.Motion.FreeRun(axis,speed)
         
     @multimethod
     def FreeRun(self,axes:list[int],speed:list[float]): 
-        self.controller.Commands.Motion.FreeRun(axes,speed)
+        self._ControllerNET.Commands.Motion.FreeRun(axes,speed)
     
     @multimethod
     def FreeRun(self,axis:str,speed:float):
-        self.controller.Commands.Motion.FreeRun(axis,speed)
+        self._ControllerNET.Commands.Motion.FreeRun(axis,speed)
     
     @multimethod
     def FreeRun(self,axes:list[str],speed:list[float]):
-        self.controller.Commands.Motion.FreeRun(axes,speed)
+        self._ControllerNET.Commands.Motion.FreeRun(axes,speed)
     
     @multimethod
-    def FreeRun(self,AxisMask:AxisMask,speed:float):
-        self.controller.Commands.Motion.FreeRun(AxisMask,speed)
+    def FreeRun(self,AxisMask:AerotechEnsembleNET.AxisMask,speed:float):
+        self._ControllerNET.Commands.Motion.FreeRun(AxisMask,speed)
         
     @multimethod
-    def FreeRun(self,AxisMask:AxisMask,speed:list[float]):
-        self.controller.Commands.Motion.FreeRun(AxisMask,speed)
+    def FreeRun(self,AxisMask:AerotechEnsembleNET.AxisMask,speed:list[float]):
+        self._ControllerNET.Commands.Motion.FreeRun(AxisMask,speed)
         
     # ! FreeRunStop
     @multimethod
     def FreeRunStop(self,axis:int): 
-        self.controller.Commands.Motion.FreeRunStop(axis)
+        self._ControllerNET.Commands.Motion.FreeRunStop(axis)
         
     @multimethod
     def FreeRunStop(self,axes:list[int]): 
-        self.controller.Commands.Motion.FreeRunStop(axes)
+        self._ControllerNET.Commands.Motion.FreeRunStop(axes)
     
     @multimethod
     def FreeRunStop(self,axis:str):
-        self.controller.Commands.Motion.FreeRunStop(axis)
+        self._ControllerNET.Commands.Motion.FreeRunStop(axis)
     
     @multimethod
     def FreeRunStop(self,axes:list[str]):
-        self.controller.Commands.Motion.FreeRunStop(axes)
+        self._ControllerNET.Commands.Motion.FreeRunStop(axes)
     
     @multimethod
-    def FreeRunStop(self,AxisMask:AxisMask):
-        self.controller.Commands.Motion.FreeRunStop(AxisMask)
+    def FreeRunStop(self,AxisMask:AerotechEnsembleNET.AxisMask):
+        self._ControllerNET.Commands.Motion.FreeRunStop(AxisMask)
         
     # ! Home
     @multimethod
     def Home(self,axis:int): 
-        self.controller.Commands.Motion.Home(axis)
+        self._ControllerNET.Commands.Motion.Home(axis)
         
     @multimethod
     def Home(self,axes:list[int]): 
-        self.controller.Commands.Motion.Home(axes)
+        self._ControllerNET.Commands.Motion.Home(axes)
     
     @multimethod
     def Home(self,axis:str):
-        self.controller.Commands.Motion.Home(axis)
+        self._ControllerNET.Commands.Motion.Home(axis)
     
     @multimethod
     def Home(self,axes:list[str]):
-        self.controller.Commands.Motion.Home(axes)
+        self._ControllerNET.Commands.Motion.Home(axes)
     
     @multimethod
-    def Home(self,AxisMask:AxisMask):
-        self.controller.Commands.Motion.Home(AxisMask)
+    def Home(self,AxisMask:AerotechEnsembleNET.AxisMask):
+        self._ControllerNET.Commands.Motion.Home(AxisMask)
             
     # ! HomeConditional
     @multimethod
     def HomeConditional(self,axis:int): 
-        self.controller.Commands.Motion.HomeConditional(axis)
+        self._ControllerNET.Commands.Motion.HomeConditional(axis)
         
     @multimethod
     def HomeConditional(self,axes:list[int]): 
-        self.controller.Commands.Motion.HomeConditional(axes)
+        self._ControllerNET.Commands.Motion.HomeConditional(axes)
     
     @multimethod
     def HomeConditional(self,axis:str):
-        self.controller.Commands.Motion.HomeConditional(axis)
+        self._ControllerNET.Commands.Motion.HomeConditional(axis)
     
     @multimethod
     def HomeConditional(self,axes:list[str]):
-        self.controller.Commands.Motion.HomeConditional(axes)
+        self._ControllerNET.Commands.Motion.HomeConditional(axes)
     
     @multimethod
-    def HomeConditional(self,AxisMask:AxisMask):
-        self.controller.Commands.Motion.HomeConditional(AxisMask)
+    def HomeConditional(self,AxisMask:AerotechEnsembleNET.AxisMask):
+        self._ControllerNET.Commands.Motion.HomeConditional(AxisMask)
         
         
     # ! Linear
     @multimethod
     def Linear(self,axis:int,distance:float): 
-        self.controller.Commands.Motion.Linear(axis,distance)
+        self._ControllerNET.Commands.Motion.Linear(axis,distance)
         
     @multimethod
     def Linear(self,axes:list[int],distance:list[float]): 
-        self.controller.Commands.Motion.Linear(axes,distance)
+        self._ControllerNET.Commands.Motion.Linear(axes,distance)
     
     @multimethod
     def Linear(self,axis:str,distance:float):
-        self.controller.Commands.Motion.Linear(axis,distance)
+        self._ControllerNET.Commands.Motion.Linear(axis,distance)
     
     @multimethod
     def Linear(self,axes:list[str],distance:list[float]):
-        self.controller.Commands.Motion.Linear(axes,distance)
+        self._ControllerNET.Commands.Motion.Linear(axes,distance)
     
     @multimethod
-    def Linear(self,AxisMask:AxisMask,distance:float):
-        self.controller.Commands.Motion.Linear(AxisMask,distance)
+    def Linear(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:float):
+        self._ControllerNET.Commands.Motion.Linear(AxisMask,distance)
         
     @multimethod
-    def Linear(self,AxisMask:AxisMask,distance:list[float]):
-        self.controller.Commands.Motion.Linear(AxisMask,distance)
+    def Linear(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:list[float]):
+        self._ControllerNET.Commands.Motion.Linear(AxisMask,distance)
 
     @multimethod
     def Linear(self,axis:int,distance:float,coordinatedSpeed:float): 
-        self.controller.Commands.Motion.Linear(axis,distance,coordinatedSpeed)
+        self._ControllerNET.Commands.Motion.Linear(axis,distance,coordinatedSpeed)
         
     @multimethod
     def Linear(self,axes:list[int],distance:list[float],coordinatedSpeed:float): 
-        self.controller.Commands.Motion.Linear(axes,distance,coordinatedSpeed)
+        self._ControllerNET.Commands.Motion.Linear(axes,distance,coordinatedSpeed)
     
     @multimethod
     def Linear(self,axis:str,distance:float,coordinatedSpeed:float):
-        self.controller.Commands.Motion.Linear(axis,distance,coordinatedSpeed)
+        self._ControllerNET.Commands.Motion.Linear(axis,distance,coordinatedSpeed)
     
     @multimethod
     def Linear(self,axes:list[str],distance:list[float],coordinatedSpeed:float):
-        self.controller.Commands.Motion.Linear(axes,distance,coordinatedSpeed)
+        self._ControllerNET.Commands.Motion.Linear(axes,distance,coordinatedSpeed)
     
     @multimethod
-    def Linear(self,AxisMask:AxisMask,distance:float,coordinatedSpeed:float):
-        self.controller.Commands.Motion.Linear(AxisMask,distance,coordinatedSpeed)
+    def Linear(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:float,coordinatedSpeed:float):
+        self._ControllerNET.Commands.Motion.Linear(AxisMask,distance,coordinatedSpeed)
         
     @multimethod
-    def Linear(self,AxisMask:AxisMask,distance:list[float],coordinatedSpeed:float):
-        self.controller.Commands.Motion.Linear(AxisMask,distance,coordinatedSpeed)
+    def Linear(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:list[float],coordinatedSpeed:float):
+        self._ControllerNET.Commands.Motion.Linear(AxisMask,distance,coordinatedSpeed)
         
     # ! MoveAbs
     @multimethod
     def MoveAbs(self,axis:int,distance:float): 
-        self.controller.Commands.Motion.MoveAbs(axis,distance)
+        self._ControllerNET.Commands.Motion.MoveAbs(axis,distance)
         
     @multimethod
     def MoveAbs(self,axes:list[int],distance:list[float]): 
-        self.controller.Commands.Motion.MoveAbs(axes,distance)
+        self._ControllerNET.Commands.Motion.MoveAbs(axes,distance)
     
     @multimethod
     def MoveAbs(self,axis:str,distance:float):
-        self.controller.Commands.Motion.MoveAbs(axis,distance)
+        self._ControllerNET.Commands.Motion.MoveAbs(axis,distance)
     
     @multimethod
     def MoveAbs(self,axes:list[str],distance:list[float]):
-        self.controller.Commands.Motion.MoveAbs(axes,distance)
+        self._ControllerNET.Commands.Motion.MoveAbs(axes,distance)
     
     @multimethod
-    def MoveAbs(self,AxisMask:AxisMask,distance:float):
-        self.controller.Commands.Motion.MoveAbs(AxisMask,distance)
+    def MoveAbs(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:float):
+        self._ControllerNET.Commands.Motion.MoveAbs(AxisMask,distance)
         
     @multimethod
-    def MoveAbs(self,AxisMask:AxisMask,distance:list[float]):
-        self.controller.Commands.Motion.MoveAbs(AxisMask,distance)
+    def MoveAbs(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:list[float]):
+        self._ControllerNET.Commands.Motion.MoveAbs(AxisMask,distance)
 
     @multimethod
     def MoveAbs(self,axis:int,distance:float,speed:float): 
-        self.controller.Commands.Motion.MoveAbs(axis,distance,speed)
+        self._ControllerNET.Commands.Motion.MoveAbs(axis,distance,speed)
         
     @multimethod
     def MoveAbs(self,axes:list[int],distance:list[float],speed:float): 
-        self.controller.Commands.Motion.MoveAbs(axes,distance,speed)
+        self._ControllerNET.Commands.Motion.MoveAbs(axes,distance,speed)
     
     @multimethod
     def MoveAbs(self,axis:str,distance:float,speed:float):
-        self.controller.Commands.Motion.MoveAbs(axis,distance,speed)
+        self._ControllerNET.Commands.Motion.MoveAbs(axis,distance,speed)
     
     @multimethod
     def MoveAbs(self,axes:list[str],distance:list[float],speed:float):
-        self.controller.Commands.Motion.MoveAbs(axes,distance,speed)
+        self._ControllerNET.Commands.Motion.MoveAbs(axes,distance,speed)
     
     @multimethod
-    def MoveAbs(self,AxisMask:AxisMask,distance:float,speed:float):
-        self.controller.Commands.Motion.MoveAbs(AxisMask,distance,speed)
+    def MoveAbs(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:float,speed:float):
+        self._ControllerNET.Commands.Motion.MoveAbs(AxisMask,distance,speed)
         
     @multimethod
-    def MoveAbs(self,AxisMask:AxisMask,distance:list[float],speed:float):
-        self.controller.Commands.Motion.MoveAbs(AxisMask,distance,speed)
+    def MoveAbs(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:list[float],speed:float):
+        self._ControllerNET.Commands.Motion.MoveAbs(AxisMask,distance,speed)
         
     # ! MoveInc
     @multimethod
     def MoveInc(self,axis:int,distance:float): 
-        self.controller.Commands.Motion.MoveInc(axis,distance)
+        self._ControllerNET.Commands.Motion.MoveInc(axis,distance)
         
     @multimethod
     def MoveInc(self,axes:list[int],distance:list[float]): 
-        self.controller.Commands.Motion.MoveInc(axes,distance)
+        self._ControllerNET.Commands.Motion.MoveInc(axes,distance)
     
     @multimethod
     def MoveInc(self,axis:str,distance:float):
-        self.controller.Commands.Motion.MoveInc(axis,distance)
+        self._ControllerNET.Commands.Motion.MoveInc(axis,distance)
     
     @multimethod
     def MoveInc(self,axes:list[str],distance:list[float]):
-        self.controller.Commands.Motion.MoveInc(axes,distance)
+        self._ControllerNET.Commands.Motion.MoveInc(axes,distance)
     
     @multimethod
-    def MoveInc(self,AxisMask:AxisMask,distance:float):
-        self.controller.Commands.Motion.MoveInc(AxisMask,distance)
+    def MoveInc(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:float):
+        self._ControllerNET.Commands.Motion.MoveInc(AxisMask,distance)
         
     @multimethod
-    def MoveInc(self,AxisMask:AxisMask,distance:list[float]):
-        self.controller.Commands.Motion.MoveInc(AxisMask,distance)
+    def MoveInc(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:list[float]):
+        self._ControllerNET.Commands.Motion.MoveInc(AxisMask,distance)
 
     @multimethod
     def MoveInc(self,axis:int,distance:float,speed:float): 
-        self.controller.Commands.Motion.MoveInc(axis,distance,speed)
+        self._ControllerNET.Commands.Motion.MoveInc(axis,distance,speed)
         
     @multimethod
     def MoveInc(self,axes:list[int],distance:list[float],speed:float): 
-        self.controller.Commands.Motion.MoveInc(axes,distance,speed)
+        self._ControllerNET.Commands.Motion.MoveInc(axes,distance,speed)
     
     @multimethod
     def MoveInc(self,axis:str,distance:float,speed:float):
-        self.controller.Commands.Motion.MoveInc(axis,distance,speed)
+        self._ControllerNET.Commands.Motion.MoveInc(axis,distance,speed)
     
     @multimethod
     def MoveInc(self,axes:list[str],distance:list[float],speed:float):
-        self.controller.Commands.Motion.MoveInc(axes,distance,speed)
+        self._ControllerNET.Commands.Motion.MoveInc(axes,distance,speed)
     
     @multimethod
-    def MoveInc(self,AxisMask:AxisMask,distance:float,speed:float):
-        self.controller.Commands.Motion.MoveInc(AxisMask,distance,speed)
+    def MoveInc(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:float,speed:float):
+        self._ControllerNET.Commands.Motion.MoveInc(AxisMask,distance,speed)
         
     @multimethod
-    def MoveInc(self,AxisMask:AxisMask,distance:list[float],speed:float):
-        self.controller.Commands.Motion.MoveInc(AxisMask,distance,speed)
+    def MoveInc(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:list[float],speed:float):
+        self._ControllerNET.Commands.Motion.MoveInc(AxisMask,distance,speed)
 
     @property
     def Setup(self):
         return self._Setup
 
     def Start(self):
-        self.controller.Commands.Start()
+        self._ControllerNET.Commands.Start()
     
     # ! WaitForMotionDone 
     @multimethod
-    def WaitForMotionDone (self,waitOption:WaitOption,axis:int): 
-        self.controller.Commands.Motion.WaitForMotionDone(waitOption,axis)
+    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axis:int): 
+        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axis)
         
     @multimethod
-    def WaitForMotionDone (self,waitOption:WaitOption,axes:list[int]): 
-        self.controller.Commands.Motion.WaitForMotionDone(waitOption,axes)
+    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axes:list[int]): 
+        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axes)
     
     @multimethod
-    def WaitForMotionDone (self,waitOption:WaitOption,axis:str):
-        self.controller.Commands.Motion.WaitForMotionDone(waitOption,axis)
+    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axis:str):
+        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axis)
     
     @multimethod
-    def WaitForMotionDone (self,waitOption:WaitOption,axes:list[str]):
-        self.controller.Commands.Motion.WaitForMotionDone(waitOption,axes)
+    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axes:list[str]):
+        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axes)
     
     @multimethod
-    def WaitForMotionDone (self,waitOption:WaitOption,AxisMask:AxisMask):
-        self.controller.Commands.Motion.WaitForMotionDone(waitOption,AxisMask)
+    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,AxisMask:AerotechEnsembleNET.AxisMask):
+        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,AxisMask)
         
     @multimethod
-    def WaitForMotionDone (self,waitOption:WaitOption,axis:int,timeout:int): 
-        self.controller.Commands.Motion.WaitForMotionDone(waitOption,axis,timeout)
+    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axis:int,timeout:int): 
+        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axis,timeout)
         
     @multimethod
-    def WaitForMotionDone (self,waitOption:WaitOption,axes:list[int],timeout:int): 
-        self.controller.Commands.Motion.WaitForMotionDone(waitOption,axes,timeout)
+    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axes:list[int],timeout:int): 
+        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axes,timeout)
     
     @multimethod
-    def WaitForMotionDone (self,waitOption:WaitOption,axis:str,timeout:int):
-        self.controller.Commands.Motion.WaitForMotionDone(waitOption,axis,timeout)
+    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axis:str,timeout:int):
+        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axis,timeout)
     
     @multimethod
-    def WaitForMotionDone (self,waitOption:WaitOption,axes:list[str],timeout:int):
-        self.controller.Commands.Motion.WaitForMotionDone(waitOption,axes,timeout)
+    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axes:list[str],timeout:int):
+        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axes,timeout)
     
     @multimethod
-    def WaitForMotionDone (self,waitOption:WaitOption,AxisMask:AxisMask,timeout:int):
-        self.controller.Commands.Motion.WaitForMotionDone(waitOption,AxisMask,timeout)
+    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,AxisMask:AerotechEnsembleNET.AxisMask,timeout:int):
+        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,AxisMask,timeout)
         
-    def WaitMode(self,type:WaitType):
-        self.controller.Commands.Motion.WaitMode(type)
+    def WaitMode(self,type:AerotechEnsembleCommandsNET.WaitType):
+        self._ControllerNET.Commands.Motion.WaitMode(type)
     
 class MotionSetupCommands():
-    def __init__(self,controller:Controller):
-        self.controller=controller
+    def __init__(self,controller:AerotechEnsembleNET.Controller):
+        self._ControllerNET=controller
     
 class OnOff():
-    Off=OnOff.Off
-    On=OnOff.On
+    Off=AerotechEnsembleCommandsNET.OnOff.Off
+    On=AerotechEnsembleCommandsNET.OnOff.On
 
 class PSOCommands():
     def __init__(self):
         pass
     
 class PsoMode():
-    Reset=PsoMode.Reset
-    Off=PsoMode.Off
-    Arm=PsoMode.Arm
-    Fire=PsoMode.Fire
-    On=PsoMode.On
-    FireContinuous=PsoMode. FireContinuous
+    Reset=AerotechEnsembleCommandsNET.PsoMode.Reset
+    Off=AerotechEnsembleCommandsNET.PsoMode.Off
+    Arm=AerotechEnsembleCommandsNET.PsoMode.Arm
+    Fire=AerotechEnsembleCommandsNET.PsoMode.Fire
+    On=AerotechEnsembleCommandsNET.PsoMode.On
+    FireContinuous=AerotechEnsembleCommandsNET.PsoMode.FireContinuous
 
 class RampMode():
-    Dist=RampMode.Dist
-    Rate=RampMode.Rate
-    Time=RampMode.Time
+    Dist=AerotechEnsembleCommandsNET.RampMode.Dist
+    Rate=AerotechEnsembleCommandsNET.RampMode.Rate
+    Time=AerotechEnsembleCommandsNET.RampMode.Time
 
 class RampType():
-    Linear=RampType.Linear
-    Scurve=RampType.Scurve
-    Sine=RampType.Sine
+    Linear=AerotechEnsembleCommandsNET.RampType.Linear
+    Scurve=AerotechEnsembleCommandsNET.RampType.Scurve
+    Sine=AerotechEnsembleCommandsNET.RampType.Sine
 
 class RegisterCommands():
     def __init__(self):
         pass
     
 class RegisterType():
-    GlobalIntegers=RegisterType.GlobalIntegers
-    GlobalDoubles=RegisterType.GlobalDoubles
-    ConversionRegisters=RegisterType.ConversionRegisters
-    ModbusMasterInputWords=RegisterType.ModbusMasterInputWords
-    ModbusMasterOutputWords=RegisterType.ModbusMasterOutputWords
-    ModbusMasterInputBits=RegisterType.ModbusMasterInputBits
-    ModbusMasterOutputBits=RegisterType.ModbusMasterOutputBits
-    ModbusMasterStatusWords=RegisterType.ModbusMasterStatusWords
-    ModbusMasterStatusBits=RegisterType.ModbusMasterStatusBits
-    ModbusMasterVirtualInputs=RegisterType.ModbusMasterVirtualInputs 
-    ModbusMasterVirtualOutputs=RegisterType.ModbusMasterVirtualOutputs
-    ModbusSlaveInputWords=RegisterType.ModbusSlaveInputWords
-    ModbusSlaveOutputWords=RegisterType.ModbusSlaveOutputWords
-    ModbusSlaveInputBits=RegisterType.ModbusSlaveInputBits
-    ModbusSlaveOutputBits=RegisterType.ModbusSlaveOutputBits
+    GlobalIntegers=AerotechEnsembleCommandsNET.RegisterType.GlobalIntegers
+    GlobalDoubles=AerotechEnsembleCommandsNET.RegisterType.GlobalDoubles
+    ConversionRegisters=AerotechEnsembleCommandsNET.RegisterType.ConversionRegisters
+    ModbusMasterInputWords=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterInputWords
+    ModbusMasterOutputWords=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterOutputWords
+    ModbusMasterInputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterInputBits
+    ModbusMasterOutputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterOutputBits
+    ModbusMasterStatusWords=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterStatusWords
+    ModbusMasterStatusBits=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterStatusBits
+    ModbusMasterVirtualInputs=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterVirtualInputs 
+    ModbusMasterVirtualOutputs=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterVirtualOutputs
+    ModbusSlaveInputWords=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveInputWords
+    ModbusSlaveOutputWords=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveOutputWords
+    ModbusSlaveInputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveInputBits
+    ModbusSlaveOutputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveOutputBits
 
 class RootCommands():
-    def __init__(self,controller:Controller):
-        self.controller=controller
+    _ControllerNET=None
+    def __init__(self,controller:AerotechEnsembleNET.Controller):
+        self._ControllerNET=controller
         #self.Motion=MotionCommands(controller)
         #self.Advanced=AdvancedCommands(controller)
         #self.Axes=AxesSelectionCommands(controller)
@@ -659,21 +683,21 @@ class RootCommands():
     
     @property
     def Motion(self):
-        return MotionCommands(self.controller)
+        return MotionCommands(self._ControllerNET)
  
     def AcknowledgeAll(self):
-        self.controller.Commands.AcknowledgeAll()
+        self._ControllerNET.Commands.AcknowledgeAll()
         
     def Execute(self,code:str):
-        self.controller.Commands.Execute(code)
+        self._ControllerNET.Commands.Execute(code)
  
     def ExecuteAsync(self,code:str):
-        self.controller.Commands.ExecuteAsync(code)
+        self._ControllerNET.Commands.ExecuteAsync(code)
     
 class Semaphores():
-    ModbusRegisters=Semaphores.ModbusRegisters
-    GlobalIntegers=Semaphores.GlobalIntegers
-    GlobalDoubles=Semaphores.GlobalDoubles 
+    ModbusRegisters=AerotechEnsembleCommandsNET.Semaphores.ModbusRegisters
+    GlobalIntegers=AerotechEnsembleCommandsNET.Semaphores.GlobalIntegers
+    GlobalDoubles=AerotechEnsembleCommandsNET.Semaphores.GlobalDoubles 
 
 class StatusCommands():
     def __init__(self):
@@ -684,10 +708,10 @@ class TuningCommands():
         pass
     
 class WaitOption():
-    InPosition=WaitOption.InPosition
-    MoveDone=WaitOption.MoveDone
+    InPosition=AerotechEnsembleCommandsNET.WaitOption.InPosition
+    MoveDone=AerotechEnsembleCommandsNET.WaitOption.MoveDone
 
 class WaitType():
-    NoWait=WaitType.NoWait
-    MoveDone=WaitType.MoveDone
-    InPos=WaitType.InPos
+    NoWait=AerotechEnsembleCommandsNET.WaitType.NoWait
+    MoveDone=AerotechEnsembleCommandsNET.WaitType.MoveDone
+    InPos=AerotechEnsembleCommandsNET.WaitType.InPos

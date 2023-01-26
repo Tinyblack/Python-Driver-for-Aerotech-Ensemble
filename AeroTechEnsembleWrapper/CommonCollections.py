@@ -13,6 +13,7 @@ class INamedCollection(Sequence):
 
 class INamedConstantCollection(Sequence):
     def __init__(self,INamedConstant,IClass):
+        # INamedConstant is .NET instance, IClass is the type decorator for python wrapper
         self.INamedConstant=INamedConstant
         self.IClass=IClass
         super().__init__()
