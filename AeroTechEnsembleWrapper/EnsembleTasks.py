@@ -22,7 +22,8 @@ from multimethod import multimethod
 
 from collections.abc import Sequence
 
-import AerotechCommonCollections
+import CommonCollections
+import Ensemble
 
 DEFAULT_DLL_PATH:str=os.path.join(os.path.join(os.path.dirname(__file__),'Aerotech_DotNet_dll'),'')
 DEFAULT_DLL_NAME:str='Aerotech.Ensemble'
@@ -51,9 +52,11 @@ class DedicatedJoystick():
  
 class Program():
     def Debug(self):
+        # TODO Fill in this section
         pass
     
     def Error(self):
+        # TODO Fill in this section
         pass
     
     @property
@@ -70,6 +73,7 @@ class Program():
 
     @multimethod
     def Run(self,FileInfo):
+        # TODO Fill in this section
         pass
 
     @multimethod
@@ -87,13 +91,35 @@ class Program():
         Tasks.Program.Stop()
  
 class Task():
-    def __init__(self):
-        pass
+    @property
+    def DedicatedJoystick(self):
+        return DedicatedJoystick
+ 
+    @property
+    def Name(self):
+        return Ensemble.TaskId
+
+    @property
+    def Program(self):
+        return Program
+    
+    @property
+    def State(self):
+        return TaskState
  
 class TasksCollection():
-    def __init__(self):
-        pass
+    @property
+    def States(self):
+        return CommonCollections.INamedConstantCollection(Tasks.TasksCollection.States)
     
+    @multimethod
+    def StopPrograms():
+        Tasks.TasksCollection.StopPrograms()
+        
+    @multimethod
+    def StopPrograms(taskIds:list[Ensemble.TaskId]):
+        Tasks.TasksCollection.StopPrograms(taskIds)
+        
 class TaskState():
     Inactive=TaskState.Inactive
     Idle=TaskState.Idle

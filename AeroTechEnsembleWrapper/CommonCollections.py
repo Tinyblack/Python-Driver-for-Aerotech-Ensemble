@@ -12,12 +12,13 @@ class INamedCollection(Sequence):
         return len(self.INamed)
 
 class INamedConstantCollection(Sequence):
-    def __init__(self,INamedConstant):
+    def __init__(self,INamedConstant,IClass):
         self.INamedConstant=INamedConstant
+        self.IClass=IClass
         super().__init__()
 
     def __getitem__(self, i):
-        return self.INamedConstant[i]
+        return self.IClass(self.INamedConstant[i])
     
     def __len__(self):
         return len(self.INamedConstant)

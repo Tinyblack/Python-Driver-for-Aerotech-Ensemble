@@ -1,0 +1,2 @@
+class FilePoint():
+    pass
