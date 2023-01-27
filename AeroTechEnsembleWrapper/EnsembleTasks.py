@@ -17,6 +17,7 @@ import Ensemble
 import EnsembleTasksDebug
 import EnsembleStatus
 import EnsembleFileSystem
+import CommonCollections
 
 DEFAULT_DLL_PATH:str=os.path.join(os.path.join(os.path.dirname(__file__),'Aerotech_DotNet_dll'),'')
 DEFAULT_DLL_NAME:str='Aerotech.Ensemble'
@@ -28,7 +29,7 @@ try:
 except:
     raise RuntimeError
 
-##################
+# ! DONE
 
 class TaskState(Enum):
     Inactive=AerotechEnsembleTasksNET.TaskState.Inactive
@@ -144,9 +145,7 @@ class TasksCollection():
         
     @property
     def States(self):
-        pass
-        # TODO Make a more explicit collection for this method
-        #return CommonCollections.INamedConstantCollection(self._TasksCollectionNET.States)
+        return CommonCollections.INamedConstantCollection(self._TasksCollectionNET.States,TaskState)
     
     @multimethod
     def StopPrograms(self):

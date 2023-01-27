@@ -26,6 +26,8 @@ try:
 except:
     raise RuntimeError
 
+# ! DONE
+
 class Variable():
     _VariableNET=None
     def __init__(self,VariableNET=AerotechEnsembleTasksDebugNET.Variable):
