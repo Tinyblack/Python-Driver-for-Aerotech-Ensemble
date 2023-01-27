@@ -7,23 +7,13 @@ sys.path.insert(0, os.path.abspath('.'))
 sys.path.extend(glob.glob(f'{pathlib.Path(__file__).parents[0].resolve()}/*/**/', recursive=True))
 
 import clr
-clr.AddReference('System')
-from System import String, Char, Int32, IntPtr,Text, UInt32,Enum,Decimal,Double
-from System.ComponentModel import ProgressChangedEventHandler
-
-from copy import deepcopy
-from win32api import GetFileVersionInfo, LOWORD, HIWORD
-
-from GlobalLogger import GlobalLogger
-
-import time
 
 from multimethod import multimethod
 
 from collections.abc import Sequence
 
-import CommonCollections
 import EnsembleTasks
+import Ensemble
 import Common
 
 DEFAULT_DLL_PATH:str=os.path.join(os.path.join(os.path.dirname(__file__),'Aerotech_DotNet_dll'),'')
@@ -32,146 +22,231 @@ if DEFAULT_DLL_PATH.upper() not in [path.upper() for path in sys.path]:
     sys.path.extend(DEFAULT_DLL_PATH)
 try:
     clr.AddReference(DEFAULT_DLL_NAME)
-    from Aerotech.Ensemble import Tasks
-    from Aerotech.Ensemble.Tasks import Debug
+    import Aerotech.Ensemble.Tasks.Debug as AerotechEnsembleTasksDebugNET
 except:
     raise RuntimeError
 
-##################
 class Variable():
+    _VariableNET=None
+    def __init__(self,VariableNET=AerotechEnsembleTasksDebugNET.Variable):
+        self._VariableNET=VariableNET
+    
     @property
     def Address(self):
-        return Debug.Variable.Address
+        return self._VariableNET.Address
     
-    #@property
-    #def controller(self):
-    #    return Debug.Variable.controller
+    @property
+    def controller(self):
+        return Ensemble.Controller(self._VariableNET.controller)
     
     @property
     def Name(self):
-        return Debug.Variable.Name
+        return self._VariableNET.Name
     
     @property
     def Scope(self):
-        return EnsembleTasks.VariableScope
+        return EnsembleTasks.VariableScope[self._VariableNET.Scope.ToString()]
     
-    #@property
-    #def task(self):
+    @property
+    def task(self):
+        return EnsembleTasks.Task(self._VariableNET.task)
     
     @property
     def Type(self):
-        return EnsembleTasks.VariableType
+        return EnsembleTasks.VariableType[self._VariableNET.Type.ToString()]
     
     @property
     def Value(self):
-        return Debug.Variable.Value
+        # TODO Solve what Object and value represents here
+        pass
+     
+class ArrayVariable(Variable,Sequence):
+    _ArrayVariableNET=None
+    def __init__(self,ArrayVariableNET=AerotechEnsembleTasksDebugNET.ArrayVariable):
+        self._ArrayVariableNET=ArrayVariableNET
+        super(Variable,self).__init__(self._ArrayVariableNET)
 
-        
-class ArrayVariable(Variable):
+    def __getitem__(self, i):
+        return self._ArrayVariableNET[i]
+    
+    def __len__(self):
+        return len(self._ArrayVariableNET)
+    
+    @property
+    def Address(self):
+        return self._ArrayVariableNET.Address
+    
+    @property
     def Count(self):
-        return Debug.ArrayVariable.Count
+        return self._ArrayVariableNET.Count
     
+    @property
     def ElementType(self):
-        return Debug.ArrayVariable.ElementType
+        return self._ArrayVariableNET.ElementType
     
-
+    @property
+    def Type(self):
+        return EnsembleTasks.VariableType[self._ArrayVariableNET.Type.ToString()]
+    
+    @property
+    def Value(self):
+        # TODO Solve what Object and value represents here
+        pass
+    
 class BreakpointsManager():
+    _BreakpointsManagerNET=None
+    def __init__(self,BreakpointsManagerNET=AerotechEnsembleTasksDebugNET.BreakpointsManager):
+        self._BreakpointsManagerNET=BreakpointsManagerNET
+    
     def Add(self,location:Common.FilePoint):
-        Debug.BreakpointsManager.Add(location)
+        self._BreakpointsManagerNET.Add(location._FilePointNET)
         
     def Remove(self,location:Common.FilePoint):
-        Debug.BreakpointsManager.Remove(location)
+        self._BreakpointsManagerNET.Remove(location._FilePointNET)
         
     def RemoveAll(self):
-        Debug.BreakpointsManager.RemoveAll()
+        self._BreakpointsManagerNET.RemoveAll()
  
-
-class CurrentContext():
+class CurrentContext(Sequence):
+    _CurrentContextNET=None
+    
+    def __init__(self,CurrentContextNET=AerotechEnsembleTasksDebugNET.CurrentContext):
+        self._CurrentContextNET=CurrentContextNET
+        
+    def __getitem__(self, i):
+        return self._CurrentContextNET[i]
+    
+    def __len__(self):
+        return len(self._CurrentContextNET)
+        
     @property
     def Arguments(self):
-        return Debug.CurrentContext.Arguments
+        return Variable(self._CurrentContextNET.Arguments)
     
     @property
     def Function(self):
-        return Debug.CurrentContext.Function
+        return self._CurrentContextNET.Function
     
     @property
     def Globals(self):
-        return Debug.CurrentContext.Globals
+        return Variable(self._CurrentContextNET.Globals)
     
     @property
     def InFunction(self):
-        return Debug.CurrentContext.InFunction
+        return self._CurrentContextNET.InFunction
     
-    #def Item[([( String])])  Allows to retrieve variables by their name 
     @property
     def Locals(self):
-        return Debug.CurrentContext.Locals
+        return Variable(self._CurrentContextNET.Locals)
     
     @property
     def Location(self):
-        return Debug.CurrentContext.Location
+        return Common.FilePoint(self._CurrentContextNET.Location)
 
-        
 class ProgramDebug():
+    _ProgramDebugNET=None
+    
+    def __init__(self,ProgramDebugNET=AerotechEnsembleTasksDebugNET.ProgramDebug):
+        self._ProgramDebugNET=ProgramDebugNET
+        
     @property
     def Breakpoints(self):
-        return BreakpointsManager
+        return BreakpointsManager(self._ProgramDebugNET.BreakPoints)
  
     def CounterToPosition(self,counter:int):
-        return Debug.ProgramDebug.CounterToPosition(counter)
+        return Common.FilePoint(self._ProgramDebugNET.CounterToPosition(counter))
 
     @property
     def FileNames(self):
-        return  Debug.ProgramDebug.FileNames
+        return self._ProgramDebugNET.FileNames
     
     @multimethod
     def LoadContext(self):
-        Debug.ProgramDebug.LoadContext()
+        return CurrentContext(self._ProgramDebugNET.LoadContext())
 
     @multimethod
     def LoadContext(self,position:Common.FilePoint):
-        Debug.ProgramDebug.LoadContext(position)
+        return CurrentContext(self._ProgramDebugNET.LoadContext(position._FilePointNET))
 
     @multimethod
     def LoadContext(self,programCounter:int):
-        Debug.ProgramDebug.LoadContext(programCounter)
+        return CurrentContext(self._ProgramDebugNET.LoadContext(programCounter))
 
     def LoadSymbols(self, path:str):
-        Debug.ProgramDebug.LoadSymbols(path)
+        self._ProgramDebugNET.LoadSymbols(path)
 
     @property
     def Location(self):
-        return Debug.ProgramDebug.Location
+        return Common.FilePoint(self._ProgramDebugNET.ProgramDebug.Location)
     
     def Pause(self):
-        Debug.ProgramDebug.Pause
+        self._ProgramDebugNET.ProgramDebug.Pause
     
     def StepInto(self):
-        Debug.ProgramDebug.StepInto
+        self._ProgramDebugNET.ProgramDebug.StepInto
         
     def StepOut(self):
-        Debug.ProgramDebug.StepOut
+        self._ProgramDebugNET.ProgramDebug.StepOut
     
     def StepOver(self):
-        Debug.ProgramDebug.StepOver
+        self._ProgramDebugNET.ProgramDebug.StepOver
         
     @property
     def SymbolsFile(self):
-        return Debug.ProgramDebug.SymbolsFile
+        return self._ProgramDebugNET.ProgramDebug.SymbolsFile
 
     @property
     def SymbolsLoaded(self):
-        return Debug.ProgramDebug.SymbolsLoaded
+        return self._ProgramDebugNET.ProgramDebug.SymbolsLoaded
 
 class SimpleVariable(Variable):
-    def __init__(self):
+    _SimpleVariableNET=None
+    def __init__(self,SimpleVariableNET=AerotechEnsembleTasksDebugNET.SimpleVariable):
+        self._SimpleVariableNET=SimpleVariableNET
+        super(Variable,self).__init__(self._SimpleVariableNET)
+
+    @property
+    def Type(self):
+        return EnsembleTasks.VariableType[self._SimpleVariableNET.Type.ToString()]
+    
+    @property
+    def Value(self):
+        # TODO Solve what Object and value represents here
         pass
         
-class StructVariable(Variable):
-    def __init__(self):
-        pass
+class StructVariable(Variable,Sequence):
+    _StructVariableNET=None
+    def __init__(self,StructVariableNET=AerotechEnsembleTasksDebugNET.StructVariable):
+        self._StructVariableNET=StructVariableNET
+        super(Variable,self).__init__(self._StructVariableNET)
+
+    def __getitem__(self, i):
+        return self._StructVariableNET[i]
     
+    def __len__(self):
+        return len(self._StructVariableNET)
+    
+    @property
+    def Address(self):
+        return self._StructVariableNET.Address
+    
+    @property
+    def Fields(self):
+        return self._StructVariableNET.Fields
+    
+    @property
+    def NumberOfFields(self):
+        return self._StructVariableNET.NumberOfFields
+    
+    @property
+    def Type(self):
+        return EnsembleTasks.VariableType[self._StructVariableNET.Type.ToString()]
+    
+    @property
+    def Value(self):
+        # TODO Solve what Object and value represents here
+        pass
+        
 if __name__=='__main__':
     a=1
     # Use __init__ as a type convertor.

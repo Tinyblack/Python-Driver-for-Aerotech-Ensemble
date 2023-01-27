@@ -41,7 +41,6 @@ except:
     raise RuntimeError
 
 
-
 class AxisMismatch(Enum):
     FirmwareVersion=AerotechEnsembleCommunicationNET.AxisMismatch.FirmwareVersion 
     AxisMask=AerotechEnsembleCommunicationNET.AxisMismatch.AxisMask 

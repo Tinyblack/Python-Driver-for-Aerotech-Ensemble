@@ -8,7 +8,7 @@ sys.path.extend(glob.glob(f'{pathlib.Path(__file__).parents[0].resolve()}/*/**/'
 
 import clr
 clr.AddReference('System')
-from System import String, Char, Int32, IntPtr,Text, UInt32,Enum,Decimal,Double
+from System import String, Char, Int32, IntPtr,Text, UInt32,Decimal,Double
 
 from copy import deepcopy
 from win32api import GetFileVersionInfo, LOWORD, HIWORD
@@ -18,6 +18,9 @@ from GlobalLogger import GlobalLogger
 import time
 
 from multimethod import multimethod
+
+from enum import Enum
+from aenum import extend_enum
 
 import Common
 import CommonCollections
@@ -44,8 +47,7 @@ try:
 except:
     raise RuntimeError
         
-class AxisMask():    
-    NONE= getattr(AerotechEnsembleNET.AxisMask,'None')
+class AxisMask(Enum):    
     A0=AerotechEnsembleNET.AxisMask.A0
     A1=AerotechEnsembleNET.AxisMask.A1
     A2=AerotechEnsembleNET.AxisMask.A2
@@ -57,12 +59,11 @@ class AxisMask():
     A8=AerotechEnsembleNET.AxisMask.A8
     A9=AerotechEnsembleNET.AxisMask.A9
     ALL=AerotechEnsembleNET.AxisMask.All
-
+extend_enum(AxisMask,'None',getattr(AerotechEnsembleNET.AxisMask,'None'))
 
 class Controller():
     _ControllerNET:AerotechEnsembleNET.Controller=None
     def __init__(self,controller):
-        # 
         self._ControllerNET=controller
 
     def ChangePassword(self,oldPassword:str,newPassword:str):
@@ -76,15 +77,15 @@ class Controller():
     @property
     def Configuration(cls):
         return None
+    
+    @classmethod
+    def Connect(cls):
+        AerotechEnsembleNET.Controller.Connect()
 
     @classmethod  
     @property
     def ConnectedControllers(cls):
         return CommonCollections.INamedConstantCollection(AerotechEnsembleNET.Controller.ConnectedControllers,cls)
-
-    @classmethod
-    def Connect(cls):
-        AerotechEnsembleNET.Controller.Connect()
 
     @property
     def ControlCenter(self):
@@ -137,7 +138,7 @@ class Controller():
     def Tasks(self):
         pass # To collections
     
-class ServoRateParameter():
+class ServoRateParameter(Enum):
     OnekHz=AerotechEnsembleNET.ServoRateParameter.OnekHz
     TwokHz=AerotechEnsembleNET.ServoRateParameter.TwokHz
     FourkHz=AerotechEnsembleNET.ServoRateParameter.FourkHz
@@ -145,7 +146,7 @@ class ServoRateParameter():
     TenkHz=AerotechEnsembleNET.ServoRateParameter.TenkHz
     TwentykHz=AerotechEnsembleNET.ServoRateParameter.TwentykHz
     
-class TaskId():
+class TaskId(Enum):
     TLibrary=AerotechEnsembleNET.TaskId.TLibrary
     T01=AerotechEnsembleNET.TaskId.T01
     T02=AerotechEnsembleNET.TaskId.T02
