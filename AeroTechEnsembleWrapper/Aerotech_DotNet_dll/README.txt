@@ -5,3 +5,4 @@
 
     _> Provide a libraryPath to the dll files.
 
+2) Currently, the dll library used is: Aerotech.Ensemble.dll
