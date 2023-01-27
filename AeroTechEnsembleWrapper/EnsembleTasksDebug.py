@@ -249,4 +249,3 @@ class StructVariable(Variable,Sequence):
         
 if __name__=='__main__':
     a=1
-    # Use __init__ as a type convertor.

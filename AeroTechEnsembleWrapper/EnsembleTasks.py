@@ -8,22 +8,15 @@ sys.path.extend(glob.glob(f'{pathlib.Path(__file__).parents[0].resolve()}/*/**/'
 
 import clr
 clr.AddReference('System')
-from System import String, Char, Int32, IntPtr,Text, UInt32,Enum,Decimal,Double
 from System.ComponentModel import ProgressChangedEventHandler
 
-from copy import deepcopy
-from win32api import GetFileVersionInfo, LOWORD, HIWORD
-
-from GlobalLogger import GlobalLogger
-
-import time
-
 from multimethod import multimethod
+from enum import Enum
 
-from collections.abc import Sequence
-
-import CommonCollections
 import Ensemble
+import EnsembleTasksDebug
+import EnsembleStatus
+import EnsembleFileSystem
 
 DEFAULT_DLL_PATH:str=os.path.join(os.path.join(os.path.dirname(__file__),'Aerotech_DotNet_dll'),'')
 DEFAULT_DLL_NAME:str='Aerotech.Ensemble'
@@ -31,119 +24,138 @@ if DEFAULT_DLL_PATH.upper() not in [path.upper() for path in sys.path]:
     sys.path.extend(DEFAULT_DLL_PATH)
 try:
     clr.AddReference(DEFAULT_DLL_NAME)
-    from Aerotech.Ensemble import Tasks
-    from Aerotech.Ensemble.Tasks import TaskState,VariableScope,VariableType
+    import Aerotech.Ensemble.Tasks as AerotechEnsembleTasksNET
 except:
     raise RuntimeError
 
 ##################
 
+class TaskState(Enum):
+    Inactive=AerotechEnsembleTasksNET.TaskState.Inactive
+    Idle=AerotechEnsembleTasksNET.TaskState.Idle
+    ProgramReady=AerotechEnsembleTasksNET.TaskState.ProgramReady
+    ProgramRunning=AerotechEnsembleTasksNET.TaskState.ProgramRunning
+    ProgramPaused=AerotechEnsembleTasksNET.TaskState.ProgramPaused
+    ProgramComplete=AerotechEnsembleTasksNET.TaskState.ProgramComplete
+    Error=AerotechEnsembleTasksNET.TaskState.Error
+    RunningPlugin=AerotechEnsembleTasksNET.TaskState.RunningPlugin
+
+class VariableScope(Enum):
+    Global=AerotechEnsembleTasksNET.VariableScope.Global
+    Argument=AerotechEnsembleTasksNET.VariableScope.Argument
+    Local=AerotechEnsembleTasksNET.VariableScope.Local
+
+class VariableType(Enum):
+    Integer=AerotechEnsembleTasksNET.VariableType.Integer
+    Long=AerotechEnsembleTasksNET.VariableType.Long
+    Double=AerotechEnsembleTasksNET.VariableType.Double
+    Float=AerotechEnsembleTasksNET.VariableType.Float
+    String=AerotechEnsembleTasksNET.VariableType.String
+    Struct=AerotechEnsembleTasksNET.VariableType.Struct
+    Array=AerotechEnsembleTasksNET.VariableType.Array
+
 class DedicatedJoystick():
+    _DedicatedJoystickNET=None
+    def __init__(self,DedicatedJoystickNET=AerotechEnsembleTasksNET.DedicatedJoystick):
+        self._DedicatedJoystickNET=DedicatedJoystickNET
 
     @multimethod
     def Start(self):
-        Tasks.DedicatedJoystick.Start()
+        self._DedicatedJoystickNET.Start()
+        
     @multimethod
     def Start(self, pairNumber:int):
-        Tasks.DedicatedJoystick.Start(pairNumber)
+        self._DedicatedJoystickNET.Start(pairNumber)
 
     def Stop(self):
-        Tasks.DedicatedJoystick.Stop()
+        self._DedicatedJoystickNET.Stop()
  
 class Program():
+    _ProgramNET=None
+    def __init__(self,ProgramNET=AerotechEnsembleTasksNET.Program):
+        self._ProgramNET=ProgramNET
+        
+    @property
     def Debug(self):
-        # TODO Fill in this section
-        pass
-    
-    def Error(self):
-        # TODO Fill in this section
-        pass
+        EnsembleTasksDebug.ProgramDebug(self._ProgramNET.Debug)
     
     @property
+    def Error(self):
+        EnsembleStatus.ErrorInformation(self._ProgramNET.Error)
+
+    @property
     def FileName(self):
-        return Tasks.Program.FileName
+        return self._ProgramNET.FileName
     
     @multimethod
     def Load(self,fileName:str):
-        return Tasks.Program.Load(fileName)
+        return self._ProgramNET.Load(fileName)
 
     @multimethod
     def Load(self,fileName:str, ProgressChangedEventHandler:ProgressChangedEventHandler):
-        return Tasks.Program.Load(fileName,ProgressChangedEventHandler)
+        # TODO Fix the event handler declaration here (Might need a wrapper here)
+        return self._ProgramNET.Load(fileName,ProgressChangedEventHandler)
 
     @multimethod
-    def Run(self,FileInfo):
-        # TODO Fill in this section
-        pass
+    def Run(self,fileInfo:EnsembleFileSystem.FileInfo):
+        self._ProgramNET.Run(fileInfo._FileInfoNET)
 
     @multimethod
     def Run(self,fileName:str):
-        return Tasks.Program.Run(fileName)
+        return self._ProgramNET.Run(fileName)
 
     @multimethod
     def Run(self,fileName:str, ProgressChangedEventHandler:ProgressChangedEventHandler):
-        return Tasks.Program.Run(fileName,ProgressChangedEventHandler)
+        # TODO Fix the event handler declaration here (Might need a wrapper here)
+        return self._ProgramNET.Run(fileName,ProgressChangedEventHandler)
 
-    def Start():
-        Tasks.Program.Start()
+    def Start(self):
+        self._ProgramNET.Start()
     
-    def Stop():
-        Tasks.Program.Stop()
+    def Stop(self):
+        self._ProgramNET.Stop()
  
 class Task():
+    _TaskNET=None
+    def __init__(self,TaskNET=AerotechEnsembleTasksNET.Task):
+        self._TaskNET=TaskNET
+        
     @property
     def DedicatedJoystick(self):
-        return DedicatedJoystick
+        return DedicatedJoystick(self._TaskNET.DedicatedJoystick)
  
     @property
     def Name(self):
-        return Ensemble.TaskId
+        return Ensemble.TaskId[self._TaskNET.Name.ToString()]
 
     @property
     def Program(self):
-        return Program
+        return Program(self._TaskNET.Program)
     
     @property
     def State(self):
-        return TaskState
+        return TaskState[self._TaskNET.State.ToString()]
  
 class TasksCollection():
+    _TasksCollectionNET=None
+    
+    def __init__(self,TasksCollectionNET=AerotechEnsembleTasksNET.TasksCollection):
+        self._TasksCollectionNET=TasksCollectionNET
+        
     @property
     def States(self):
-        return CommonCollections.INamedConstantCollection(Tasks.TasksCollection.States)
+        pass
+        # TODO Make a more explicit collection for this method
+        #return CommonCollections.INamedConstantCollection(self._TasksCollectionNET.States)
     
     @multimethod
-    def StopPrograms():
-        Tasks.TasksCollection.StopPrograms()
+    def StopPrograms(self):
+        self._TasksCollectionNET.StopPrograms()
         
     @multimethod
-    def StopPrograms(taskIds:list[Ensemble.TaskId]):
-        Tasks.TasksCollection.StopPrograms(taskIds)
+    def StopPrograms(self,taskIds:list[Ensemble.TaskId]):
+        for taskId in taskIds:
+            self._TasksCollectionNETStopPrograms(taskId.value)
         
-class TaskState():
-    Inactive=TaskState.Inactive
-    Idle=TaskState.Idle
-    ProgramReady=TaskState.ProgramReady
-    ProgramRunning=TaskState.ProgramRunning
-    ProgramPaused=TaskState.ProgramPaused
-    ProgramComplete=TaskState.ProgramComplete
-    Error=TaskState.Error
-    RunningPlugin=TaskState.RunningPlugin
-
-class VariableScope():
-    Global=VariableScope.Global
-    Argument=VariableScope.Argument
-    Local=VariableScope.Local
-
-class VariableType():
-    Integer=VariableType.Integer
-    Long=VariableType.Long
-    Double=VariableType.Double
-    Float=VariableType.Float
-    String=VariableType.String
-    Struct=VariableType.Struct
-    Array=VariableType.Array
-
-
 if __name__=='__main__':
     a=1

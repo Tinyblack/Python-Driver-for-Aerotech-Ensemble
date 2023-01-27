@@ -107,3 +107,11 @@ class AxisDiagPacket():
         self.VelocityErrorCounts=data.VelocityErrorCounts
         self.VelocityFeedback=data.VelocityFeedback
         self.VelocityFeedbackCounts=data.VelocityFeedbackCounts
+
+
+
+class ErrorInformation():
+    _ErrorInformationNET=None
+    
+    def __init__(self,ErrorInformationNET=AerotechEnsembleStatusNET.ErrorInformation):
+        self._ErrorInformation=ErrorInformationNET
