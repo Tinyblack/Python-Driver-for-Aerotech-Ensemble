@@ -109,7 +109,7 @@ class ControllerInformation():
         
     @property
     def Axes(self): # Provides access to information about axes 
-        return CommonCollections.INamedConstantCollection(self._ControllerInformationNET.Axes,AxisInfo)
+        return CommonCollections.NamedConstantCollection(self._ControllerInformationNET.Axes,AxisInfo)
 
     @property
     def AxisMismatch(self): # Indicates a configuration error on the controller 
@@ -167,7 +167,7 @@ class DriveInformation():
         
     @property     
     def Axes(self): # Returns information about the axes that are present on the drive. 
-        return CommonCollections.INamedConstantCollection(self._DriveInformationNET.Axes,AxisInfo)
+        return CommonCollections.NamedConstantCollection(self._DriveInformationNET.Axes,AxisInfo)
 
     @property  
     def IOBoardPresent(self): # If the IO board is connected.

@@ -44,7 +44,7 @@ except:
 class AxisMismatch(Enum):
     FirmwareVersion=AerotechEnsembleCommunicationNET.AxisMismatch.FirmwareVersion 
     AxisMask=AerotechEnsembleCommunicationNET.AxisMismatch.AxisMask 
-extend_enum(AxisMismatch,'None',getattr(AerotechEnsembleCommunicationNET,'None'))
+extend_enum(AxisMismatch,'None',getattr(AerotechEnsembleCommunicationNET.AxisMismatch,'None'))
     
 class CommunicationType(Enum):
     Ethernet=AerotechEnsembleCommunicationNET.CommunicationType.Ethernet

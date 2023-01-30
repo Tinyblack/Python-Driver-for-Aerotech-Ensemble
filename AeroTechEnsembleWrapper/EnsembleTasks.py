@@ -145,7 +145,7 @@ class TasksCollection():
         
     @property
     def States(self):
-        return CommonCollections.INamedConstantCollection(self._TasksCollectionNET.States,TaskState)
+        return CommonCollections.NamedConstantCollection(self._TasksCollectionNET.States,TaskState)
     
     @multimethod
     def StopPrograms(self):

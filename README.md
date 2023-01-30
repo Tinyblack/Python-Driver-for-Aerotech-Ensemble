@@ -12,7 +12,7 @@ Wrapper Progress:
 * Aerotech.Ensemble.Commands => 10%
 * Aerotech.Ensemble.Communication => 90%
 * Aerotech.Ensemble.Configuration => DONE
-* Aerotech.Ensemble.DataCollection  => 0%
+* Aerotech.Ensemble.DataCollection  => 90%
 * Aerotech.Ensemble.Exceptions => 0%
 * Aerotech.Ensemble.FileSystem => DONE
 * Aerotech.Ensemble.Firmware => DONE

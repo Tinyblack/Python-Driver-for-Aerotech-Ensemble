@@ -85,7 +85,7 @@ class Controller():
     @classmethod  
     @property
     def ConnectedControllers(cls):
-        return CommonCollections.INamedConstantCollection(AerotechEnsembleNET.Controller.ConnectedControllers,cls)
+        return CommonCollections.NamedConstantCollection(AerotechEnsembleNET.Controller.ConnectedControllers,cls)
 
     @property
     def ControlCenter(self):
