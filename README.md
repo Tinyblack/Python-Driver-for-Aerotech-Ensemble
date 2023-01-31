@@ -7,7 +7,7 @@ However, the basic motion function has been finished and tested.
 
 Wrapper Progress:
 
-* Aerotech.Common => 10%
+* Aerotech.Common => 90%
 * Aerotech.Common.Collections => DONE
 * Aerotech.Ensemble.Commands => 10%
 * Aerotech.Ensemble.Communication => 90%
