@@ -13,21 +13,9 @@ import clr
 clr.AddReference('System')
 from System.ComponentModel import ProgressChangedEventHandler
 
-import Common
 import CommonCollections
 import Ensemble
-import EnsembleCommands 
-import EnsembleCommunication 
-import EnsembleConfiguration  
-import EnsembleDataCollection
-import EnsembleExceptions
-import EnsembleFileSystem
-import EnsembleFirmware
-import EnsembleInformation
-import EnsembleParameters
 import EnsembleStatus
-import EnsembleTasks
-import EnsembleTasksDebug
 
 from multimethod import multimethod
 
@@ -40,6 +28,8 @@ try:
     import Aerotech.Ensemble.DataCollection as AerotechEnsembleDataCollectionNET
 except:
     raise RuntimeError
+
+# ! DONE
 
 class OptionalDataNumber(Enum):  # Specifies the number of the optional data source 
     Optional1=AerotechEnsembleDataCollectionNET.OptionalDataNumber.Optional1  # The first optional output 
@@ -134,53 +124,160 @@ class AxesData():  # Retrieves data for all the axes
     
     @property
     def AnalogInput(self):  # Provides access to retrieving Analog Input 
- 
+        return IDataRetriever(self._AxesDataNET.AnalogInput,AxisAnalogInputData)
     @property
     def AnalogOutput(self):  # Provides access to retrieving Analog Output 
- 
+        return IDataRetriever(self._AxesDataNET.AnalogOutput,AxisAnalogOutputData)
     @property
     def AxisFault(self):  # Provides access to retrieving Axis Fault 
- 
+        return IDataRetriever(self._AxesDataNET.AxisFault,EnsembleStatus.AxisFault)
     @property
     def AxisStatus(self):  # Provides access to retrieving Axis Status 
- 
+        return IDataRetriever(self._AxesDataNET.AxisStatus,EnsembleStatus.AxisStatus)
     @property
     def Command(self):  # Provides access to retrieving Position, Velocity, and Acceleration Commands 
- 
+        return IDataRetriever(self._AxesDataNET.Command,AxisCommandData) 
     @property
     def CurrentCommand(self):  # Provides access to retrieving Current Command 
- 
+        return IDataRetriever(self._AxesDataNET.CurrentCommand,int)
     @property
     def CurrentFeedback(self):  # Provides access to retrieving Current Feedback 
- 
+        return IDataRetriever(self._AxesDataNET.CurrentFeedback,int)
     @property
     def DigitalInput(self):  # Provides access to retrieving Digital Input 
- 
+        return IDataRetriever(self._AxesDataNET.DigitalInput,AxisDigitalInputData)
     @property
     def DigitalOutput(self):  # Provides access to retrieving Digital Output 
- 
+        return IDataRetriever(self._AxesDataNET.DigitalOutput,AxisDigitalOutputData)
+    @property
+    def Feedback(self):  # Provides access to retrieving of Position and Velocity feedback 
+        return IDataRetriever(self._AxesDataNET.Feedback,AxisFeedbackData)
     @property
     def OptionalData(self):  # Provides access to retrieving Optional Data 
- 
+        return AxesOptionalRetriever(self._AxesDataNET.OptionalData)
     @property
     def PositionFeedbackAuxiliary(self):  # Provides access to retrieving Position Feedback Auxiliary 
- 
+        return IDataRetriever(self._AxesDataNET.PositionFeedbackAuxiliary,float)
     @property
     def ProgramCounter(self):  # Provides access to retrieving Program Counter 
- 
-    def Retrieve(self)  Waits for all the data to be collected, then retrieves all data for all axes 
+        return ControllerProgramCounterRetriever(self._AxesDataNET.ProgramCounter)
     
-    def Retrieve(self,Int32)  Waits for all the data to be collected, then retrieves all data for all axes 
-    
-    def Retrieve(self,Int32, ProgressChangedEventHandler)  Waits for all the data to be collected, then retrieves all data for all axes 
- 
+    @multimethod
+    def Retrieve(self):  # Waits for all the data to be collected, then retrieves all data for all axes 
+        return ControllerDataResults(self._AxesDataNET.Retrieve())
+    @multimethod
+    def Retrieve(self,pointsToRetrieve:int):  # Waits for all the data to be collected, then retrieves all data for all axes 
+        return ControllerDataResults(self._AxesDataNET.Retrieve(pointsToRetrieve))
+    @multimethod
+    def Retrieve(self,pointsToRetrieve:int, progressChangedEventHandler:ProgressChangedEventHandler):  # Waits for all the data to be collected, then retrieves all data for all axes 
+        return ControllerDataResults(self._AxesDataNET.Retrieve(pointsToRetrieve,progressChangedEventHandler))
 
-class AxesDataContainer():  # A container of some data for several axes 
-
-class AxesDataResults():  # Contains collected data for all axes 
+class AxesDataContainer(CommonCollections.NamedMaskedConstantCollection):  # A container of some data for several axes
+    def __init__(self,TData,pyClass):
+        self.TData=TData
+        self.pyClass=pyClass
+        super(CommonCollections.NamedMaskedConstantCollection,self).__init__(TData,pyClass)
+        
+    @property
+    def CollectionPeriod (self):
+        return self.TData.CollectionPeriod
+         
+class AxesDataResults(CommonCollections.NamedMaskedConstantCollection):  # Contains collected data for all axes 
+    _AxesDataResultsNET=None
+    def __init__(self,TObject):
+        self._AxesDataResultsNET=TObject
+        super(CommonCollections.NamedMaskedConstantCollection,self).__init__(TObject,AxisDataResults,Ensemble.AxisMask)
+        
+    @property
+    def AnalogInput(self):  # The analog input #0 and #1 for the axes 
+        return AxesDataContainer(self._AxesDataResultsNET.AnalogInput,AxisAnalogInputData)
+    @property
+    def AnalogOutput(self):  # The analog output #0 and #1 for the axes 
+        return AxesDataContainer(self._AxesDataResultsNET.AnalogOutput,AxisAnalogOutputData)
+    @property
+    def AxisFault(self):  # The faults for the axes 
+        return AxesDataContainer(self._AxesDataResultsNET.AxisFault,EnsembleStatus.AxisFault)
+    @property
+    def AxisStatus(self):  # The statuses for the axes 
+        return AxesDataContainer(self._AxesDataResultsNET.AxisStatus,EnsembleStatus.AxisStatus)
+    @property
+    def Command(self):  # The position, velocity, and acceleration commands for the axes 
+        return AxesDataContainer(self._AxesDataResultsNET.Command,AxisCommandData) 
+    @property
+    def CurrentCommand(self):  # The current commands for the axes 
+        return AxesDataContainer(self._AxesDataResultsNET.CurrentCommand,int)
+    @property
+    def CurrentError(self):  # The current errors for the axes 
+        return AxesDataContainer(self._AxesDataResultsNET.CurrentError,int)
+    @property
+    def CurrentFeedback(self):  # The current feedbacks for the axes 
+        return AxesDataContainer(self._AxesDataResultsNET.CurrentFeedback,int)
+    @property
+    def DigitalInput(self):  # The digital inputs #0, #1, and #2 for the axes 
+        return AxesDataContainer(self._AxesDataResultsNET.DigitalInput,AxisDigitalInputData)
+    @property
+    def DigitalOutput(self):  # The digital outputs #0, #1, and #2 for the axes 
+        return AxesDataContainer(self._AxesDataResultsNET.DigitalOutput,AxisDigitalOutputData)
+    @property
+    def Feedback(self):  # The position and velocity feedbacks for the axes 
+        return AxesDataContainer(self._AxesDataResultsNET.Feedback,AxisFeedbackData)
+    @property
+    def OptionalData1(self):  # The optional data #1 for the axes 
+        return AxesDataContainer(self._AxesDataResultsNET.OptionalData1,float)
+    @property
+    def OptionalData2(self):  # The optional data #2 for the axes 
+        return AxesDataContainer(self._AxesDataResultsNET.OptionalData2,float)
+    @property
+    def PositionError(self):  # The position errors for the axes, in user units 
+        return AxesDataContainer(self._AxesDataResultsNET.PositionError,float)
+    @property
+    def PositionErrorCounts(self):  # The position errors for the axes, in counts 
+        return AxesDataContainer(self._AxesDataResultsNET.PositionErrorCounts,float)
+    @property
+    def PositionFeedbackAuxiliary(self):  # The position feedback auxiliary for the axes 
+        return AxesDataContainer(self._AxesDataResultsNET.PositionFeedbackAuxiliary,float)
+    @property
+    def VelocityError(self):  # The velocity errors for the axes, in user units 
+        return AxesDataContainer(self._AxesDataResultsNET.VelocityError,float)
+    @property
+    def VelocityErrorCounts(self):  # The velocity errors for the axes, in counts  
+        return AxesDataContainer(self._AxesDataResultsNET.VelocityErrorCounts,float)
 
 class AxesOptionalRetriever():  # Allows retrieval of Optional Data for several axes 
+    _AxesOptionalRetrieverNET=None
+    def __init__(self,AxesOptionalRetrieverNET=AerotechEnsembleDataCollectionNET.AxesOptionalRetriever):
+        self._AxesOptionalRetrieverNET=AxesOptionalRetrieverNET 
 
+    @multimethod
+    def Retrieve(self,optionalNumber:OptionalDataNumber):  # Waits for all the Optional Data to be collected, then retrieves it 
+        self._AxesOptionalRetrieverNET.Retrieve(optionalNumber.value)
+    @multimethod
+    def Retrieve(self,pointsToRetrieve:int, optionalNumber:OptionalDataNumber):  # Waits for for the specified number of Optional Data points to be collected, then retrieves it 
+        self._AxesOptionalRetrieverNET.Retrieve(pointsToRetrieve,optionalNumber.value)
+    @multimethod
+    def Retrieve(self,pointsToRetrieve:int, optionalNumber:OptionalDataNumber, progressChangedEventHandler:ProgressChangedEventHandler):  # Waits for for the specified number of Optional Data points to be collected, then retrieves it 
+        self._AxesOptionalRetrieverNET.Retrieve(pointsToRetrieve,optionalNumber.value,progressChangedEventHandler)
+        
+    @multimethod
+    def Select(self,axisNumber:int, optionalNumber:OptionalDataNumber, dataSource:OptionalDataSource):  # Selects which data to collect for optional data 
+        self._AxesOptionalRetrieverNET.Select(axisNumber, optionalNumber, dataSource)
+    @multimethod
+    def Select(self,axisName:str, optionalNumber:OptionalDataNumber, dataSource:OptionalDataSource):  # Selects which data to collect for optional data 
+        self._AxesOptionalRetrieverNET.Select(axisName, optionalNumber, dataSource)
+    @multimethod
+    def Select(self,axisMask:Ensemble.AxisMask, optionalNumber:OptionalDataNumber, dataSource:OptionalDataSource):  # Selects which data to collect for optional data
+        self._AxesOptionalRetrieverNET.Select(axisMask, optionalNumber, dataSource)
+     
+    @multimethod
+    def SelectMemory(self,axisNumber:int, optionalNumber:OptionalDataNumber, dataSource:OptionalMemoryDataSource, memoryLocation:int):  # Selects which memory location to collect 
+        self._AxesOptionalRetrieverNET.SelectMemory(axisNumber, optionalNumber, dataSource ,memoryLocation)
+    @multimethod
+    def SelectMemory(self,axisName:str, optionalNumber:OptionalDataNumber, dataSource:OptionalMemoryDataSource, memoryLocation:int):  # Selects which memory location to collect for optional data 
+        self._AxesOptionalRetrieverNET.SelectMemory(axisName, optionalNumber, dataSource ,memoryLocation)
+    @multimethod
+    def SelectMemory(self,axisMask:Ensemble.AxisMask, optionalNumber:OptionalDataNumber, dataSource:OptionalMemoryDataSource, memoryLocation:int):  # Selects which memory location to collect for optional data 
+        self._AxesOptionalRetrieverNET.SelectMemory(axisMask, optionalNumber, dataSource ,memoryLocation)
+ 
 class AxisAnalogInputData():  # Stores analog input #0 and #1 data 
     _AxisAnalogInputDataNET=None
     def __init__(self,AxisAnalogInputDataNET=AerotechEnsembleDataCollectionNET.AxisAnalogInputData):
@@ -207,7 +304,6 @@ class AxisAnalogOutputData():  # Stores analog output #0 and #1 data
     def Output1(self):  # Analog Output #1 
         return self._AxisAnalogOutputDataNET.Output1
     
-
 class AxisCommandData():  # Contains position, velocity, and acceleration command data 
     _AxisCommandDataNET=None
     def __init__(self,AxisCommandDataNET=AerotechEnsembleDataCollectionNET.AxisCommandData):
@@ -318,7 +414,6 @@ class AxisDataResults():  # Contains collected data for an axis
     def VelocityErrorCounts(self):  # Gets the velocity error for the axis, in counts  
         return self._AxisDataResultsNET.VelocityErrorCounts
     
-
 class AxisDigitalInputData():  # Stores digital input #0, #1, and #2 data 
     _AxisDigitalInputDataNET=None
     def __init__(self,AxisDigitalInputDataNET=AerotechEnsembleDataCollectionNET.AxisDigitalInputData):
@@ -375,7 +470,6 @@ class AxisFeedbackData():  # Stores the position and velocity feedback data
     def VelocityCounts(self):  # The velocity feedback of the axis, in counts  
         return self._AxisFeedbackDataNET.VelocityCounts
 
-
 class ControllerDataResults():  # Contains collected data for the controller
     _ControllerDataResultsNET=None
     def __init__(self,ControllerDataResultsNET=AerotechEnsembleDataCollectionNET.ControllerDataResults):
@@ -397,7 +491,6 @@ class ControllerDataResults():  # Contains collected data for the controller
     def ProgramCounter(self):  # Retreives the program counter data  
         return self._ControllerDataResultsNET.ProgramCounter
     
-
 class ControllerProgramCounterRetriever():  # Allows retrieval of Program Counter for the master 
     _ControllerProgramCounterRetrieverNET=None
     def __init__(self,ControllerProgramCounterRetrieverNET=AerotechEnsembleDataCollectionNET.ControllerProgramCounterRetriever):
@@ -480,5 +573,19 @@ class DataCollectionStatus():  # Contains status of data collection
     def ScopeTrigId(self):  # The Id with which ScopeTrig was initiated 
         return ScopeTrigId[self._DataCollectionStatusNET.ScopeTrigId.ToString()]
 
-# class IDataRetriever():  # Retrieves some specific data from the Controller 
-
+class IDataRetriever():  # Retrieves some specific data from the Controller 
+    _DataRetriever=None
+    _pyClass=None
+    def __init__(self,DataRetriever,pyClass):
+        self.DataRetriever=DataRetriever
+        self.pyClass=pyClass
+        
+    @multimethod
+    def Retrieve(self):  # Waits for data to be available and then retrieves the specific data for multiple or one axis 
+        return AxesDataContainer(self.DataRetriever.Retrieve(),self.pyClass)
+    @multimethod
+    def Retrieve(self,pointsToRetrieve:int):  # Waits for data to be available and then retrieves the specific data for multiple or one axis 
+        return AxesDataContainer(self.DataRetriever.Retrieve(pointsToRetrieve),self.pyClass)
+    @multimethod
+    def Retrieve(self,pointsToRetrieve:int, progressChangedEventHandler:ProgressChangedEventHandler):  # Waits for data to be available and then retrieves the specific data for multiple or one axis  
+        return AxesDataContainer(self.DataRetriever.Retrieve(pointsToRetrieve,progressChangedEventHandler),self.pyClass)
