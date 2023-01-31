@@ -17,8 +17,8 @@ Wrapper Progress:
 * Aerotech.Ensemble.FileSystem => DONE
 * Aerotech.Ensemble.Firmware => DONE
 * Aerotech.Ensemble.Information => DONE
-* Aerotech.Ensemble.Parameters => 0%
-* Aerotech.Ensemble.Status => 10%
+* Aerotech.Ensemble.Parameters => 30%
+* Aerotech.Ensemble.Status => 30%
 * Aerotech.Ensemble.Tasks => DONE
 * Aerotech.Ensemble.Tasks.Debug => DONE
 

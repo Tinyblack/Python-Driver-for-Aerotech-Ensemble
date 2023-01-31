@@ -15,9 +15,11 @@ from enum import Enum
 from aenum import extend_enum
 
 import Ensemble
+import EnsembleTasks
 import EnsembleTasksDebug
 import EnsembleStatus
 import EnsembleFileSystem
+import CommonCollections
 
 DEFAULT_DLL_PATH:str=os.path.join(os.path.join(os.path.dirname(__file__),'Aerotech_DotNet_dll'),'')
 DEFAULT_DLL_NAME:str='Aerotech.Ensemble'
@@ -252,16 +254,22 @@ class ControlCenter():  # Retrieves diagnostic data, callbacks, and task states 
 class ControllerDiagPacket():  # The diagnostic packet of the controller 
 
 class ControllerEventArgs():  # The base class for classes containing event data related to controllers. 
- 
+    _ControllerEventArgsNET=None
+    def __init__(self,ControllerEventArgsNET=AerotechEnsembleStatusNET.ControllerEventArgs):
+        self._ControllerEventArgsNET=ControllerEventArgsNET
+        
+    @property
+    def Controller(self):
+        return Ensemble.Controller(self._ControllerEventArgsNET.Controller)
+        
 class DebugFlags():  # Represents the debug flags on the controller
  
 class DiagPacketPoller():  # Allows to poll for diagnostic information from a controller in the background 
  
-class ErrorEventArgs():  # Provides data for the error events 
+class ErrorEventArgs(ControllerEventArgs):  # Provides data for the error events 
   
 class ErrorInformation(): # Provides error information.
     _ErrorInformationNET=None
-    
     def __init__(self,ErrorInformationNET=AerotechEnsembleStatusNET.ErrorInformation):
         self._ErrorInformationNET=ErrorInformationNET
         
@@ -286,7 +294,7 @@ class ErrorInformation(): # Provides error information.
 
         
  
-class InputBoxCallbackEventArgs(): # Provides data for InputBoxCallback
+class InputBoxCallbackEventArgs(ControllerEventArgs): # Provides data for InputBoxCallback
  
 class JoystickButton(Enum): # Specifies the button on a joystick 
     ButtonA=AerotechEnsembleStatusNET.JoystickButton.ButtonA #Button A 
@@ -297,125 +305,69 @@ extend_enum(JoystickButton,'None',getattr(AerotechEnsembleStatusNET.JoystickButt
  
 class JoystickDiagPacket(): # Represents the diagnostic information about the joystick 
  
-class NewDiagPacketArrivedEventArgs(): # Provides data for NewDiagPacketArrived
+class NewDiagPacketArrivedEventArgs(ControllerEventArgs): # Provides data for NewDiagPacketArrived
+    _NewDiagPacketArrivedEventArgsNET=None
+    def __init__(self,NewDiagPacketArrivedEventArgsNET=AerotechEnsembleStatusNET.NewDiagPacketArrivedEventArgs):
+        self._NewDiagPacketArrivedEventArgsNET=NewDiagPacketArrivedEventArgsNET
+        ControllerEventArgs.__init__(self,NewDiagPacketArrivedEventArgsNET)
+        
+    @property
+    def Data(self):   # The most recent diagnostics retrieved from the controller  
+        return ControllerDiagPacket(self._NewDiagPacketArrivedEventArgsNET.Data)
  
-class NewTaskStatesArrivedEventArgs(): # Provides data for NewTaskStatesArrived
+class NewTaskStatesArrivedEventArgs(ControllerEventArgs): # Provides data for NewTaskStatesArrived
+    _NewTaskStatesArrivedEventArgsNET=None
+    def __init__(self,NewTaskStatesArrivedEventArgsNET=AerotechEnsembleStatusNET.NewTaskStatesArrivedEventArgs):
+        self._NewTaskStatesArrivedEventArgsNET=NewTaskStatesArrivedEventArgsNET
+        ControllerEventArgs.__init__(self,NewTaskStatesArrivedEventArgsNET)
+    
+    @property
+    def TaskStates(self):   # The most recent task state information retrieved from the controller  
+        # TODO check if this is valid
+        return CommonCollections.NamedConstantCollection(self._NewTaskStatesArrivedEventArgsNET.TaskStates,EnsembleTasks.TaskState)
  
 class PlaneStatus(): # Represents plane status
- 
-class PrintCallbackEventArgs(): # Provides data for PrintCallback
- 
+PlaneStatus()()()()  Creates a new instance with all things unset (false)
+
+PlaneStatus(Int32)  Creates a new instance with given mask value
+
+AccelerationPhaseActive  Acceleration Phase Active
+
+ActiveBits  Returns a list of the active bit names.
+
+BitHelpLinks  Returns a dictionary of bit value names (keys) and the associated help file link (values) 
+
+BitValues  Returns a listing of the bit names and their corresponding values 
+
+DecelerationPhaseActive  Deceleration Phase Active
+
+Explicit Narrowing Explicit Explicit Explicit (Int32 to PlaneStatus)  Converts the enumeration value as an integer to this class 
+
+HoldModeActive  Hold Mode Active
+
+MaskValue  The underlying mask value 
+
+MotionAborting  Motion Aborting
+
+MotionActive  Motion Active
+
+None  If all the other properties are not set (false) 
+
+ToString(Boolean)  Converts to a string representation 
+
+ValueNames  Returns a mapping of values to their human readable form. 
+
+VelocityProfilingActive  Velocity Profiling Active 
+
+class PrintCallbackEventArgs(ControllerEventArgs): # Provides data for PrintCallback
+    _PrintCallbackEventArgsNET=None
+    def __init__(self,PrintCallbackEventArgsNET=AerotechEnsembleStatusNET.PrintCallbackEventArgs):
+        self._PrintCallbackEventArgsNET=PrintCallbackEventArgsNET
+        ControllerEventArgs.__init__(self,PrintCallbackEventArgsNET)
+        
+    @property
+    def Message(self):
+        return self._PrintCallbackEventArgsNET.Message()
+     
 class TaskStatesPoller(): # Allows to poll for task state information from a controller in the background  
 
-
-
-'''
-    AbsoluteFeedback=None
-    AccelerationCommand=None
-    AccelerationCommandCounts=None
-    AccelerationError=None
-    AccelerationErrorCounts=None
-    AccelerationFeedback=None
-    AccelerationFeedbackCounts=None
-    AmplifierTemperature=None
-    AnalogInput0=None
-    AnalogInput1=None
-    AnalogInput2=None
-    AnalogInput3=None
-    AnalogOutput0=None
-    AnalogOutput1=None
-    AnalogOutput2=None
-    AnalogOutput3=None
-    AnalogOutput4=None
-    AxisFault=None
-    AxisName=None
-    AxisStatus=None
-    CurrentCommand=None
-    CurrentError=None
-    CurrentFeedback=None
-    DigitalInput0=None
-    DigitalInput1=None
-    DigitalInput2=None
-    DigitalOutput0=None
-    DigitalOutput1=None
-    DigitalOutput2=None
-    PiezoVoltageCommand=None
-    PiezoVoltageFeedback=None
-    PositionCommand=None
-    PositionCommandCounts=None 
-    PositionError=None
-    PositionErrorCounts=None
-    PositionFeedback=None
-    PositionFeedbackAuxiliary=None 
-    PositionFeedbackCounts=None
-    ProgramPositionCommand=None
-    ProgramPositionCommandCounts=None
-    ProgramPositionError=None
-    ProgramPositionErrorCounts=None
-    ProgramPositionFeedback=None
-    ProgramPositionFeedbackCounts=None
-    VelocityCommand=None
-    VelocityCommandCounts=None
-    VelocityError=None
-    VelocityErrorCounts=None
-    VelocityFeedback=None
-    VelocityFeedbackCounts=None  
-
-    def __init__(self):
-        pass
-
-    def toString(self):
-        return vars(self)
-        
-    def updateStatus(self,data):
-        self.AbsoluteFeedback=data.AbsoluteFeedback
-        self.AccelerationCommand=data.AccelerationCommand
-        self.AccelerationCommandCounts=data.AccelerationCommandCounts
-        self.AccelerationError=data.AccelerationError
-        self.AccelerationErrorCounts=data.AccelerationErrorCounts
-        self.AccelerationFeedback=data.AccelerationFeedback
-        self.AccelerationFeedbackCounts=data.AccelerationFeedbackCounts
-        self.AmplifierTemperature=data.AmplifierTemperature
-        self.AnalogInput0=data.AnalogInput0
-        self.AnalogInput1=data.AnalogInput1
-        self.AnalogInput2=data.AnalogInput2
-        self.AnalogInput3=data.AnalogInput3
-        self.AnalogOutput0=data.AnalogOutput0
-        self.AnalogOutput1=data.AnalogOutput1
-        self.AnalogOutput2=data.AnalogOutput2
-        self.AnalogOutput3=data.AnalogOutput3
-        self.AnalogOutput4=data.AnalogOutput4
-        self.AxisFault=data.AxisFault
-        self.AxisName=data.AxisName
-        self.AxisStatus=data.AxisStatus
-        self.CurrentCommand=data.CurrentCommand
-        self.CurrentError=data.CurrentError
-        self.CurrentFeedback=data.CurrentFeedback
-        self.DigitalInput0=data.DigitalInput0
-        self.DigitalInput1=data.DigitalInput1
-        self.DigitalInput2=data.DigitalInput2
-        self.DigitalOutput0=data.DigitalOutput0
-        self.DigitalOutput1=data.DigitalOutput1
-        self.DigitalOutput2=data.DigitalOutput2
-        self.PiezoVoltageCommand=data.PiezoVoltageCommand
-        self.PiezoVoltageFeedback=data.PiezoVoltageFeedback
-        self.PositionCommand=data.PositionCommand
-        self.PositionCommandCounts=data.PositionCommandCounts
-        self.PositionError=data.PositionError
-        self.PositionErrorCounts=data.PositionErrorCounts
-        self.PositionFeedback=data.PositionFeedback
-        self.PositionFeedbackAuxiliary=data.PositionFeedbackAuxiliary
-        self.PositionFeedbackCounts=data.PositionFeedbackCounts
-        self.ProgramPositionCommand=data.ProgramPositionCommand
-        self.ProgramPositionCommandCounts=data.ProgramPositionCommandCounts
-        self.ProgramPositionError=data.ProgramPositionError
-        self.ProgramPositionErrorCounts=data.ProgramPositionErrorCounts
-        self.ProgramPositionFeedback=data.ProgramPositionFeedback
-        self.ProgramPositionFeedbackCounts=data.ProgramPositionFeedbackCounts
-        self.VelocityCommand=data.VelocityCommand
-        self.VelocityCommandCounts=data.VelocityCommandCounts
-        self.VelocityError=data.VelocityError
-        self.VelocityErrorCounts=data.VelocityErrorCounts
-        self.VelocityFeedback=data.VelocityFeedback
-        self.VelocityFeedbackCounts=data.VelocityFeedbackCounts
-'''

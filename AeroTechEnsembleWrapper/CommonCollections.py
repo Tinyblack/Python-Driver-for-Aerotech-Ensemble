@@ -9,7 +9,10 @@ class NamedConstantCollection(Sequence):
         super().__init__()
 
     def __getitem__(self, TName):
-        return self.pyClass(self.TObject[TName])
+        try:
+            return self.pyClass(self.TObject[TName])
+        except:
+            return self.pyClass[self.TObject[TName].ToString()]
     
     def __len__(self):
         return self.TObject.Count

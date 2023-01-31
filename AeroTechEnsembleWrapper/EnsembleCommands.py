@@ -8,7 +8,7 @@ sys.path.extend(glob.glob(f'{pathlib.Path(__file__).parents[0].resolve()}/*/**/'
 
 import clr
 clr.AddReference('System')
-from System import String, Char, Int32, IntPtr,Text, UInt32,Enum,Decimal,Double
+from System import String, Char, Int32, IntPtr,Text, UInt32,Decimal,Double
 
 from copy import deepcopy
 from win32api import GetFileVersionInfo, LOWORD, HIWORD
@@ -16,6 +16,9 @@ from win32api import GetFileVersionInfo, LOWORD, HIWORD
 from GlobalLogger import GlobalLogger
 
 import time
+
+from enum import Enum
+from aenum import extend_enum
 
 from multimethod import multimethod
 
@@ -68,7 +71,7 @@ class DataAcquisitionCommands():
     def __init__(self):
         pass
 
-class EthernetStatus():
+class EthernetStatus(Enum):
     DataInTransmitter=AerotechEnsembleCommandsNET.EthernetStatus.DataInTransmitter
     DataInReceiver=AerotechEnsembleCommandsNET.EthernetStatus.DataInReceiver
 
@@ -76,14 +79,14 @@ class IOCommands():
     def __init__(self):
         pass
     
-class LoopTransmissionMode():
+class LoopTransmissionMode(Enum):
     Off=AerotechEnsembleCommandsNET.LoopTransmissionMode.Off
     Sinusoid=AerotechEnsembleCommandsNET.LoopTransmissionMode.Sinusoid
     SinusoidGantry=AerotechEnsembleCommandsNET.LoopTransmissionMode.SinusoidGantry
     WhiteNoise=AerotechEnsembleCommandsNET.LoopTransmissionMode.WhiteNoise
     WhiteNoiseGantry=AerotechEnsembleCommandsNET.LoopTransmissionMode.WhiteNoiseGantry
 
-class LoopTransmissionType():
+class LoopTransmissionType(Enum):
     OpenLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.OpenLoop
     ClosedLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.ClosedLoop
     CurrentLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.CurrentLoop
@@ -91,7 +94,7 @@ class LoopTransmissionType():
     AFClosedLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.AFClosedLoop
 
 
-class ModeType():
+class ModeType(Enum):
     MotionMode=AerotechEnsembleCommandsNET.ModeType.MotionMode
     WaitMode=AerotechEnsembleCommandsNET.ModeType.WaitMode
     RampMode=AerotechEnsembleCommandsNET.ModeType.RampMode
@@ -620,7 +623,7 @@ class MotionSetupCommands():
     def __init__(self,controller:AerotechEnsembleNET.Controller):
         self._ControllerNET=controller
     
-class OnOff():
+class OnOff(Enum):
     Off=AerotechEnsembleCommandsNET.OnOff.Off
     On=AerotechEnsembleCommandsNET.OnOff.On
 
@@ -628,7 +631,7 @@ class PSOCommands():
     def __init__(self):
         pass
     
-class PsoMode():
+class PsoMode(Enum):
     Reset=AerotechEnsembleCommandsNET.PsoMode.Reset
     Off=AerotechEnsembleCommandsNET.PsoMode.Off
     Arm=AerotechEnsembleCommandsNET.PsoMode.Arm
@@ -636,12 +639,12 @@ class PsoMode():
     On=AerotechEnsembleCommandsNET.PsoMode.On
     FireContinuous=AerotechEnsembleCommandsNET.PsoMode.FireContinuous
 
-class RampMode():
+class RampMode(Enum):
     Dist=AerotechEnsembleCommandsNET.RampMode.Dist
     Rate=AerotechEnsembleCommandsNET.RampMode.Rate
     Time=AerotechEnsembleCommandsNET.RampMode.Time
 
-class RampType():
+class RampType(Enum):
     Linear=AerotechEnsembleCommandsNET.RampType.Linear
     Scurve=AerotechEnsembleCommandsNET.RampType.Scurve
     Sine=AerotechEnsembleCommandsNET.RampType.Sine
@@ -650,7 +653,7 @@ class RegisterCommands():
     def __init__(self):
         pass
     
-class RegisterType():
+class RegisterType(Enum):
     GlobalIntegers=AerotechEnsembleCommandsNET.RegisterType.GlobalIntegers
     GlobalDoubles=AerotechEnsembleCommandsNET.RegisterType.GlobalDoubles
     ConversionRegisters=AerotechEnsembleCommandsNET.RegisterType.ConversionRegisters
@@ -694,24 +697,80 @@ class RootCommands():
     def ExecuteAsync(self,code:str):
         self._ControllerNET.Commands.ExecuteAsync(code)
     
-class Semaphores():
+class Semaphores(Enum):
     ModbusRegisters=AerotechEnsembleCommandsNET.Semaphores.ModbusRegisters
     GlobalIntegers=AerotechEnsembleCommandsNET.Semaphores.GlobalIntegers
     GlobalDoubles=AerotechEnsembleCommandsNET.Semaphores.GlobalDoubles 
 
-class StatusCommands():
-    def __init__(self):
-        pass
+class StatusCommands(CommandCategory):
+    _StatusCommandsNET=None
+    def __init__(self,StatusCommandsNET=AerotechEnsembleCommandsNET.StatusCommands):
+        self._StatusCommandsNET=StatusCommandsNET
+        CommandCategory.__init__(self,StatusCommandsNET)
     
-class TuningCommands():
-    def __init__(self):
-        pass
+    def EtherStatus():  # Gets the Ethernet status.
+
+    @multimethod
+    def PositionMarkerLatched(Int32):  # Gets the position feedback latched when the marker signal occurred during a home.
+ 
+    @multimethod
+    def PositionMarkerLatched(String):  # Gets the position feedback latched when the marker signal occurred during a home.
+ 
+
+class TuningCommands(CommandCategory):
+    _TuningCommandsNET=None
+    def __init__(self,TuningCommandsNET=AerotechEnsembleCommandsNET.TuningCommands):
+        self._TuningCommandsNET=TuningCommandsNET
+        CommandCategory.__init__(self,TuningCommandsNET)
+        
+    @multimethod
+    def LoopTrans(Int32, LoopTransmissionMode, Double, Double, LoopTransmissionType):  # Initiates loop transmission mode.
     
-class WaitOption():
+    @multimethod
+    def LoopTrans(String, LoopTransmissionMode, Double, Double, LoopTransmissionType):  # Initiates loop transmission mode.
+    
+    @multimethod
+    def MComm(Int32, Double):  # Sends a direct current command to the servo loop.
+    
+    @multimethod
+    def  MComm(String, Double):  # Sends a direct current command to the servo loop.
+    
+    @multimethod
+    def MSet(Int32, Double, Int32):  # Generates an open-loop current command.
+    
+    @multimethod
+    def MSet(String, Double, Int32):  # Generates an open-loop current command.
+    
+    @multimethod
+    def Oscillate(Int32, Double, Double, Int32):  # Generates sinusoidal oscillation on an axis.
+    
+    @multimethod
+    def Oscillate(String, Double, Double, Int32):  # Generates sinusoidal oscillation on an axis.
+    
+    @multimethod
+    def Oscillate(Int32, Double, Double, Int32, Int32):  # Generates sinusoidal oscillation on an axis.
+    
+    @multimethod
+    def Oscillate(String, Double, Double, Int32, Int32):  # Generates sinusoidal oscillation on an axis.
+    
+    @multimethod
+    def SetGain(Int32, Double, Double, Double, Double):  # Sets four or nine servo loop gains at the same time.
+    
+    @multimethod
+    def SetGain(String, Double, Double, Double, Double):  # Sets four or nine servo loop gains at the same time.
+    
+    @multimethod
+    def SetGain(Int32, Double, Double, Double, Double, Double, Double, Double, Double, Double):  # Sets four or nine servo loop gains at the same time.
+    
+    @multimethod
+    def SetGain(String, Double, Double, Double, Double, Double, Double, Double, Double, Double):  # Sets four or nine servo loop gains at the same time.
+
+    
+class WaitOption(Enum):
     InPosition=AerotechEnsembleCommandsNET.WaitOption.InPosition
     MoveDone=AerotechEnsembleCommandsNET.WaitOption.MoveDone
 
-class WaitType():
+class WaitType(Enum):
     NoWait=AerotechEnsembleCommandsNET.WaitType.NoWait
     MoveDone=AerotechEnsembleCommandsNET.WaitType.MoveDone
     InPos=AerotechEnsembleCommandsNET.WaitType.InPos
