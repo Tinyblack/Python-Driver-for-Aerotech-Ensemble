@@ -28,23 +28,22 @@ try:
 except:
     raise RuntimeError
 
-# ! DONE
-
+# * Checked
 class PluginType(Enum):  # Represents a type of plugin  
     E= AerotechEnsembleFirmwareNET.PluginType.E # Type E plugins 
     All= AerotechEnsembleFirmwareNET.PluginType.All # All types of plugins  
 extend_enum(PluginType,'None',getattr(AerotechEnsembleFirmwareNET.PluginType,'None'))
 
+# * Checked
 class Debug():  # Provides the ability to debug the firmware 
     _DebugNET=None
-    def __init__(self,DebugNET=AerotechEnsembleFirmwareNET.Debug):
+    @multimethod
+    def __init__(self,DebugNET:AerotechEnsembleFirmwareNET.Debug=AerotechEnsembleFirmwareNET.Debug):
         self._DebugNET=DebugNET
         
-    def __init__(self,DebugNET:Union[AerotechEnsembleFirmwareNET.Debug,Ensemble.Controller]=AerotechEnsembleFirmwareNET.Debug):
-        if type(DebugNET) is type(AerotechEnsembleFirmwareNET.Debug):
-            self._DebugNET=DebugNET
-        elif type(DebugNET) is type(Ensemble.Controller):
-            self._DebugNET=AerotechEnsembleFirmwareNET.Debug(DebugNET._ControllerNET)
+    @multimethod
+    def __init__(self,Controller:Ensemble.Controller):
+        self._DebugNET=AerotechEnsembleFirmwareNET.Debug(Controller._ControllerNET)
  
     def CommitFlash(self):  # Commits the flash memory to permanent storage on the master 
         self._DebugNET.CommitFlash()
@@ -109,11 +108,13 @@ class Loader():  # Provides ability to update the firmware on the Controllers
         
 class PluginHandler():  # Helps with managing the plugins 
     _PluginHandlerNET=None
-    def __init__(self,PluginHandlerNET:Union[AerotechEnsembleFirmwareNET.PluginHandler,Ensemble.Controller]=AerotechEnsembleFirmwareNET.PluginHandler):
-        if type(PluginHandlerNET) is type(AerotechEnsembleFirmwareNET.PluginHandler):
-            self._PluginHandlerNET=PluginHandlerNET
-        elif type(PluginHandlerNET) is type(Ensemble.Controller):
-            self._PluginHandlerNET=AerotechEnsembleFirmwareNET.PluginHandler(PluginHandlerNET._ControllerNET)
+    @multimethod
+    def __init__(self,PluginHandlerNET:AerotechEnsembleFirmwareNET.PluginHandler=AerotechEnsembleFirmwareNET.PluginHandler):
+        self._PluginHandlerNET=PluginHandlerNET
+        
+    @multimethod
+    def __init__(self,Controller:Ensemble.Controller):
+        self._PluginHandlerNET=AerotechEnsembleFirmwareNET.PluginHandler(Controller._ControllerNET)
  
     def IsRunning(self,pluginType:PluginType): # The plugin type to check if it is running  
         return AerotechEnsembleFirmwareNET.IsRunning(pluginType.value)

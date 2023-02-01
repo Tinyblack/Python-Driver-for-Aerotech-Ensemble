@@ -29,12 +29,12 @@ try:
 except:
     raise RuntimeError
 
-# ! DONE
-
+# * Checked
 class OptionalDataNumber(Enum):  # Specifies the number of the optional data source 
     Optional1=AerotechEnsembleDataCollectionNET.OptionalDataNumber.Optional1  # The first optional output 
     Optional2=AerotechEnsembleDataCollectionNET.OptionalDataNumber.Optional2  # The second optional output  
 
+# * Checked
 class OptionalDataSource(Enum):  # Optional items for a specific axis
     EncoderSine=AerotechEnsembleDataCollectionNET.OptionalDataSource.EncoderSine  # Encoder Sine
     EncoderCosine=AerotechEnsembleDataCollectionNET.OptionalDataSource.EncoderCosine  # Encoder Cosine
@@ -102,7 +102,8 @@ class OptionalDataSource(Enum):  # Optional items for a specific axis
     CapacitanceSensorRawPosition=AerotechEnsembleDataCollectionNET.OptionalDataSource.CapacitanceSensorRawPosition  # Capacitance Sensor Raw Position
     AccuracyCorrectionStartingPosition=AerotechEnsembleDataCollectionNET.OptionalDataSource.AccuracyCorrectionStartingPosition  # Accuracy Correction Starting Position
     AccuracyCorrectionEndingPosition=AerotechEnsembleDataCollectionNET.OptionalDataSource.AccuracyCorrectionEndingPosition  # Accuracy Correction Ending Position 
-
+    
+# * Checked
 class OptionalMemoryDataSource(Enum):  # Optional items for a specific axis
     Integer=AerotechEnsembleDataCollectionNET.OptionalMemoryDataSource.Integer  # Drive Memory Integer
     Float=AerotechEnsembleDataCollectionNET.OptionalMemoryDataSource.Float  # Drive Memory Float
@@ -111,12 +112,14 @@ class OptionalMemoryDataSource(Enum):  # Optional items for a specific axis
     Short=AerotechEnsembleDataCollectionNET.OptionalMemoryDataSource.Short  # Drive Memory Integer 
 extend_enum(OptionalMemoryDataSource,'None',getattr(AerotechEnsembleDataCollectionNET.OptionalMemoryDataSource,'None'))
 
+# * Checked
 class ScopeTrigId(Enum):  # Specifies the known scope trig application Ids 
     Default=AerotechEnsembleDataCollectionNET.ScopeTrigId.Default  # No application Id was specified
     DigitalScope=AerotechEnsembleDataCollectionNET.ScopeTrigId.DigitalScope  # Digital Scope was specified
     MotionDesigner=AerotechEnsembleDataCollectionNET.ScopeTrigId.MotionDesigner  # Motion Designer was specified
     MotionSimulator=AerotechEnsembleDataCollectionNET.ScopeTrigId.MotionSimulator  # Motion Simulator was specified 
 
+# * Checked
 class AxesData():  # Retrieves data for all the axes 
     _AxesDataNET=None
     def __init__(self,AxesDataNET=AerotechEnsembleDataCollectionNET.AxesData):
@@ -172,6 +175,7 @@ class AxesData():  # Retrieves data for all the axes
     def Retrieve(self,pointsToRetrieve:int, progressChangedEventHandler:ProgressChangedEventHandler):  # Waits for all the data to be collected, then retrieves all data for all axes 
         return ControllerDataResults(self._AxesDataNET.Retrieve(pointsToRetrieve,progressChangedEventHandler))
 
+# * Checked
 class AxesDataContainer(CommonCollections.NamedMaskedConstantCollection):  # A container of some data for several axes
     def __init__(self,TData,pyClass):
         self.TData=TData
@@ -181,7 +185,8 @@ class AxesDataContainer(CommonCollections.NamedMaskedConstantCollection):  # A c
     @property
     def CollectionPeriod (self):
         return self.TData.CollectionPeriod
-         
+  
+# * Checked       
 class AxesDataResults(CommonCollections.NamedMaskedConstantCollection):  # Contains collected data for all axes 
     _AxesDataResultsNET=None
     def __init__(self,TObject):
@@ -243,6 +248,7 @@ class AxesDataResults(CommonCollections.NamedMaskedConstantCollection):  # Conta
     def VelocityErrorCounts(self):  # The velocity errors for the axes, in counts  
         return AxesDataContainer(self._AxesDataResultsNET.VelocityErrorCounts,float)
 
+# * Checked
 class AxesOptionalRetriever():  # Allows retrieval of Optional Data for several axes 
     _AxesOptionalRetrieverNET=None
     def __init__(self,AxesOptionalRetrieverNET=AerotechEnsembleDataCollectionNET.AxesOptionalRetriever):
@@ -277,7 +283,8 @@ class AxesOptionalRetriever():  # Allows retrieval of Optional Data for several 
     @multimethod
     def SelectMemory(self,axisMask:Ensemble.AxisMask, optionalNumber:OptionalDataNumber, dataSource:OptionalMemoryDataSource, memoryLocation:int):  # Selects which memory location to collect for optional data 
         self._AxesOptionalRetrieverNET.SelectMemory(axisMask, optionalNumber, dataSource ,memoryLocation)
- 
+
+# * Checked
 class AxisAnalogInputData():  # Stores analog input #0 and #1 data 
     _AxisAnalogInputDataNET=None
     def __init__(self,AxisAnalogInputDataNET=AerotechEnsembleDataCollectionNET.AxisAnalogInputData):
@@ -290,7 +297,8 @@ class AxisAnalogInputData():  # Stores analog input #0 and #1 data
     @property
     def Input1(self):  # Analog Input #1 
         return self._AxisAnalogInputDataNET.Input1
-    
+
+# * Checked
 class AxisAnalogOutputData():  # Stores analog output #0 and #1 data 
     _AxisAnalogOutputDataNET=None
     def __init__(self,AxisAnalogOutputDataNET=AerotechEnsembleDataCollectionNET.AxisAnalogOutputData):
@@ -303,7 +311,8 @@ class AxisAnalogOutputData():  # Stores analog output #0 and #1 data
     @property
     def Output1(self):  # Analog Output #1 
         return self._AxisAnalogOutputDataNET.Output1
-    
+
+# * Checked 
 class AxisCommandData():  # Contains position, velocity, and acceleration command data 
     _AxisCommandDataNET=None
     def __init__(self,AxisCommandDataNET=AerotechEnsembleDataCollectionNET.AxisCommandData):
@@ -333,6 +342,7 @@ class AxisCommandData():  # Contains position, velocity, and acceleration comman
     def VelocityCounts(self):  # The velocity command of the axis, in counts  
         return self._AxisCommandDataNET.VelocityCounts
 
+# * Checked
 class AxisDataResults():  # Contains collected data for an axis 
     _AxisDataResultsNET=None
     def __init__(self,AxisDataResultsNET=AerotechEnsembleDataCollectionNET.AxisDataResults):
@@ -413,7 +423,8 @@ class AxisDataResults():  # Contains collected data for an axis
     @property
     def VelocityErrorCounts(self):  # Gets the velocity error for the axis, in counts  
         return self._AxisDataResultsNET.VelocityErrorCounts
-    
+
+# * Checked 
 class AxisDigitalInputData():  # Stores digital input #0, #1, and #2 data 
     _AxisDigitalInputDataNET=None
     def __init__(self,AxisDigitalInputDataNET=AerotechEnsembleDataCollectionNET.AxisDigitalInputData):
@@ -430,7 +441,8 @@ class AxisDigitalInputData():  # Stores digital input #0, #1, and #2 data
     @property
     def Input2(self):  # Digital Input #2  
         return self._AxisDigitalInputDataNET.Input2
-    
+
+# * Checked
 class AxisDigitalOutputData():  # Stores digital output #0, #1, and #2 data 
     _AxisDigitalOutputDataNET=None
     def __init__(self,AxisDigitalOutputDataNET=AerotechEnsembleDataCollectionNET.AxisDigitalOutputData):
@@ -447,7 +459,8 @@ class AxisDigitalOutputData():  # Stores digital output #0, #1, and #2 data
     @property
     def Output2(self):  # Digital output #2  
         return self._AxisDigitalOutputDataNET.Output2
-
+    
+# * Checked
 class AxisFeedbackData():  # Stores the position and velocity feedback data 
     
     _AxisFeedbackDataNET=None
@@ -470,6 +483,7 @@ class AxisFeedbackData():  # Stores the position and velocity feedback data
     def VelocityCounts(self):  # The velocity feedback of the axis, in counts  
         return self._AxisFeedbackDataNET.VelocityCounts
 
+# * Checked
 class ControllerDataResults():  # Contains collected data for the controller
     _ControllerDataResultsNET=None
     def __init__(self,ControllerDataResultsNET=AerotechEnsembleDataCollectionNET.ControllerDataResults):
@@ -490,7 +504,8 @@ class ControllerDataResults():  # Contains collected data for the controller
     @property
     def ProgramCounter(self):  # Retreives the program counter data  
         return self._ControllerDataResultsNET.ProgramCounter
-    
+
+# * Checked  
 class ControllerProgramCounterRetriever():  # Allows retrieval of Program Counter for the master 
     _ControllerProgramCounterRetrieverNET=None
     def __init__(self,ControllerProgramCounterRetrieverNET=AerotechEnsembleDataCollectionNET.ControllerProgramCounterRetriever):
@@ -507,7 +522,8 @@ class ControllerProgramCounterRetriever():  # Allows retrieval of Program Counte
         
     def Retrieve(self,pointsToRetrieve:int, collectionPeriod:float, progressChangedEventHandler:ProgressChangedEventHandler):  # Waits for the specified number of Program Counter data points to be collected, then retrieves it  
         self._ControllerProgramCounterRetrieverNET.Retrieve(pointsToRetrieve,collectionPeriod,progressChangedEventHandler)
-
+        
+# * Checked
 class Data(AxesData):  # Provides access to all the data of the controller
     _DataNET=None
     def __init__(self,DataNET=AerotechEnsembleDataCollectionNET.Data):
@@ -516,42 +532,43 @@ class Data(AxesData):  # Provides access to all the data of the controller
     
     @property
     def PointsAllocated(self):   # Specifies the maximum number of points to collect  
-        return AerotechEnsembleDataCollectionNET.PointsAllocated
+        return self._DataNET.PointsAllocated
     
     @multimethod
     def RetrieveDiagnostics(self,previous:EnsembleStatus.ControllerDiagPacket):   # Retrieves diagnostic information for the controller 
-        AerotechEnsembleDataCollectionNET.RetrieveDiagnostics(previous.value)
+        self._DataNET.RetrieveDiagnostics(previous.value)
     
     @multimethod 
     def RetrieveDiagnostics(self):  # Retrieves diagnostic information for the controller 
-        AerotechEnsembleDataCollectionNET.RetrieveDiagnostics()
+        self._DataNET.RetrieveDiagnostics()
         
     @multimethod
     def RetrieveDiagnostics(self,allInfo:bool):   # Retrieves diagnostic information for the controller 
-        AerotechEnsembleDataCollectionNET.RetrieveDiagnostics(allInfo)
+        self._DataNET.RetrieveDiagnostics(allInfo)
  
     def StartCollection(self,period:float):   # Starts the data collection at a specified rate
-        AerotechEnsembleDataCollectionNET.StartCollection(period)
+        self._DataNET.StartCollection(period)
  
     @property
     def Status(self):  # Provides the current status of data collection
-        return DataCollectionStatus(AerotechEnsembleDataCollectionNET.Status)
+        return DataCollectionStatus(self._DataNET.Status)
         
     def Stop(self):  # Stops the current data collection
-        AerotechEnsembleDataCollectionNET.Stop()
+        self._DataNET.Stop()
     
     @property
     def TaskCollection(self):  # Specifies the task for which to collect the program position 
-        return Ensemble.TaskId[AerotechEnsembleDataCollectionNET.TaskCollection.ToString()]
+        return Ensemble.TaskId[self._DataNET.TaskCollection.ToString()]
  
     @multimethod 
-    def WaitForData(points:int):  # Waits for a specific amount of data points to be collected 
-        AerotechEnsembleDataCollectionNET.TaskCollection.WaitForData(points)
+    def WaitForData(self,points:int):  # Waits for a specific amount of data points to be collected 
+        self._DataNET.WaitForData(points)
         
     @multimethod 
-    def WaitForData(points:int, waiter:ProgressChangedEventHandler):  # Waits for a specific amount of data points to be collected  
-        AerotechEnsembleDataCollectionNET.TaskCollection.WaitForData(points,waiter)
-
+    def WaitForData(self,points:int, waiter:ProgressChangedEventHandler):  # Waits for a specific amount of data points to be collected  
+        self._DataNET.WaitForData(points,waiter)
+        
+# * Checked
 class DataCollectionStatus():  # Contains status of data collection
     _DataCollectionStatusNET=None
     def __init__(self,DataCollectionStatusNET=AerotechEnsembleDataCollectionNET.DataCollectionStatus):
@@ -572,7 +589,8 @@ class DataCollectionStatus():  # Contains status of data collection
     @property
     def ScopeTrigId(self):  # The Id with which ScopeTrig was initiated 
         return ScopeTrigId[self._DataCollectionStatusNET.ScopeTrigId.ToString()]
-
+    
+# * Checked
 class IDataRetriever():  # Retrieves some specific data from the Controller 
     _DataRetriever=None
     _pyClass=None
@@ -583,9 +601,11 @@ class IDataRetriever():  # Retrieves some specific data from the Controller
     @multimethod
     def Retrieve(self):  # Waits for data to be available and then retrieves the specific data for multiple or one axis 
         return AxesDataContainer(self.DataRetriever.Retrieve(),self.pyClass)
+    
     @multimethod
     def Retrieve(self,pointsToRetrieve:int):  # Waits for data to be available and then retrieves the specific data for multiple or one axis 
         return AxesDataContainer(self.DataRetriever.Retrieve(pointsToRetrieve),self.pyClass)
+    
     @multimethod
     def Retrieve(self,pointsToRetrieve:int, progressChangedEventHandler:ProgressChangedEventHandler):  # Waits for data to be available and then retrieves the specific data for multiple or one axis  
         return AxesDataContainer(self.DataRetriever.Retrieve(pointsToRetrieve,progressChangedEventHandler),self.pyClass)

@@ -20,13 +20,13 @@ try:
 except:
     raise RuntimeError
 
-# ! DONE
-
+# * Checked
 class BinaryCalibrationActionStatus(Enum):  # Specifies the status of a binary calibration file action.
     TableAdded=AerotechEnsembleConfigurationNET.BinaryCalibrationActionStatus.TableAdded  # The calibration table was added.
     TableRemoved=AerotechEnsembleConfigurationNET.BinaryCalibrationActionStatus.TableRemoved  # The calibration table was removed.
     TableNotAdded=AerotechEnsembleConfigurationNET.BinaryCalibrationActionStatus.TableNotAdded  # The calibration table was not added. 
 
+# * Checked
 class BinaryCalibrationActionTableType(Enum):  # Specifies the type of calibration table associated with a calibration file action. 
     Calibration1D=AerotechEnsembleConfigurationNET.BinaryCalibrationActionTableType.Calibration1D  # 1D calibration table.
     Calibration2D=AerotechEnsembleConfigurationNET.BinaryCalibrationActionTableType.Calibration2D  # 2D calibration table. 

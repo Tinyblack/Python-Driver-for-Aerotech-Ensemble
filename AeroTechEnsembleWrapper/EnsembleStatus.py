@@ -14,6 +14,7 @@ from multimethod import multimethod
 from enum import Enum
 from aenum import extend_enum
 
+import Common
 import Ensemble
 import EnsembleTasks
 import EnsembleTasksDebug
@@ -241,17 +242,64 @@ class AxisFault():  # Represents the faults of an axis
     _AxisFaultNET=None
     def __init__(self,AxisFaultNET=AerotechEnsembleStatusNET.AxisFault):
         self._AxisFaultNET=AxisFaultNET
- 
+     # TODO
 class AxisStatus():  # Represents an axis status
     _AxisStatusNET=None
     def __init__(self,AxisStatusNET=AerotechEnsembleStatusNET.AxisStatus):
         self._AxisStatusNET=AxisStatusNET
+        # TODO
  
-class CallbacksPoller():  # Allows to poll for callback information from a controller in the background 
- 
+class CallbacksPoller():  # Allows to poll for callback information from a controller in the background  
+    # TODO
+    
 class ControlCenter():  # Retrieves diagnostic data, callbacks, and task states in the background from a controller 
+    _ControlCenterNET=None
+    def __init__(self,ControlCenterNET=AerotechEnsembleStatusNET.ControlCenter):
+        self._ControlCenterNET=ControlCenterNET
+        
+    @property
+    def Callbacks(self):  # Allows to setup polling for the different callbacks 
+        return CallbacksPoller(self._ControlCenterNET.Callbacks)
+    @property
+    def Diagnostics(self):  # Allows to setup polling for diagnostic information 
+        return DiagPacketPoller(self._ControlCenterNET.Diagnostics)
+    @property
+    def TaskStates(self):  # Allows to setup polling for task state information 
+        return TaskStatesPoller(self._ControlCenterNET.TaskStates)
+
+    def UnsubscribeAll(self):  # Unsubscribes everyone from this class or any of its members  
+        self._ControlCenterNET.UnsubscribeAll()
+
  
-class ControllerDiagPacket():  # The diagnostic packet of the controller 
+class ControllerDiagPacket(CommonCollections.NamedMaskedConstantCollection):  # The diagnostic packet of the controller 
+    _ControllerDiagPacketNET=None
+    def __init__(self,ControllerDiagPacketNET):
+        self._ControllerDiagPacketNET=ControllerDiagPacketNET
+        CommonCollections.NamedMaskedConstantCollection.__init__(self,ControllerDiagPacketNET,AxisDiagPacket,Ensemble.AxisMask)
+        
+    @property
+    def DebugFlags(self):  # The debugging flags on the controller 
+        return DebugFlags(self._ControllerDiagPacketNET.DebugFlags)
+    
+    @property
+    def Joystick(self):  # The status of the joystick input 
+        return JoystickDiagPacket(self._ControllerDiagPacketNET.Joystick)
+    
+    @property
+    def PacketTime(self):  # The time of the packet since controller boot up 
+        return self._ControllerDiagPacketNET.PacketTime
+    
+    @property
+    def PlaneStatus(self):  # The status of the planes on the controller 
+        return PlaneStatus(self._ControllerDiagPacketNET.PlaneStatus)
+    
+    @property
+    def ProgramCounter(self):  # The program counts of the user tasks 
+        return CommonCollections.NamedConstantCollection(self._ControllerDiagPacketNET.ProgramCounter,int)
+    
+    @property
+    def ProgramPosition(self):  # The program positions of the user tasks  
+        return CommonCollections.NamedConstantCollection(self._ControllerDiagPacketNET.ProgramPosition,Common.FilePoint)
 
 class ControllerEventArgs():  # The base class for classes containing event data related to controllers. 
     _ControllerEventArgsNET=None
@@ -263,11 +311,118 @@ class ControllerEventArgs():  # The base class for classes containing event data
         return Ensemble.Controller(self._ControllerEventArgsNET.Controller)
         
 class DebugFlags():  # Represents the debug flags on the controller
- 
+    _DebugFlagsNET=None
+    
+    @multimethod
+    def __init__(self,DebugFlagsNET=AerotechEnsembleStatusNET.DebugFlags):
+        self._DebugFlagsNET=DebugFlagsNET
+        
+    @multimethod
+    def __init__(self):  # Creates a new instance with all things unset (false)
+        self._DebugFlagsNET=AerotechEnsembleStatusNET.DebugFlags()
+        
+    @multimethod
+    def __init__(self,maskValue:int):  # Creates a new instance with given mask value
+        self._DebugFlagsNET=AerotechEnsembleStatusNET.DebugFlags(maskValue)
+        
+    @property
+    def ActiveBits(self):  # Returns a list of the active bit names.
+        # TODO deal with ReadOnlyCollection 
+        return self._DebugFlagsNET.ActiveBits
+    
+    @property
+    def BitHelpLinks(self):  # Returns a dictionary of bit value names (keys) and the associated help file link (values) 
+        # TODO deal with IDictionary 
+        return self._DebugFlagsNET.BitHelpLinks
+    
+    @property
+    def BitValues(self):  # Returns a listing of the bit names and their corresponding values 
+        # TODO deal with IDictionary 
+        return self._DebugFlagsNET.BitValues
+      
+    @property
+    def CollectionDone(self):  # Collection Done
+        return self._DebugFlagsNET.CollectionDone
+    
+    @property
+    def CollectionTriggered(self):  # Collection Triggered
+        return self._DebugFlagsNET.CollectionTriggered
+    
+    @property
+    def InputBoxCallbackPending(self):  # Input Box Callback Pending
+        return self._DebugFlagsNET.InputBoxCallbackPending
+    
+    @property
+    def MaskValue(self):  # The underlying mask value 
+        return self._DebugFlagsNET.MaskValue
+    
+    @property
+    def PrintStringCallbackPending(self):  # Print String Callback Pending
+        return self._DebugFlagsNET.PrintStringCallbackPending
+    
+    @multimethod
+    def ToString(self):  # 
+        return self._DebugFlagsNET.ToString()
+    
+    @multimethod
+    def ToString(self,userReadableFormat:bool):  # Converts to a string representation 
+        return self._DebugFlagsNET.ToString(userReadableFormat)
+    
+    @property
+    def ValueNames(self):  # Returns a mapping of values to their human readable form. 
+        # TODO deal with IDictionary 
+        return self._DebugFlagsNET.ValueNames
+    
+
+# * Checked
 class DiagPacketPoller():  # Allows to poll for diagnostic information from a controller in the background 
+    _DiagPacketPollerNET=None
+    def __init__(self,DiagPacketPollerNET=AerotechEnsembleStatusNET.DiagPacketPoller):
+        self._DiagPacketPollerNET=DiagPacketPollerNET
+
+    @property
+    def AutoStart(self):  # Whether to start polling when someone subscribes to the NewTaskStatesArrived
+        return self._DiagPacketPollerNET.AutoStart
  
+    # ErrorOccurred  Raised when an error occurs during retrieval of data from the controller 
+ 
+    @property
+    def IsExecutingEvent(self):  # Tells whether there is currenty an event being executed 
+        return self._DiagPacketPollerNET.IsExecutingEvent
+ 
+    @property
+    def IsSuspended(self):  # Whether the polling is suspended 
+        return self._DiagPacketPollerNET.IsSuspended
+ 
+    @property
+    def Latest(self):  # The latest task states packet that was retrieved from the controller 
+        return ControllerDiagPacket(self._DiagPacketPollerNET.Latest)
+
+    # NewTaskStatesArrived  Event that gets called when new task states has been retrieved 
+ 
+    @classmethod
+    @property
+    def RefreshInterval(self):  # he interval of retrieving of data 
+        return AerotechEnsembleStatusNET.DiagPacketPoller.RefreshInterval
+            
+    def Resume(self):  # Resumes the polling for task state information 
+        self._DiagPacketPollerNET.Resume()
+ 
+    def Suspend(self):  # Suspends the polling for task state information 
+        self._DiagPacketPollerNET.Suspend()
+    
+# * Checked   
 class ErrorEventArgs(ControllerEventArgs):  # Provides data for the error events 
-  
+    _ErrorEventArgsNET=None
+    def __init__(self,ErrorEventArgsNET=AerotechEnsembleStatusNET.ErrorEventArgs):
+        self._ErrorEventArgsNET=ErrorEventArgsNET
+        ControllerEventArgs.__init__(self,ErrorEventArgsNET)
+        
+    @property
+    def Exception(self): # The exception that caused the error to happen  
+        return self._ErrorEventArgsNET.Exception
+
+# * Checked
 class ErrorInformation(): # Provides error information.
     _ErrorInformationNET=None
     def __init__(self,ErrorInformationNET=AerotechEnsembleStatusNET.ErrorInformation):
@@ -289,22 +444,62 @@ class ErrorInformation(): # Provides error information.
     def HelpLink(self):   # Gets the link to the help associated with this error.
         return self._ErrorInformationNET.HelpLink
 
-    def ToString(self)  # Returns a string representation of this class.
+    def ToString(self):  # Returns a string representation of this class.
         return self._ErrorInformationNET.ToString()
 
-        
- 
+# * Checked
 class InputBoxCallbackEventArgs(ControllerEventArgs): # Provides data for InputBoxCallback
+    _InputBoxCallbackEventArgsNET=None
+    def __init__(self,InputBoxCallbackEventArgsNET=AerotechEnsembleStatusNET.InputBoxCallbackEventArgs):
+        self._InputBoxCallbackEventArgsNET=InputBoxCallbackEventArgsNET
+        ControllerEventArgs.__init__(self,InputBoxCallbackEventArgsNET)
+        
+    @property
+    def DefaultValue(self):  # The default value to return by the command  
+        return self._InputBoxCallbackEventArgsNET.DefaultValue
+    
+    @property
+    def Handled(self):  # Whether this callback has already been handled by another event handler  
+        return self._InputBoxCallbackEventArgsNET.Handled
+    
+    @property
+    def Prompt(self):  # The prompt to ask the user  
+        return self._InputBoxCallbackEventArgsNET.Prompt
+    
+    @property
+    def ReturnValue(self):  # The value to return to the callback  
+        return self._InputBoxCallbackEventArgsNET.ReturnValue
  
+# * Checked
 class JoystickButton(Enum): # Specifies the button on a joystick 
     ButtonA=AerotechEnsembleStatusNET.JoystickButton.ButtonA #Button A 
     ButtonB=AerotechEnsembleStatusNET.JoystickButton.ButtonB #Button B 
     ButtonC=AerotechEnsembleStatusNET.JoystickButton.ButtonC #Button C (both A and B)  
 extend_enum(JoystickButton,'None',getattr(AerotechEnsembleStatusNET.JoystickButton,'None'))
 
- 
+# * Checked
 class JoystickDiagPacket(): # Represents the diagnostic information about the joystick 
- 
+    _JoystickDiagPacketNET=None
+    def __init__(self,JoystickDiagPacketNET=AerotechEnsembleStatusNET.JoystickDiagPacket):
+        self._JoystickDiagPacketNET=JoystickDiagPacketNET
+        
+    @property
+    def Button(self):   # Specifies which button on the joystick is pressed  
+        return JoystickButton[self._JoystickDiagPacketNET.Button.ToString()]
+    @property
+    def Horizontal(self):   # The horizontal axis value 
+        return self._JoystickDiagPacketNET.Horizontal
+    @property
+    def IsActive(self):   # Whether joystick is in active on any axis 
+        return self._JoystickDiagPacketNET.IsActive
+    @property
+    def IsConnected(self):   # Whether the joystick is connected
+        return self._JoystickDiagPacketNET.IsConnected
+    @property
+    def Vertical(self):   # The vertical axis value  
+        return self._JoystickDiagPacketNET.Vertical
+
+# * Checked
 class NewDiagPacketArrivedEventArgs(ControllerEventArgs): # Provides data for NewDiagPacketArrived
     _NewDiagPacketArrivedEventArgsNET=None
     def __init__(self,NewDiagPacketArrivedEventArgsNET=AerotechEnsembleStatusNET.NewDiagPacketArrivedEventArgs):
@@ -314,7 +509,8 @@ class NewDiagPacketArrivedEventArgs(ControllerEventArgs): # Provides data for Ne
     @property
     def Data(self):   # The most recent diagnostics retrieved from the controller  
         return ControllerDiagPacket(self._NewDiagPacketArrivedEventArgsNET.Data)
- 
+    
+# * Checked
 class NewTaskStatesArrivedEventArgs(ControllerEventArgs): # Provides data for NewTaskStatesArrived
     _NewTaskStatesArrivedEventArgsNET=None
     def __init__(self,NewTaskStatesArrivedEventArgsNET=AerotechEnsembleStatusNET.NewTaskStatesArrivedEventArgs):
@@ -323,42 +519,69 @@ class NewTaskStatesArrivedEventArgs(ControllerEventArgs): # Provides data for Ne
     
     @property
     def TaskStates(self):   # The most recent task state information retrieved from the controller  
-        # TODO check if this is valid
         return CommonCollections.NamedConstantCollection(self._NewTaskStatesArrivedEventArgsNET.TaskStates,EnsembleTasks.TaskState)
- 
+    
+# * Checked
 class PlaneStatus(): # Represents plane status
-PlaneStatus()()()()  Creates a new instance with all things unset (false)
+    _PlaneStatusNET=None
+    
+    @multimethod
+    def __init__(self,PlaneStatusNET:AerotechEnsembleStatusNET.PlaneStatus=AerotechEnsembleStatusNET.PlaneStatus):
+        self._PlaneStatusNET=PlaneStatusNET
+        
+    @multimethod
+    def __init__(self):  # Creates a new instance with all things unset (false)
+        self._PlaneStatusNET=AerotechEnsembleStatusNET.PlaneStatus()
+        
+    @multimethod
+    def __init__(self,maskValue:int):  # Creates a new instance with given mask value
+        self._PlaneStatusNET=AerotechEnsembleStatusNET.PlaneStatus(maskValue)
 
-PlaneStatus(Int32)  Creates a new instance with given mask value
-
-AccelerationPhaseActive  Acceleration Phase Active
-
-ActiveBits  Returns a list of the active bit names.
-
-BitHelpLinks  Returns a dictionary of bit value names (keys) and the associated help file link (values) 
-
-BitValues  Returns a listing of the bit names and their corresponding values 
-
-DecelerationPhaseActive  Deceleration Phase Active
-
-Explicit Narrowing Explicit Explicit Explicit (Int32 to PlaneStatus)  Converts the enumeration value as an integer to this class 
-
-HoldModeActive  Hold Mode Active
-
-MaskValue  The underlying mask value 
-
-MotionAborting  Motion Aborting
-
-MotionActive  Motion Active
-
-None  If all the other properties are not set (false) 
-
-ToString(Boolean)  Converts to a string representation 
-
-ValueNames  Returns a mapping of values to their human readable form. 
-
-VelocityProfilingActive  Velocity Profiling Active 
-
+    @property
+    def AccelerationPhaseActive(self):  # Acceleration Phase Active
+        return self._PlaneStatusNET.AccelerationPhaseActive
+    @property
+    def ActiveBits(self):  # Returns a list of the active bit names.
+        # TODO deal with ReadonlyCollections
+        return self._PlaneStatusNET.ActiveBits
+    @property
+    def BitHelpLinks(self):  # Returns a dictionary of bit value names (keys) and the associated help file link (values) 
+        # TODO deal with IDictionary
+        return self._PlaneStatusNET.BitHelpLinks
+    @property
+    def BitValues(self):  # Returns a listing of the bit names and their corresponding values 
+        # TODO deal with IDictionary
+        return self._PlaneStatusNET.BitValues
+    @property
+    def DecelerationPhaseActive(self):  # Deceleration Phase Active
+        return self._PlaneStatusNET.DecelerationPhaseActive
+    @property
+    def HoldModeActive(self):  # Hold Mode Active
+        return self._PlaneStatusNET.HoldModeActive
+    @property
+    def MaskValue(self):  # The underlying mask value 
+        return self._PlaneStatusNET.MaskValue
+    @property
+    def MotionAborting(self):  # Motion Aborting
+        return self._PlaneStatusNET.MotionAborting
+    @property
+    def MotionActive(self):  # Motion Active
+        return self._PlaneStatusNET.MotionActive
+    @multimethod
+    def ToString(self):  # Converts to a string representation 
+        return self._PlaneStatusNET.ToString()
+    @multimethod 
+    def ToString(self,userReadableFormat:bool):  # Converts to a string representation 
+        return self._PlaneStatusNET.ToString(userReadableFormat)
+    @property
+    def ValueNames(self):  # Returns a mapping of values to their human readable form. 
+        # TODO deal with IDictionary
+        return self._PlaneStatusNET.ValueName
+    @property
+    def VelocityProfilingActive(self):  # Velocity Profiling Active 
+        return self._PlaneStatusNET.VelocityProfilingActive
+    
+# * Checked
 class PrintCallbackEventArgs(ControllerEventArgs): # Provides data for PrintCallback
     _PrintCallbackEventArgsNET=None
     def __init__(self,PrintCallbackEventArgsNET=AerotechEnsembleStatusNET.PrintCallbackEventArgs):
@@ -368,6 +591,41 @@ class PrintCallbackEventArgs(ControllerEventArgs): # Provides data for PrintCall
     @property
     def Message(self):
         return self._PrintCallbackEventArgsNET.Message()
-     
+    
+# * Checked
 class TaskStatesPoller(): # Allows to poll for task state information from a controller in the background  
+    _TaskStatesPollerNET=None
+    def __init__(self,TaskStatesPollerNET=AerotechEnsembleStatusNET.TaskStatesPoller):
+        self._TaskStatesPollerNET=TaskStatesPollerNET
 
+    @property
+    def AutoStart(self):  # Whether to start polling when someone subscribes to the NewTaskStatesArrived
+        return self._TaskStatesPollerNET.AutoStart
+ 
+    # ErrorOccurred  Raised when an error occurs during retrieval of data from the controller 
+ 
+    @property
+    def IsExecutingEvent(self):  # Tells whether there is currenty an event being executed 
+        return self._TaskStatesPollerNET.IsExecutingEvent
+ 
+    @property
+    def IsSuspended(self):  # Whether the polling is suspended 
+        return self._TaskStatesPollerNET.IsSuspended
+ 
+    @property
+    def Latest(self):  # The latest task states packet that was retrieved from the controller 
+        return NewTaskStatesArrivedEventArgs(self._TaskStatesPollerNET.Latest)
+
+    # NewTaskStatesArrived  Event that gets called when new task states has been retrieved 
+ 
+    @classmethod
+    @property
+    def RefreshInterval(self):  # he interval of retrieving of data 
+        return AerotechEnsembleStatusNET.TaskStatesPoller.RefreshInterval
+            
+    def Resume(self):  # Resumes the polling for task state information 
+        self._TaskStatesPollerNET.Resume()
+ 
+    def Suspend(self):  # Suspends the polling for task state information 
+        self._TaskStatesPollerNET.Suspend()
+ 

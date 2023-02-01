@@ -40,131 +40,149 @@ try:
 except:
     raise RuntimeError
 
-
+# * Checked
 class AxisMismatch(Enum):
     FirmwareVersion=AerotechEnsembleCommunicationNET.AxisMismatch.FirmwareVersion 
     AxisMask=AerotechEnsembleCommunicationNET.AxisMismatch.AxisMask 
 extend_enum(AxisMismatch,'None',getattr(AerotechEnsembleCommunicationNET.AxisMismatch,'None'))
-    
+
+# * Checked
 class CommunicationType(Enum):
     Ethernet=AerotechEnsembleCommunicationNET.CommunicationType.Ethernet
     Usb=AerotechEnsembleCommunicationNET.CommunicationType.Usb
-
+    
+# * Checked
 class NetworkNodeAddress():
+    _NetworkNodeAddressNET=None
+    def __init__(self,NetworkNodeAddressNET=AerotechEnsembleCommunicationNET.NetworkNodeAddress):
+        self._NetworkNodeAddressNET=NetworkNodeAddressNET
+    
     @property
     def CommunicationType(self):
-        return CommunicationType[AerotechEnsembleCommunicationNET.NetworkNodeAddress.CommunicationType.ToString()]
+        return CommunicationType[self._NetworkNodeAddressNET.CommunicationType.ToString()]
  
     @property
     def Name(self):
-        return AerotechEnsembleCommunicationNET.NetworkNodeAddress.Name
+        return self._NetworkNodeAddressNET.Name
 
+# * Checked
 class NetworkNode(NetworkNodeAddress):
+    _NetworkNodeNET=None
+    def __init__(self,NetworkNodeNET=AerotechEnsembleCommunicationNET.NetworkNode):
+        self._NetworkNodeNET=NetworkNodeNET
+        NetworkNodeAddress.__init__(self,NetworkNodeNET)
+    
     def ChangeEthernet(self,ipAddress:int, subnetMask:int, gateway:int):
-        AerotechEnsembleCommunicationNET.NetworkNode.ChangeEthernet(Net.IPAdress(ipAddress),Net.IPAdress(subnetMask),Net.IPAdress(gateway))
+        self._NetworkNodeNET.ChangeEthernet(Net.IPAdress(ipAddress),Net.IPAdress(subnetMask),Net.IPAdress(gateway))
  
     @property
     def DHCPActive(self):
-        return AerotechEnsembleCommunicationNET.NetworkNode.DHCPActive
+        return self._NetworkNodeNET.DHCPActive
  
     #DHCPActiveChanged  Raised when DHCPActive changes 
     @property
     def GatewayAddress(self):
-      return AerotechEnsembleCommunicationNET.NetworkNode.GatewayAddress.get_Address()
+      return self._NetworkNodeNET.GatewayAddress.get_Address()
  
     #GatewayAddressChanged  Raised when GatewayAddress changes 
     @property
     def IPAddress(self):
-        return AerotechEnsembleCommunicationNET.NetworkNode.IPAddress.get_Address()
+        return self._NetworkNodeNET.IPAddress.get_Address()
  
     #IPAddressChanged  Raised when IPAddress changes 
     @property
     def IsEpaq(self):
-        return AerotechEnsembleCommunicationNET.NetworkNode.IsEpaq
+        return self._NetworkNodeNET.IsEpaq
  
     #IsNamedLockedChanged  Raised when IsNameLocked changes 
     
     @property
     def IsNameLocked(self):
-        return AerotechEnsembleCommunicationNET.NetworkNode.IsNameLocked
+        return self._NetworkNodeNET.IsNameLocked
     
     @property
     def LEDToggle(self):
-        return AerotechEnsembleCommunicationNET.NetworkNode.LEDToggle
+        return self._NetworkNodeNET.LEDToggle
  
     #LEDToggleChanged  Raised when LEDToggle changes 
     
     def LockName(self,lockCode:str):
-        return AerotechEnsembleCommunicationNET.NetworkNode.LockName(lockCode)
+        return self._NetworkNodeNET.LockName(lockCode)
     
     @property
     def MACAddress(self):
-        return AerotechEnsembleCommunicationNET.NetworkNode.MACAddress.ToString()
+        return self._NetworkNodeNET.MACAddress.ToString()
  
     @property
     def MasterType(self):
-      return EnsembleInformation.ComponentType[AerotechEnsembleCommunicationNET.NetworkNode.MasterType.ToString()] 
+      return EnsembleInformation.ComponentType[self._NetworkNodeNET.MasterType.ToString()] 
 
     @property
     def Name(self):
-        return AerotechEnsembleCommunicationNET.NetworkNode.Name
+        return self._NetworkNodeNET.Name
  
     #NameChanged  Raised whenever Name changes 
     
     @property
     def SubnetAddress(self):
-        return AerotechEnsembleCommunicationNET.NetworkNode.SubnetAddress.get_Address()
+        return self._NetworkNodeNET.SubnetAddress.get_Address()
  
     #SubnetAddressChanged  Raised when SubnetAddress changes 
  
     def UnLockName(self,lockCode:str):
-        return AerotechEnsembleCommunicationNET.NetworkNode.UnLockName(lockCode)
+        return self._NetworkNodeNET.UnLockName(lockCode)
     
     @property
     def UsbId(self):
-        return AerotechEnsembleCommunicationNET.NetworkNode.UsbId
+        return self._NetworkNodeNET.UsbId
     
     @property
     def Version(self):
-        return EnsembleInformation.ControllerVersion(AerotechEnsembleCommunicationNET.NetworkNode.Version)
-
-class NetworkSetup(): 
+        return EnsembleInformation.ControllerVersion(self._NetworkNodeNET.Version)
+    
+# * Checked
+class NetworkSetup(CommonCollections.NamedConstantCollection): 
+    _NetworkSetupNET=None
+    def __init__(self,NetworkSetupNET=AerotechEnsembleCommunicationNET.NetworkSetup):
+        self._NetworkSetupNET=NetworkSetupNET
+        CommonCollections.NamedConstantCollection.__init__(self,NetworkSetupNET,NetworkNodeAddress)
+        
     @property
     def AutoCommit(self):   #Whether to automatically commit the changes 
-        pass 
+        return self._NetworkSetupNET.AutoCommit
     
     @property
     def Capacity(self):   #Returns the size of the NetworkNode list, because there are no null entries, this is the same as Count. 
-        pass
+        return self._NetworkSetupNET.Capacity
     
     def Commit(self): #Commits the current setup to the configuration file 
-        pass
+        self._NetworkSetupNET.Commit()
     
     @property
     def Count(self):  #Returns the number of NetworkNodes in the Configuration file. 
-        pass
+        return self._NetworkSetupNET.Count
     
     def Dispose(self):   #Disposes the current NetworkSetup instance. 
-        pass
+        self._NetworkSetupNET.Dispose()
  
-  #GetEnumerator()()()()  #Returns an Enumerator of current NetworkNodeAddresses. 
+    #GetEnumerator()()()()  #Returns an Enumerator of current NetworkNodeAddresses. 
  
-    def IsMapped(self,NetworkNodeAddress):  #Checks whether the given address is mapped 
-        pass
+    def IsMapped(self,nodeAddress:NetworkNodeAddress):  #Checks whether the given address is mapped 
+        return self._NetworkSetupNET.IsMapped(nodeAddress._NetworkNodeAddressNET)
     
     @multimethod
-    def Map(self,NetworkNodeAddress):  #Maps a new controller to the list of active controllers 
-        pass
+    def Map(self,nodeAddress:NetworkNodeAddress):  #Maps a new controller to the list of active controllers 
+        self._NetworkSetupNET.Map(nodeAddress._NetworkNodeAddressNET)
     
     @multimethod
-    def Map(self,NetworkNode):  #Maps a new controller to the list of active controllers 
-        pass
+    def Map(self,node:NetworkNode):  #Maps a new controller to the list of active controllers 
+        self._NetworkSetupNET.Map(node._NetworkNodeNET)
     
     def Refresh(self):  #Reloads the profile file 
-        pass
+        self._NetworkSetupNET.Refresh()
     
-    def Unmap(self,NetworkNodeAddress):  #Unmaps a controller 
-        pass
+    def Unmap(self,nodeAddress:NetworkNodeAddress):  #Unmaps a controller 
+        self._NetworkSetupNET.Unmap(nodeAddress._NetworkNodeAddressNET)
     
     def UnmapAll(self):   #Unmaps all mapped controllers  
-        pass
+        self._NetworkSetupNET.UnmapAll()

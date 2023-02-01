@@ -1,6 +1,6 @@
 from collections.abc import Sequence,MutableSequence
 
-# A constant collection of objects that have a name associated with them 
+# * Checked
 class NamedConstantCollection(Sequence): 
     def __init__(self,TObject,pyClass):
         # TObject is .NET instance, pyClass is the type decorator for python wrapper
@@ -25,10 +25,10 @@ class NamedConstantCollection(Sequence):
     def Count(self):
         return self.TObject.Count
     
-# A collection of objects that have a name associated with them
+# * Checked
 class NamedCollection(MutableSequence,NamedConstantCollection): 
     def __init__(self,TObject,pyClass):
-        super(NamedConstantCollection,self).__init__(TObject,pyClass)
+        NamedConstantCollection.__init__(self,TObject,pyClass)
 
     def __delitem__(self,TName):
         del self.TObject[TName]
@@ -48,11 +48,11 @@ class NamedCollection(MutableSequence,NamedConstantCollection):
     def Remove(self,TName):
         self.TObject.Remove(TName)
 
-                                        
+# * Checked                                     
 class NamedMaskedConstantCollection(NamedConstantCollection):
     def __init__(self,TObject,pyClass,pyMask):
         self.pyMask=pyMask
-        super(NamedConstantCollection,self).__init__(TObject,pyClass)
+        NamedConstantCollection.__init__(self,TObject,pyClass)
                                         
     @property
     def Mask(self):  # The mask of the collection 
@@ -61,11 +61,11 @@ class NamedMaskedConstantCollection(NamedConstantCollection):
     def Remask(self,TMask):   # Produces a new collection with some additional objects masked 
         self.TObject.Remask(TMask) 
         
-        
+# * Checked   
 class NamedMaskableConstantCollection(NamedMaskedConstantCollection):
     def __init__(self,TObject,pyClass,pyMask):
         self.pyMask=pyMask
-        super(NamedMaskedConstantCollection,self).__init__(TObject,pyClass)
+        NamedMaskedConstantCollection.__init__(self,TObject,pyClass)
                                         
     @property
     def Mask(self):  # The mask of the collection 
@@ -77,4 +77,3 @@ class NamedMaskableConstantCollection(NamedMaskedConstantCollection):
     
     def Remask(self,TMask):   # Produces a new collection with some additional objects masked 
         self.TObject.Remask(TMask) 
-

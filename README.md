@@ -7,20 +7,21 @@ However, the basic motion function has been finished and tested.
 
 Wrapper Progress:
 
-* Aerotech.Common => 90%
-* Aerotech.Common.Collections => DONE
+* Aerotech.Common => DONE => REVISED
+* Aerotech.Common.Collections => DONE => REVISED
+* Aerotech.Ensemble => DONE => REVISED
 * Aerotech.Ensemble.Commands => 10%
-* Aerotech.Ensemble.Communication => 90%
-* Aerotech.Ensemble.Configuration => DONE
-* Aerotech.Ensemble.DataCollection  => DONE
-* Aerotech.Ensemble.Exceptions => 0%
-* Aerotech.Ensemble.FileSystem => DONE
-* Aerotech.Ensemble.Firmware => DONE
-* Aerotech.Ensemble.Information => DONE
-* Aerotech.Ensemble.Parameters => 30%
-* Aerotech.Ensemble.Status => 30%
-* Aerotech.Ensemble.Tasks => DONE
-* Aerotech.Ensemble.Tasks.Debug => DONE
+* Aerotech.Ensemble.Communication => DONE => REVISED
+* Aerotech.Ensemble.Configuration => DONE => REVISED
+* Aerotech.Ensemble.DataCollection => DONE => REVISED
+* Aerotech.Ensemble.Exceptions => DONE => REVISED
+* Aerotech.Ensemble.FileSystem => DONE => REVISED
+* Aerotech.Ensemble.Firmware => DONE => REVISED
+* Aerotech.Ensemble.Information => DONE => REVISED
+* Aerotech.Ensemble.Parameters => 70%
+* Aerotech.Ensemble.Status => 90%
+* Aerotech.Ensemble.Tasks => DONE => REVISED
+* Aerotech.Ensemble.Tasks.Debug => DONE => REVISED
 
 
 

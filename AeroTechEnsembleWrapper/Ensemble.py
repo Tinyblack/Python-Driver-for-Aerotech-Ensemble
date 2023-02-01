@@ -7,35 +7,22 @@ sys.path.insert(0, os.path.abspath('.'))
 sys.path.extend(glob.glob(f'{pathlib.Path(__file__).parents[0].resolve()}/*/**/', recursive=True))
 
 import clr
-clr.AddReference('System')
-from System import String, Char, Int32, IntPtr,Text, UInt32,Decimal,Double
-
-from copy import deepcopy
-from win32api import GetFileVersionInfo, LOWORD, HIWORD
-
-from GlobalLogger import GlobalLogger
-
-import time
 
 from multimethod import multimethod
 
 from enum import Enum
 from aenum import extend_enum
 
-import Common
 import CommonCollections
 import EnsembleCommands 
 import EnsembleCommunication 
-import EnsembleConfiguration  
 import EnsembleDataCollection
-import EnsembleExceptions
 import EnsembleFileSystem
-import EnsembleFirmware
 import EnsembleInformation
 import EnsembleParameters
 import EnsembleStatus
 import EnsembleTasks
-import EnsembleTasksDebug
+
 
 DEFAULT_DLL_PATH:str=os.path.join(os.path.join(os.path.dirname(__file__),'Aerotech_DotNet_dll'),'')
 DEFAULT_DLL_NAME:str='Aerotech.Ensemble'
@@ -47,6 +34,7 @@ try:
 except:
     raise RuntimeError
         
+# * Checked
 class AxisMask(Enum):    
     A0=AerotechEnsembleNET.AxisMask.A0
     A1=AerotechEnsembleNET.AxisMask.A1
@@ -61,6 +49,7 @@ class AxisMask(Enum):
     ALL=AerotechEnsembleNET.AxisMask.All
 extend_enum(AxisMask,'None',getattr(AerotechEnsembleNET.AxisMask,'None'))
 
+# * Checked
 class Controller():
     _ControllerNET:AerotechEnsembleNET.Controller=None
     def __init__(self,controller):
@@ -76,11 +65,11 @@ class Controller():
     @classmethod
     @property
     def Configuration(cls):
-        return None
+        return EnsembleCommunication.NetworkSetup(AerotechEnsembleNET.Controller.Configuration)
     
     @classmethod
     def Connect(cls):
-        AerotechEnsembleNET.Controller.Connect()
+        return CommonCollections.NamedConstantCollection(AerotechEnsembleNET.Controller.Connect(),cls)
 
     @classmethod  
     @property
@@ -89,30 +78,30 @@ class Controller():
 
     @property
     def ControlCenter(self):
-        pass # To collections
+        return EnsembleStatus.ControlCenter(self._ControllerNET.DataCollection)
     
     @property
     def DataCollection(self):
-        pass # To collections
+        return EnsembleDataCollection.Data(self._ControllerNET.DataCollection)
     
     @classmethod
     def Disconnect(cls):
-        Controller.Connect()
+        cls._ControllerNET.Disconnect()
     
     def EnumerateAxes(self):
         self._ControllerNET.EnumerateAxes()
 
     @property
     def FileManager(self):
-        pass # To collections
+        return EnsembleFileSystem.FileManager(self._ControllerNET.FileManager)
     
     @classmethod
     def Identify(cls):
-        pass
+        return CommonCollections.NamedConstantCollection(AerotechEnsembleNET.Controller.Identify(),EnsembleCommunication.NetworkNode)
 
     @property
     def Information(self):
-        pass # To collections
+        EnsembleInformation.ControllerInformation(self._ControllerNET.Information)
     
     @property
     def IsConnected(self):
@@ -124,7 +113,7 @@ class Controller():
     
     @property
     def Parameters(self):
-        pass # To collections
+        EnsembleParameters.ControllerParameters(self._ControllerNET.Parameters)
 
     @multimethod
     def Reset(self):
@@ -136,8 +125,9 @@ class Controller():
         
     @property
     def Tasks(self):
-        pass # To collections
+        return EnsembleTasks.TasksCollection(self._ControllerNET.Tasks)
     
+# * Checked
 class ServoRateParameter(Enum):
     OnekHz=AerotechEnsembleNET.ServoRateParameter.OnekHz
     TwokHz=AerotechEnsembleNET.ServoRateParameter.TwokHz
@@ -145,7 +135,8 @@ class ServoRateParameter(Enum):
     FivekHz=AerotechEnsembleNET.ServoRateParameter.FivekHz
     TenkHz=AerotechEnsembleNET.ServoRateParameter.TenkHz
     TwentykHz=AerotechEnsembleNET.ServoRateParameter.TwentykHz
-    
+
+# * Checked
 class TaskId(Enum):
     TLibrary=AerotechEnsembleNET.TaskId.TLibrary
     T01=AerotechEnsembleNET.TaskId.T01
@@ -154,36 +145,35 @@ class TaskId(Enum):
     T04=AerotechEnsembleNET.TaskId.T04
     TAuxiliary=AerotechEnsembleNET.TaskId.TAuxiliary
     
+# * Checked 
 class SoftwareEnvironment():
-    @classmethod
+    _SoftwareEnvironmentNET=None
+    def __init__(self,SoftwareEnvironmentNET=AerotechEnsembleNET.SoftwareEnvironment):
+        self._SoftwareEnvironmentNET=SoftwareEnvironmentNET
+        
     @property
-    def BinDir(cls):
-        return AerotechEnsembleNET.SoftwareEnvironment.BinDir 
+    def BinDir(self):
+        return self._SoftwareEnvironmentNET.BinDir 
     
-    @classmethod
     @property
-    def InstallDir(cls):
-        return AerotechEnsembleNET.SoftwareEnvironment.InstallDir 
+    def InstallDir(self):
+        return self._SoftwareEnvironmentNET.InstallDir 
     
-    @classmethod
     @property
-    def IsLoaderRunning(cls):
-        return AerotechEnsembleNET.SoftwareEnvironment.IsLoaderRunning 
+    def IsLoaderRunning(self):
+        return self._SoftwareEnvironmentNET.IsLoaderRunning 
     
-    @classmethod
     @property
-    def NumberOfProcesses(cls):
-        return AerotechEnsembleNET.SoftwareEnvironment.NumberOfProcesses 
+    def NumberOfProcesses(self):
+        return self._SoftwareEnvironmentNET.NumberOfProcesses 
     
-    @classmethod
     @property
-    def ProductKey(cls):
-        return AerotechEnsembleNET.SoftwareEnvironment.ProductKey 
+    def ProductKey(self):
+        return self._SoftwareEnvironmentNET.ProductKey 
     
-    @classmethod
     @property
-    def Version(cls):
-        return AerotechEnsembleNET.SoftwareEnvironment.Version 
+    def Version(self):
+        return self._SoftwareEnvironmentNET.Version 
     
 if __name__=='__main__':
     

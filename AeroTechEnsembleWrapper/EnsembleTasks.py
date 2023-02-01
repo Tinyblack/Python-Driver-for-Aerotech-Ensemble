@@ -29,8 +29,7 @@ try:
 except:
     raise RuntimeError
 
-# ! DONE
-
+# * Checked
 class TaskState(Enum):
     Inactive=AerotechEnsembleTasksNET.TaskState.Inactive
     Idle=AerotechEnsembleTasksNET.TaskState.Idle
@@ -41,11 +40,13 @@ class TaskState(Enum):
     Error=AerotechEnsembleTasksNET.TaskState.Error
     RunningPlugin=AerotechEnsembleTasksNET.TaskState.RunningPlugin
 
+# * Checked
 class VariableScope(Enum):
     Global=AerotechEnsembleTasksNET.VariableScope.Global
     Argument=AerotechEnsembleTasksNET.VariableScope.Argument
     Local=AerotechEnsembleTasksNET.VariableScope.Local
 
+# * Checked
 class VariableType(Enum):
     Integer=AerotechEnsembleTasksNET.VariableType.Integer
     Long=AerotechEnsembleTasksNET.VariableType.Long
@@ -54,7 +55,8 @@ class VariableType(Enum):
     String=AerotechEnsembleTasksNET.VariableType.String
     Struct=AerotechEnsembleTasksNET.VariableType.Struct
     Array=AerotechEnsembleTasksNET.VariableType.Array
-
+    
+# * Checked
 class DedicatedJoystick():
     _DedicatedJoystickNET=None
     def __init__(self,DedicatedJoystickNET=AerotechEnsembleTasksNET.DedicatedJoystick):
@@ -70,7 +72,8 @@ class DedicatedJoystick():
 
     def Stop(self):
         self._DedicatedJoystickNET.Stop()
- 
+
+# * Checked
 class Program():
     _ProgramNET=None
     def __init__(self,ProgramNET=AerotechEnsembleTasksNET.Program):
@@ -115,7 +118,8 @@ class Program():
     
     def Stop(self):
         self._ProgramNET.Stop()
- 
+
+# * Checked
 class Task():
     _TaskNET=None
     def __init__(self,TaskNET=AerotechEnsembleTasksNET.Task):
@@ -137,9 +141,9 @@ class Task():
     def State(self):
         return TaskState[self._TaskNET.State.ToString()]
  
+# * Checked
 class TasksCollection():
     _TasksCollectionNET=None
-    
     def __init__(self,TasksCollectionNET=AerotechEnsembleTasksNET.TasksCollection):
         self._TasksCollectionNET=TasksCollectionNET
         
@@ -154,7 +158,4 @@ class TasksCollection():
     @multimethod
     def StopPrograms(self,taskIds:list[Ensemble.TaskId]):
         for taskId in taskIds:
-            self._TasksCollectionNETStopPrograms(taskId.value)
-        
-if __name__=='__main__':
-    a=1
+            self._TasksCollectionNET.StopPrograms(taskId.value)

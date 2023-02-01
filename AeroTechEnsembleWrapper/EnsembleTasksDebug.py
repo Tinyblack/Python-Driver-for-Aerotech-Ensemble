@@ -26,8 +26,7 @@ try:
 except:
     raise RuntimeError
 
-# ! DONE
-
+# * Checked
 class Variable():
     _VariableNET=None
     def __init__(self,VariableNET=AerotechEnsembleTasksDebugNET.Variable):
@@ -59,14 +58,15 @@ class Variable():
     
     @property
     def Value(self):
-        # TODO Solve what Object and value represents here
-        pass
+        return self._VariableNET.Value
      
+# * Checked
 class ArrayVariable(Variable,Sequence):
     _ArrayVariableNET=None
     def __init__(self,ArrayVariableNET=AerotechEnsembleTasksDebugNET.ArrayVariable):
         self._ArrayVariableNET=ArrayVariableNET
-        super(Variable,self).__init__(self._ArrayVariableNET)
+        Variable.__init__(self,self._ArrayVariableNET)
+        Sequence.__init__(self)
 
     def __getitem__(self, i):
         return self._ArrayVariableNET[i]
@@ -84,7 +84,7 @@ class ArrayVariable(Variable,Sequence):
     
     @property
     def ElementType(self):
-        return self._ArrayVariableNET.ElementType
+        return EnsembleTasks.VariableType[self._ArrayVariableNET.ElementType.ToString()]
     
     @property
     def Type(self):
@@ -92,9 +92,9 @@ class ArrayVariable(Variable,Sequence):
     
     @property
     def Value(self):
-        # TODO Solve what Object and value represents here
-        pass
+        return self._VariableNET.Value
     
+# * Checked
 class BreakpointsManager():
     _BreakpointsManagerNET=None
     def __init__(self,BreakpointsManagerNET=AerotechEnsembleTasksDebugNET.BreakpointsManager):
@@ -108,12 +108,13 @@ class BreakpointsManager():
         
     def RemoveAll(self):
         self._BreakpointsManagerNET.RemoveAll()
- 
+
+# * Checked
 class CurrentContext(Sequence):
     _CurrentContextNET=None
-    
     def __init__(self,CurrentContextNET=AerotechEnsembleTasksDebugNET.CurrentContext):
         self._CurrentContextNET=CurrentContextNET
+        Sequence.__init__(self)
         
     def __getitem__(self, i):
         return self._CurrentContextNET[i]
@@ -145,9 +146,9 @@ class CurrentContext(Sequence):
     def Location(self):
         return Common.FilePoint(self._CurrentContextNET.Location)
 
+# * Checked
 class ProgramDebug():
     _ProgramDebugNET=None
-    
     def __init__(self,ProgramDebugNET=AerotechEnsembleTasksDebugNET.ProgramDebug):
         self._ProgramDebugNET=ProgramDebugNET
         
@@ -182,16 +183,16 @@ class ProgramDebug():
         return Common.FilePoint(self._ProgramDebugNET.ProgramDebug.Location)
     
     def Pause(self):
-        self._ProgramDebugNET.ProgramDebug.Pause
+        self._ProgramDebugNET.ProgramDebug.Pause()
     
     def StepInto(self):
-        self._ProgramDebugNET.ProgramDebug.StepInto
+        self._ProgramDebugNET.ProgramDebug.StepInto()
         
     def StepOut(self):
-        self._ProgramDebugNET.ProgramDebug.StepOut
+        self._ProgramDebugNET.ProgramDebug.StepOut()
     
     def StepOver(self):
-        self._ProgramDebugNET.ProgramDebug.StepOver
+        self._ProgramDebugNET.ProgramDebug.StepOver()
         
     @property
     def SymbolsFile(self):
@@ -201,6 +202,7 @@ class ProgramDebug():
     def SymbolsLoaded(self):
         return self._ProgramDebugNET.ProgramDebug.SymbolsLoaded
 
+# * Checked
 class SimpleVariable(Variable):
     _SimpleVariableNET=None
     def __init__(self,SimpleVariableNET=AerotechEnsembleTasksDebugNET.SimpleVariable):
@@ -213,14 +215,15 @@ class SimpleVariable(Variable):
     
     @property
     def Value(self):
-        # TODO Solve what Object and value represents here
-        pass
-        
+        return self._VariableNET.Value
+
+# * Checked      
 class StructVariable(Variable,Sequence):
     _StructVariableNET=None
     def __init__(self,StructVariableNET=AerotechEnsembleTasksDebugNET.StructVariable):
         self._StructVariableNET=StructVariableNET
-        super(Variable,self).__init__(self._StructVariableNET)
+        Variable.__init__(self,self._StructVariableNET)
+        Sequence.__init__(self)
 
     def __getitem__(self, i):
         return self._StructVariableNET[i]
@@ -246,8 +249,4 @@ class StructVariable(Variable,Sequence):
     
     @property
     def Value(self):
-        # TODO Solve what Object and value represents here
-        pass
-        
-if __name__=='__main__':
-    a=1
+        return self._VariableNET.Value

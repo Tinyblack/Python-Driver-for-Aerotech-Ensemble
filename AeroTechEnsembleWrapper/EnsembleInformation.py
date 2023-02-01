@@ -31,8 +31,7 @@ try:
 except:
     raise RuntimeError
 
-# ! DONE
-
+# * Checked
 class AxisInfo():
     _AxisInfoNET=None
     def __init__(self,AxisInfoNET=AerotechEnsembleInformationNET.AxisInfo):
@@ -81,12 +80,14 @@ class AxisInfo():
     @property        
     def Number(self): # The axis number 
         return self._AxisInfoNET.Number
- 
+    
+# * Checked
 class CommandOutputType(Enum):
     Current=AerotechEnsembleInformationNET.ComponentOutputType.Current  # Current output is generated.
     Voltage=AerotechEnsembleInformationNET.ComponentOutputType.Voltage  # Voltage output is generated. 
 extend_enum(CommandOutputType,'None',getattr(AerotechEnsembleInformationNET.CommandOutputType,'None'))
 
+# * Checked
 class ComponentType(Enum):
     CP=AerotechEnsembleInformationNET.ComponentType.CP # Compact pulse width modulation
     MP=AerotechEnsembleInformationNET.ComponentType.MP # Micro pulse width modulation
@@ -101,7 +102,8 @@ class ComponentType(Enum):
     QDe=AerotechEnsembleInformationNET.ComponentType.QDe  # High Performance Single Axis Piezo Drive
     QL=AerotechEnsembleInformationNET.ComponentType.QL  # Single Axis Piezo Drive
     QLe=AerotechEnsembleInformationNET.ComponentType.QLe  # High Performance Single Axis Piezo Drive 
-    
+
+# * Checked
 class ControllerInformation():
     _ControllerInformationNET=None
     def __init__(self,ControllerInformationNET=AerotechEnsembleInformationNET.ControllerInformation):
@@ -143,6 +145,7 @@ class ControllerInformation():
     def Version(self): # Specifies the versions of the controller  
         return ControllerVersion(self._ControllerInformationNET.Version)
 
+# * Checked
 class ControllerVersion():
     _ControllerVersionNET=None
     def __init__(self,ControllerVersionNET=AerotechEnsembleInformationNET.ControllerVersion):
@@ -159,7 +162,8 @@ class ControllerVersion():
     @property
     def HardwareVersion(self):  #Specifies the hardware version 
         return self._ControllerVersionNET.HardwareVersion
-    
+
+# * Checked
 class DriveInformation():
     _DriveInformationNET=None
     def __init__(self,DriveInformationNET=AerotechEnsembleInformationNET.DriveInformation):
@@ -180,21 +184,23 @@ class DriveInformation():
     @property  
     def Version(self): # Specifies the version of the drive. 
         return ControllerVersion(self._DriveInformationNET.Version)
-
+    
+# * Checked
 class EnumInformation():
     _EnumInformationNET=None
     def __init__(self,EnumInformationNET=AerotechEnsembleInformationNET.EnumInformation):
         self._EnumInformationNET=EnumInformationNET
         
     def GetEnumName(self,enumType:System.Type): # Get the string representation of an enumeration.
-        return self._EnumInformationNET.GetEnumName
+        return self._EnumInformationNET.GetEnumName(enumType)
     
     def GetValueName(self,enumValue:System.Enum):  # Get the string representation of a value.
-        return self._EnumInformationNET.GetValueName
+        return self._EnumInformationNET.GetValueName(enumValue)
     
     def GetValueNames(self,enumType:System.Type):  # Get the string representations of values of an enumeration.
-        return self._EnumInformationNET.GetValueNames
- 
+        return self._EnumInformationNET.GetValueNames(enumType)
+
+# * Checked
 class FlashConfigStatus():
     _FlashConfigStatusNET=None
     def __init__(self,FlashConfigStatusNET:Union[AerotechEnsembleInformationNET.FlashConfigStatus,int]=None):
@@ -251,7 +257,8 @@ class FlashConfigStatus():
     def ValueNames(self):  # Returns a mapping of values to their human readable form.  
         # TODO Deal with 'IDictionary'
         return self._FlashConfigStatusNET.ValueNames
-
+    
+# * Checked
 class InitializationInformation():
     _InitializationInformationNET=None
     def __init__(self,InitializationInformationNET=AerotechEnsembleInformationNET.InitializationInformation):

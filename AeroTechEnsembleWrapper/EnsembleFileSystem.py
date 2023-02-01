@@ -10,34 +10,11 @@ import clr
 clr.AddReference('System')
 from System.ComponentModel import ProgressChangedEventHandler
 
-from copy import deepcopy
-from win32api import GetFileVersionInfo, LOWORD, HIWORD
-
-from GlobalLogger import GlobalLogger
-
-import time
-
 from multimethod import multimethod
 
 from enum import Enum
-from aenum import extend_enum
 
-from collections.abc import Sequence
-
-import Common
 import CommonCollections
-import EnsembleCommands 
-import EnsembleCommunication 
-import EnsembleConfiguration  
-import EnsembleDataCollection
-import EnsembleExceptions
-import EnsembleFileSystem
-import EnsembleFirmware
-import EnsembleInformation
-import EnsembleParameters
-import EnsembleStatus
-import EnsembleTasks
-import EnsembleTasksDebug
 
 DEFAULT_DLL_PATH:str=os.path.join(os.path.join(os.path.dirname(__file__),'Aerotech_DotNet_dll'),'')
 DEFAULT_DLL_NAME:str='Aerotech.Ensemble'
@@ -49,19 +26,20 @@ try:
 except:
     raise RuntimeError
 
-# ! DONE
-
+# * Checked
 class FileRetrieveMode(Enum):  # Specifies the mode for retreival of the file from the controller 
     NoOverwrite=AerotechEnsembleFileSystemNET.FileRetrieveMode.NoOverwrite  # Do not overwrite files 
     Overwrite=AerotechEnsembleFileSystemNET.FileRetrieveMode.Overwrite  # Overwrite files 
     Append=AerotechEnsembleFileSystemNET.FileRetrieveMode.Append  # Append to existing files  
 
+# * Checked
 class SystemAttributes(Enum):  # Represents standard file attributes  
     Compressed=AerotechEnsembleFileSystemNET.SystemAttributes.Compressed  # Compressed 
     Hidden=AerotechEnsembleFileSystemNET.SystemAttributes.Hidden  # File is hidden 
     NoCrcData=AerotechEnsembleFileSystemNET.SystemAttributes.NoCrcData  # No CRC data is present 
     PcCreated=AerotechEnsembleFileSystemNET.SystemAttributes.PcCreated  # File was not created by the controller  
 
+# * Checked
 class FileInfo():
     _FileInfoNET=None
     def __init__(self,FileInfoNET=AerotechEnsembleFileSystemNET.FileInfo):
@@ -84,18 +62,12 @@ class FileInfo():
     def UserAttributes(self):  # Any user attributes  
         return self._FileInfoNET.UserAttributes
 
-class FileManager(Sequence,FileInfo):  # Provides access to the file system on the controller
+# * Checked
+class FileManager(CommonCollections.NamedConstantCollection):  # Provides access to the file system on the controller
     _FileManagerNET=None
     def __init__(self,FileManagerNET=AerotechEnsembleFileSystemNET.FileManager):
         self._FileManagerNET=FileManagerNET
-        super(Sequence,self).__init__(self)
-        super(FileInfo,self).__init__(self._FileManagerNET)
-        
-    def __getitem__(self, i):
-        return self._FileManagerNET[i]
-    
-    def __len__(self):
-        return len(self._FileManagerNET)
+        CommonCollections.NamedConstantCollection.__init__(self,FileManagerNET,FileInfo)
     
     @multimethod
     def Delete(self,name:str):  # Deletes the file 
