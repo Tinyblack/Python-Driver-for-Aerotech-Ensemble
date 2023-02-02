@@ -8,17 +8,9 @@ sys.path.extend(glob.glob(f'{pathlib.Path(__file__).parents[0].resolve()}/*/**/'
 
 import clr
 clr.AddReference('System')
-from System import String, Char, Int32, IntPtr,Text, UInt32,Decimal,Double
-
-from copy import deepcopy
-from win32api import GetFileVersionInfo, LOWORD, HIWORD
-
-from GlobalLogger import GlobalLogger
-
-import time
+from System.ComponentModel import ProgressChangedEventHandler
 
 from enum import Enum
-from aenum import extend_enum
 
 from multimethod import multimethod
 
@@ -33,7 +25,6 @@ if DEFAULT_DLL_PATH.upper() not in [path.upper() for path in sys.path]:
     sys.path.extend(DEFAULT_DLL_PATH)
 try:
     clr.AddReference(DEFAULT_DLL_NAME)
-    import Aerotech.Ensemble as AerotechEnsembleNET
     import Aerotech.Ensemble.Commands as AerotechEnsembleCommandsNET
 except:
     raise RuntimeError
@@ -124,6 +115,11 @@ class RegisterType(Enum):
     ModbusSlaveOutputWords=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveOutputWords
     ModbusSlaveInputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveInputBits
     ModbusSlaveOutputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveOutputBits
+
+class CommandCategory():
+    _CommandCategoryNET=None
+    def __init__(self,CommandCategoryNET=AerotechEnsembleCommandsNET.CommandCategory):
+        self._CommandCategoryNET=CommandCategoryNET
 
 class AdvancedAnalogCommands(CommandCategory):
     _AdvancedAnalogCommandsNET=None
@@ -322,11 +318,6 @@ class AxesSelectionCommands(Sequence):
     def Select(self, axisNumbers:list[int]):  # Allows the selection of axes on which to execute the command  
         return AxesRootCommands(self._AxesSelectionCommandsNET.Select(axisNumbers))
 
-class CommandCategory():
-    _CommandCategoryNET=None
-    def __init__(self,CommandCategoryNET=AerotechEnsembleCommandsNET.CommandCategory):
-        self._CommandCategoryNET=CommandCategoryNET
-
 class DataAcquisitionCommands(CommandCategory):
     _DataAcquisitionCommandsNET=None
     def __init__(self,DataAcquisitionCommandsNET=AerotechEnsembleCommandsNET.DataAcquisitionCommands):
@@ -447,7 +438,7 @@ class IOCommands(CommandCategory):
     
 class MotionAdvancedCommands(CommandCategory):
     _MotionAdvancedCommandsNET=None
-    def __init__(self,MotionAdvancedCommandsNET:AerotechEnsembleNET.MotionAdvancedCommands):
+    def __init__(self,MotionAdvancedCommandsNET:AerotechEnsembleCommandsNET.MotionAdvancedCommands):
         self._MotionAdvancedCommandsNET=MotionAdvancedCommandsNET
         
     @multimethod
@@ -475,9 +466,8 @@ class MotionAdvancedCommands(CommandCategory):
         self._MotionAdvancedCommandsNET.MoveToLimCW(Axis)
 
 class MotionCommands(CommandCategory):
-    
     _MotionCommandNET=None
-    def __init__(self,MotionCommandNET:AerotechEnsembleNET.MotionCommand):
+    def __init__(self,MotionCommandNET:AerotechEnsembleCommandsNET.MotionCommand):
         self._MotionCommandNET=MotionCommandNET
     
     # ! Abort
@@ -955,7 +945,7 @@ class MotionCommands(CommandCategory):
     
 class MotionSetupCommands(CommandCategory):
     _MotionSetupCommandsNET=None
-    def __init__(self,MotionSetupCommandsNET:AerotechEnsembleNET.MotionSetupCommands):
+    def __init__(self,MotionSetupCommandsNET:AerotechEnsembleCommandsNET.MotionSetupCommands):
         self._MotionSetupCommandsNET=MotionSetupCommandsNET
         
 
@@ -1211,448 +1201,549 @@ class MotionSetupCommands(CommandCategory):
 
 class PSOCommands(CommandCategory):
     _PSOCommandsNET=None
-    def __init__(self,PSOCommandsNET:AerotechEnsembleNET.PSOCommands):
+    def __init__(self,PSOCommandsNET:AerotechEnsembleCommandsNET.PSOCommands):
         self._PSOCommandsNET=PSOCommandsNET
     
     @multimethod
-    def Array(self,Axis:int, Int32, Int32):  # Sends data into the PSO array.
-        return self._PSOCommandsNET.
+    def Array(self,Axis:int, StartIndex:int, NumberOfElements:int):  # Sends data into the PSO array.
+        self._PSOCommandsNET.Array(Axis, StartIndex, NumberOfElements)
     
     @multimethod
-    def Array(self,Axis:str, Int32, Int32):  # Sends data into the PSO array.
-        return self._PSOCommandsNET.
+    def Array(self,Axis:str, StartIndex:int, NumberOfElements:int):  # Sends data into the PSO array.
+        self._PSOCommandsNET.Array(Axis, StartIndex, NumberOfElements)
     
     @multimethod
-    def ArrayFifoSelectDistance(self,Axis:int, Int32, Int32):  # Sends data into the PSO array.
-        return self._PSOCommandsNET.
+    def ArrayFifoSelectDistance(self,Axis:int, StartIndex:int, NumberOfElements:int):  # Sends data into the PSO array.
+        self._PSOCommandsNET.ArrayFifoSelectDistance(Axis, StartIndex, NumberOfElements)
     
     @multimethod
-    def ArrayFifoSelectDistance(self,Axis:str, Int32, Int32):  # Sends data into the PSO array.
-        return self._PSOCommandsNET.
+    def ArrayFifoSelectDistance(self,Axis:str, StartIndex:int, NumberOfElements:int):  # Sends data into the PSO array.
+        self._PSOCommandsNET.ArrayFifoSelectDistance(Axis, StartIndex, NumberOfElements)
     
     @multimethod
-    def ArrayFifoSelectLaser(self,Axis:int, Int32, Int32):  # Sends data into the PSO array.
-        return self._PSOCommandsNET.
+    def ArrayFifoSelectLaser(self,Axis:int, StartIndex:int, NumberOfElements:int):  # Sends data into the PSO array.
+        self._PSOCommandsNET.ArrayFifoSelectLaser(Axis, StartIndex, NumberOfElements)
     
     @multimethod
-    def ArrayFifoSelectLaser(self,Axis:str, Int32, Int32):  # Sends data into the PSO array.
-        return self._PSOCommandsNET.
+    def ArrayFifoSelectLaser(self,Axis:str, StartIndex:int, NumberOfElements:int):  # Sends data into the PSO array.
+        self._PSOCommandsNET.ArrayFifoSelectLaser(Axis, StartIndex, NumberOfElements)
     
     @multimethod
-    def ArrayFifoSelectWindow1(self,Axis:int, Int32, Int32):  # Sends data into the PSO array.
-        return self._PSOCommandsNET.
+    def ArrayFifoSelectWindow1(self,Axis:int, StartIndex:int, NumberOfElements:int):  # Sends data into the PSO array.
+        self._PSOCommandsNET.ArrayFifoSelectWindow1(Axis, StartIndex, NumberOfElements)
     
     @multimethod
-    def ArrayFifoSelectWindow1(self,Axis:str, Int32, Int32):  # Sends data into the PSO array.
-        return self._PSOCommandsNET.
+    def ArrayFifoSelectWindow1(self,Axis:str, StartIndex:int, NumberOfElements:int):  # Sends data into the PSO array.
+        self._PSOCommandsNET.ArrayFifoSelectWindow1(Axis, StartIndex, NumberOfElements)
     
     @multimethod
-    def ArrayFifoSelectWindow2(self,Axis:int, Int32, Int32):  # Sends data into the PSO array.
-        return self._PSOCommandsNET.
+    def ArrayFifoSelectWindow2(self,Axis:int, StartIndex:int, NumberOfElements:int):  # Sends data into the PSO array.
+        self._PSOCommandsNET.ArrayFifoSelectWindow2(Axis, StartIndex, NumberOfElements)
     
     @multimethod
-    def ArrayFifoSelectWindow2(self,Axis:str, Int32, Int32):  # Sends data into the PSO array.
-        return self._PSOCommandsNET.
+    def ArrayFifoSelectWindow2(self,Axis:str, StartIndex:int, NumberOfElements:int):  # Sends data into the PSO array.
+        self._PSOCommandsNET.ArrayFifoSelectWindow2(Axis, StartIndex, NumberOfElements)
     
     @multimethod
-    def Control(self,Axis:int, PsoMode):  # Enables and disables the PSO hardware.
-        return self._PSOCommandsNET.
+    def Control(self,Axis:int, Mode:PsoMode):  # Enables and disables the PSO hardware.
+        self._PSOCommandsNET.Control(Axis,Mode.value)
     
     @multimethod
-    def Control(self,Axis:str, PsoMode):  # Enables and disables the PSO hardware.
-        return self._PSOCommandsNET.
+    def Control(self,Axis:str, Mode:PsoMode):  # Enables and disables the PSO hardware.
+        self._PSOCommandsNET.Control(Axis,Mode.value)
     
     @multimethod
     def DistanceArray(self,Axis:int):  # Sets the distance to travel between firing events.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.DistanceArray(Axis)
     
     @multimethod
     def DistanceArray(self,Axis:str):  # Sets the distance to travel between firing events.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.DistanceArray(Axis)
     
     @multimethod
-    def DistanceFixed(self,Axis:int, Double):  # Sets the distance to travel between firing events.
-        return self._PSOCommandsNET.
+    def DistanceFixed(self,Axis:int, FireDistance:float):  # Sets the distance to travel between firing events.
+        self._PSOCommandsNET.DistanceFixed(Axis,FireDistance)
     
     @multimethod
-    def DistanceFixed(self,Axis:str, Double):  # Sets the distance to travel between firing events.
-        return self._PSOCommandsNET.
+    def DistanceFixed(self,Axis:str, FireDistance:float):  # Sets the distance to travel between firing events.
+        self._PSOCommandsNET.DistanceFixed(Axis,FireDistance)
     
     @multimethod
     def OutputBitMap(self,Axis:int):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputBitMap(Axis)
     
     @multimethod
     def OutputBitMap(self,Axis:str):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputBitMap(Axis)
     
     @multimethod
-    def OutputBitMap(self,Axis:int, Int32):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+    def OutputBitMap(self,Axis:int, Mode:int):  # Sets the PSO output mode.
+        self._PSOCommandsNET.OutputBitMap(Axis, Mode)
     
     @multimethod
-    def OutputBitMap(self,Axis:str, Int32):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+    def OutputBitMap(self,Axis:str, Mode:int):  # Sets the PSO output mode.
+        self._PSOCommandsNET.OutputBitMap(Axis, Mode)
     
     @multimethod
-    def OutputControl(self,Axis:int, Int32):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+    def OutputControl(self,Axis:int, Mode:int):  # Sets the PSO output mode.
+        self._PSOCommandsNET.OutputControl(Axis, Mode)
     
     @multimethod
-    def OutputControl(self,Axis:str, Int32):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+    def OutputControl(self,Axis:str, Mode:int):  # Sets the PSO output mode.
+        self._PSOCommandsNET.OutputControl(Axis, Mode)
     
     @multimethod
     def OutputPulse(self,Axis:int):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputPulse(Axis)
     
     @multimethod
     def OutputPulse(self,Axis:str):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputPulse(Axis)
     
     @multimethod
     def OutputPulseBitMask(self,Axis:int):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputPulseBitMask(Axis)
     
     @multimethod
     def OutputPulseBitMask(self,Axis:str):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputPulseBitMask(Axis)
     
     @multimethod
     def OutputPulseExtSync(self,Axis:int):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutpOutputPulseExtSyncutPulse(Axis)
     
     @multimethod
     def OutputPulseExtSync(self,Axis:str):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputPulseExtSync(Axis)
     
     @multimethod
     def OutputPulseWindowBitMask(self,Axis:int):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputPulseWindowBitMask(Axis)
     
     @multimethod
     def OutputPulseWindowBitMask(self,Axis:str):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputPulseWindowBitMask(Axis)
     
     @multimethod
-    def OutputPulseWindowBitMaskEdgeMode(self,Axis:int, Int32):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+    def OutputPulseWindowBitMaskEdgeMode(self,Axis:int, EdgeMode:int):  # Sets the PSO output mode.
+        self._PSOCommandsNET.OutputPulseWindowBitMaskEdgeMode(Axis,EdgeMode)
     
     @multimethod
-    def OutputPulseWindowBitMaskEdgeMode(self,Axis:str, Int32):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+    def OutputPulseWindowBitMaskEdgeMode(self,Axis:str, EdgeMode:int):  # Sets the PSO output mode.
+        self._PSOCommandsNET.OutputPulseWindowBitMaskEdgeMode(Axis,EdgeMode)
     
     @multimethod
     def OutputPulseWindowMask(self,Axis:int):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputPulseWindowMask(Axis)
     
     @multimethod
     def OutputPulseWindowMask(self,Axis:str):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputPulseWindowMask(Axis)
     
     @multimethod
-    def OutputPulseWindowMaskEdgeMode(self,Axis:int, Int32):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+    def OutputPulseWindowMaskEdgeMode(self,Axis:int, EdgeMode:int):  # Sets the PSO output mode.
+        self._PSOCommandsNET.OutputPulseWindowMaskEdgeMode(Axis,EdgeMode)
     
     @multimethod
-    def OutputPulseWindowMaskEdgeMode(self,Axis:str, Int32):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+    def OutputPulseWindowMaskEdgeMode(self,Axis:str, EdgeMode:int):  # Sets the PSO output mode.
+        self._PSOCommandsNET.OutputPulseWindowMaskEdgeMode(Axis,EdgeMode)
     
     @multimethod
     def OutputPulseWindowMaskHard(self,Axis:int):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputPulseWindowMaskHard(Axis)
     
     @multimethod
     def OutputPulseWindowMaskHard(self,Axis:str):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputPulseWindowMaskHard(Axis)
     
     @multimethod
     def OutputToggle(self,Axis:int):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputToggle(Axis)
     
     @multimethod
     def OutputToggle(self,Axis:str):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputToggle(Axis)
     
     @multimethod
     def OutputWindow(self,Axis:int):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputWindow(Axis)
     
     @multimethod
     def OutputWindow(self,Axis:str):  # Sets the PSO output mode.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.OutputWindow(Axis)
     
     @multimethod
-    def Pulse(self,Axis:int, Double, Double):  # Configures the pulse sequence that is used for PSO.
-        return self._PSOCommandsNET.
+    def Pulse(self,Axis:int, TotalTime:float, OnTime:float):  # Configures the pulse sequence that is used for PSO.
+        self._PSOCommandsNET.Pulse(Axis,TotalTime,OnTime)
     
     @multimethod
-    def Pulse(self,Axis:str, Double, Double):  # Configures the pulse sequence that is used for PSO.
-        return self._PSOCommandsNET.
+    def Pulse(self,Axis:str, TotalTime:float, OnTime:float):  # Configures the pulse sequence that is used for PSO.
+        self._PSOCommandsNET.Pulse(Axis,TotalTime,OnTime)
     
     @multimethod
-    def PulseCyclesOrDelayCyclesAndDelay(self,Axis:int, Double, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
-        return self._PSOCommandsNET.
+    def PulseCyclesOrDelayCyclesAndDelay(self,Axis:int, TotalTime:float, OnTime:float, NumCycles:float, DelayTime:float):  # Configures the pulse sequence that is used for PSO.
+        self._PSOCommandsNET.PulseCyclesOrDelayCyclesAndDelay(Axis,TotalTime,OnTime, NumCycles, DelayTime)
     
     @multimethod
-    def PulseCyclesOrDelayCyclesAndDelay(self,Axis:str, Double, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
-        return self._PSOCommandsNET.
+    def PulseCyclesOrDelayCyclesAndDelay(self,Axis:int, TotalTime:float, OnTime:float, NumCycles:float, DelayTime:float):  # Configures the pulse sequence that is used for PSO.
+        self._PSOCommandsNET.PulseCyclesOrDelayCyclesAndDelay(Axis,TotalTime,OnTime, NumCycles, DelayTime)
     
     @multimethod
-    def PulseCyclesOrDelayCyclesOnly(self,Axis:int, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
-        return self._PSOCommandsNET.
+    def PulseCyclesOrDelayCyclesOnly(self,Axis:int, TotalTime:float, OnTime:float, NumCycles:float):  # Configures the pulse sequence that is used for PSO.
+        self._PSOCommandsNET.PulseCyclesOrDelayCyclesOnly(Axis,TotalTime,OnTime, NumCycles)
     
     @multimethod
-    def PulseCyclesOrDelayCyclesOnly(self,Axis:str, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
-        return self._PSOCommandsNET.
+    def PulseCyclesOrDelayCyclesOnly(self,Axis:str, TotalTime:float, OnTime:float, NumCycles:float):  # Configures the pulse sequence that is used for PSO.
+        self._PSOCommandsNET.PulseCyclesOrDelayCyclesOnly(Axis,TotalTime,OnTime, NumCycles)
     
     @multimethod
-    def PulseCyclesOrDelayDelayOnly(self,Axis:int, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
-        return self._PSOCommandsNET.
+    def PulseCyclesOrDelayDelayOnly(self,Axis:int, TotalTime:float, OnTime:float, DelayTime:float):  # Configures the pulse sequence that is used for PSO.
+        self._PSOCommandsNET.PulseCyclesOrDelayDelayOnly(Axis,TotalTime,OnTime, DelayTime)
     
     @multimethod
-    def PulseCyclesOrDelayDelayOnly(self,Axis:str, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
-        return self._PSOCommandsNET.
+    def PulseCyclesOrDelayDelayOnly(self,Axis:str, TotalTime:float, OnTime:float, DelayTime:float):  # Configures the pulse sequence that is used for PSO.
+        self._PSOCommandsNET.PulseCyclesOrDelayDelayOnly(Axis,TotalTime,OnTime, DelayTime)
     
     @multimethod
     def Status(self,Axis:int):  # Gets the PSO status information.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.Status(Axis)
     
     @multimethod
     def Status(self,Axis:str):  # Gets the PSO status information.
-        return self._PSOCommandsNET.
+        self._PSOCommandsNET.Status(Axis)
     
     @multimethod
-    def TrackDirection(self,Axis:int, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackDirection(self,Axis:int, DBitMask:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackDirection(Axis,DBitMask)
     
     @multimethod
-    def TrackDirection(self,Axis:str, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackDirection(self,Axis:str, DBitMask:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackDirection(Axis,DBitMask)
     
     @multimethod
-    def TrackInput(self,Axis:int, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackInput(self,Axis:int, Source1:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackInput(Axis,Source1)
     
     @multimethod
-    def TrackInput(self,Axis:str, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackInput(self,Axis:str, Source1:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackInput(Axis,Source1)
     
     @multimethod
-    def TrackInput(self,Axis:int, Int32, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackInput(self,Axis:int, Source1:int, Source2:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackInput(Axis,Source1,Source2)
     
     @multimethod
-    def TrackInput(self,Axis:str, Int32, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackInput(self,Axis:str, Source1:int, Source2:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackInput(Axis,Source1,Source2)
     
     @multimethod
-    def TrackInput(self,Axis:int, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackInput(self,Axis:int, Source1:int, Source2:int, Source3:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackInput(Axis,Source1,Source2,Source3)
     
     @multimethod
-    def TrackInput(self,Axis:str, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackInput(self,Axis:str, Source1:int, Source2:int, Source3:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackInput(Axis,Source1,Source2,Source3)
     
     @multimethod
-    def TrackReset(self,Axis:int, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackReset(self,Axis:int, DBitMask:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackReset(Axis,DBitMask)
     
     @multimethod
-    def TrackReset(self,Axis:str, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackReset(self,Axis:str, DBitMask:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackReset(Axis,DBitMask)
     
     @multimethod
-    def TrackScale(self,Axis:int, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackScale(self,Axis:int, Source1:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackScale(Axis,Source1)
     
     @multimethod
-    def TrackScale(self,Axis:str, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackScale(self,Axis:str, Source1:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackScale(Axis,Source1)
     
     @multimethod
-    def TrackScale(self,Axis:int, Int32, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackScale(self,Axis:int, Source1:int, Source2:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackScale(Axis,Source1,Source2)
     
     @multimethod
-    def TrackScale(self,Axis:str, Int32, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackScale(self,Axis:str, Source1:int, Source2:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackScale(Axis,Source1,Source2)
     
     @multimethod
-    def TrackScale(self,Axis:int, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackScale(self,Axis:int, Source1:int, Source2:int, Source3:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackScale(Axis,Source1,Source2,Source3)
     
     @multimethod
-    def TrackScale(self,Axis:str, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
-        return self._PSOCommandsNET.
+    def TrackScale(self,Axis:str, Source1:int, Source2:int, Source3:int):  # Configures the PSO distance tracking counters.
+        self._PSOCommandsNET.TrackScale(Axis,Source1,Source2,Source3)
     
     @multimethod
-    def WindowInput(self,Axis:int, Int32, Int32):  # Configures which encoder channel is connected to each window.
-        return self._PSOCommandsNET.
+    def WindowInput(self,Axis:int, WindowNumber:int, Source:int):  # Configures which encoder channel is connected to each window.
+        self._PSOCommandsNET.WindowInput(Axis,WindowNumber,Source)
     
     @multimethod
-    def WindowInput(self,Axis:str, Int32, Int32):  # Configures which encoder channel is connected to each window.
-        return self._PSOCommandsNET.
+    def WindowInput(self,Axis:str, WindowNumber:int, Source:int):  # Configures which encoder channel is connected to each window.
+        self._PSOCommandsNET.WindowInput(Axis,WindowNumber,Source)
     
     @multimethod
-    def WindowInputInvert(self,Axis:int, Int32, Int32):  # Configures which encoder channel is connected to each window.
-        return self._PSOCommandsNET.
+    def WindowInputInvert(self,Axis:int, WindowNumber:int, Source:int):  # Configures which encoder channel is connected to each window.
+        self._PSOCommandsNET.WindowInputInvert(Axis,WindowNumber,Source)
     
     @multimethod
-    def WindowInputInvert(self,Axis:str, Int32, Int32):  # Configures which encoder channel is connected to each window.
-        return self._PSOCommandsNET.
+    def WindowInputInvert(self,Axis:str, WindowNumber:int, Source:int):  # Configures which encoder channel is connected to each window.
+        self._PSOCommandsNET.WindowInputInvert(Axis,WindowNumber,Source)
     
     @multimethod
-    def WindowLoad(self,Axis:int, Int32, Int32):  # Loads the specified window counter with a value.
-        return self._PSOCommandsNET.
+    def WindowLoad(self,Axis:int, WindowNumber:int, Value:int):  # Loads the specified window counter with a value.
+        self._PSOCommandsNET.WindowLoad(Axis,WindowNumber,Value)
     
     @multimethod
-    def WindowLoad(self,Axis:str, Int32, Int32):  # Loads the specified window counter with a value.
-        return self._PSOCommandsNET.
+    def WindowLoad(self,Axis:str, WindowNumber:int, Value:int):  # Loads the specified window counter with a value.
+        self._PSOCommandsNET.WindowLoad(Axis,WindowNumber,Value)
     
     @multimethod
-    def WindowOff(self,Axis:int, Int32):  # Disables the PSO Window Hardware.
-        return self._PSOCommandsNET.
+    def WindowOff(self,Axis:int, WindowNumber:int):  # Disables the PSO Window Hardware.
+        self._PSOCommandsNET.WindowOff(Axis,WindowNumber)
     
     @multimethod
-    def WindowOff(self,Axis:str, Int32):  # Disables the PSO Window Hardware.
-        return self._PSOCommandsNET.
+    def WindowOff(self,Axis:str, WindowNumber:int):  # Disables the PSO Window Hardware.
+        self._PSOCommandsNET.WindowOff(Axis,WindowNumber)
     
     @multimethod
-    def WindowOn(self,Axis:int, Int32):  # Enables the PSO Window Hardware.
-        return self._PSOCommandsNET.
+    def WindowOn(self,Axis:int, WindowNumber:int):  # Enables the PSO Window Hardware.
+        self._PSOCommandsNET.WindowOn(Axis,WindowNumber)
     
     @multimethod
-    def WindowOn(self,Axis:str, Int32):  # Enables the PSO Window Hardware.
-        return self._PSOCommandsNET.
+    def WindowOn(self,Axis:str, WindowNumber:int):  # Enables the PSO Window Hardware.
+        self._PSOCommandsNET.WindowOn(Axis,WindowNumber)
     
     @multimethod
-    def WindowOnInvert(self,Axis:int, Int32):  # Enables the PSO Window Hardware.
-        return self._PSOCommandsNET.
+    def WindowOnInvert(self,Axis:int, WindowNumber:int):  # Enables the PSO Window Hardware.
+        self._PSOCommandsNET.WindowOnInvert(Axis,WindowNumber)
     
     @multimethod
-    def WindowOnInvert(self,Axis:str, Int32):  # Enables the PSO Window Hardware.
-        return self._PSOCommandsNET.
+    def WindowOnInvert(self,Axis:str, WindowNumber:int):  # Enables the PSO Window Hardware.
+        self._PSOCommandsNET.WindowOnInvert(Axis,WindowNumber)
     
     @multimethod
-    def WindowRange(self,Axis:int, Int32, Double, Double):  # Specifies the low and high comparison values for specified PSO window.
-        return self._PSOCommandsNET.
+    def WindowRange(self,Axis:int, WindowNumber:int, LowValue:float, HighValue:float):  # Specifies the low and high comparison values for specified PSO window.
+        self._PSOCommandsNET.WindowRange(Axis,WindowNumber,LowValue,HighValue)
     
     @multimethod
-    def WindowRange(self,Axis:str, Int32, Double, Double):  # Specifies the low and high comparison values for specified PSO window.
-        return self._PSOCommandsNET.
+    def WindowRange(self,Axis:str, WindowNumber:int, LowValue:float, HighValue:float):  # Specifies the low and high comparison values for specified PSO window.
+        self._PSOCommandsNET.WindowRange(Axis,WindowNumber,LowValue,HighValue)
     
     @multimethod
-    def WindowRangeArray(self,Axis:int, Int32):  # Specifies the array mode parameters for the specified PSO window.
-        return self._PSOCommandsNET.
+    def WindowRangeArray(self,Axis:int, WindowNumber:int):  # Specifies the array mode parameters for the specified PSO window.
+        self._PSOCommandsNET.WindowRangeArray(Axis,WindowNumber)
     
     @multimethod
-    def WindowRangeArray(self,Axis:str, Int32):  # Specifies the array mode parameters for the specified PSO window.
-        return self._PSOCommandsNET.
+    def WindowRangeArray(self,Axis:str, WindowNumber:int):  # Specifies the array mode parameters for the specified PSO window.
+        self._PSOCommandsNET.WindowRangeArray(Axis,WindowNumber)
     
     @multimethod
-    def WindowRangeArrayEdge(self,Axis:int, Int32, Double):  # Specifies the array mode parameters for the specified PSO window.
-        return self._PSOCommandsNET.
+    def WindowRangeArrayEdge(self,Axis:int, WindowNumber:int, EdgeCode:float):  # Specifies the array mode parameters for the specified PSO window.
+        self._PSOCommandsNET.WindowRangeArrayEdge(Axis,WindowNumber,EdgeCode)
     
     @multimethod
-    def WindowRangeArrayEdge(self,Axis:str, Int32, Double):  # Specifies the array mode parameters for the specified PSO window.
-        return self._PSOCommandsNET.
+    def WindowRangeArrayEdge(self,Axis:str, WindowNumber:int, EdgeCode:float):  # Specifies the array mode parameters for the specified PSO window.
+        self._PSOCommandsNET.WindowRangeArrayEdge(Axis,WindowNumber,EdgeCode)
     
     @multimethod
-    def WindowReset(self,Axis:int, Int32, Int32):  # Resets the window counter to 0 based on the encoder marker signal.
-        return self._PSOCommandsNET.
+    def WindowReset(self,Axis:int, WindowNumber:int, BitMask:int):  # Resets the window counter to 0 based on the encoder marker signal.
+        self._PSOCommandsNET.WindowRangeArWindowResetrayEdge(Axis,WindowNumber,BitMask)
     
     @multimethod
-    def WindowReset(self,Axis:str, Int32, Int32):  # Resets the window counter to 0 based on the encoder marker signal. 
-        return self._PSOCommandsNET.
+    def WindowReset(self,Axis:str, WindowNumber:int, BitMask:int):  # Resets the window counter to 0 based on the encoder marker signal. 
+        self._PSOCommandsNET.WindowRangeArWindowResetrayEdge(Axis,WindowNumber,BitMask)
     
-
 class RegisterCommands(CommandCategory):
     _RegisterCommandsNET=None
-    def __init__(self,RegisterCommandsNET:AerotechEnsembleNET.RegisterCommands):
+    def __init__(self,RegisterCommandsNET:AerotechEnsembleCommandsNET.RegisterCommands):
         self._RegisterCommandsNET=RegisterCommandsNET
         
-        # TODO
+
+    def Lock(self,Semaphore:Semaphores):  # Locks a specified semaphore.
+        self._RegisterCommandsNET.Lock(Semaphore.value)
+        
+    def ReadDoubleGlobal(self,RegNumber:int):  # Provides access to the global double variable (self,register) set.
+        self._RegisterCommandsNET.ReadDoubleGlobal(RegNumber)
+        
+    @multimethod
+    def ReadDoubles(self,address:int, count:int):  # Reads multiple values from DoubleRegisters 
+        return self._RegisterCommandsNET.ReadDoubles(address,count)
+        
+    @multimethod
+    def ReadDoubles(self,address:int, count:int, progressChangedEventHandler:ProgressChangedEventHandler):  # Reads multiple values from DoubleRegisters 
+        return self._RegisterCommandsNET.ReadDoubles(address,count,progressChangedEventHandler)
+        
+    def ReadIntegerGlobal(self,RegNumber:int):  # Provides access to the global integer variable (self,register) set.
+        return self._RegisterCommandsNET.ReadIntegerGlobal(RegNumber)
+
+    @multimethod
+    def ReadIntegers(self,address:int, count:int):  # Reads multiple values from IntegerRegisters 
+        return self._RegisterCommandsNET.ReadIntegers(address,count)
+        
+    @multimethod
+    def ReadIntegers(self,address:int, count:int, progressChangedEventHandler:ProgressChangedEventHandler):  # Reads multiple values from IntegerRegisters 
+        return self._RegisterCommandsNET.ReadIntegers(address,count,progressChangedEventHandler)
+        
+    def UnLock(self,Semaphore:Semaphores):  # Unlocks a specified semaphore.
+        self._RegisterCommandsNET.UnLock(Semaphore.value)
+        
+    def WriteDoubleGlobal(self,RegNumber:int, Value:float):  # Provides access to the global double variable (self,register) set.
+        self._RegisterCommandsNET.WriteDoubleGlobal(RegNumber,Value)
+        
+    @multimethod
+    def WriteDoubles(self,address:int, values:list[float]):  # Writes multiple values to DoubleRegisters 
+        self._RegisterCommandsNET.WriteDoubles(address,values)
+        
+    @multimethod
+    def WriteDoubles(self,address:int, values:list[float], progressChangedEventHandler:ProgressChangedEventHandler):  # Writes multiple values to DoubleRegisters 
+        self._RegisterCommandsNET.WriteDoubles(address,values,progressChangedEventHandler)
+        
+    def WriteIntegerGlobal(self,RegNumber:int, Value:float):  # Provides access to the global integer variable (self,register) set.
+        self._RegisterCommandsNET.WriteIntegerGlobal(RegNumber,Value)
+        
+    @multimethod
+    def WriteIntegers(self,address:int, values:list[int]):  # Writes multiple values to IntegerRegisters 
+        self._RegisterCommandsNET.WriteIntegers(address,values)
+        
+    @multimethod
+    def WriteIntegers(self,address:int, values:list[int], progressChangedEventHandler:ProgressChangedEventHandler):  # Writes multiple values to IntegerRegisters  
+        self._RegisterCommandsNET.WriteIntegers(address,values,progressChangedEventHandler)
     
 class RootCommands(CommandCategory):
     _RootCommandsNET=None
-    def __init__(self,RootCommandsNET:AerotechEnsembleNET.RootCommands):
+    def __init__(self,RootCommandsNET:AerotechEnsembleCommandsNET.RootCommands):
         self._RootCommandsNET=RootCommandsNET
-            
-        # TODO
-    @property
-    def Motion(self):
-        return MotionCommands(self._ControllerNET)
- 
-    def AcknowledgeAll(self):
-        self._ControllerNET.Commands.AcknowledgeAll()
+
+    def AcknowledgeAll(self):  # Acknowledges all axis faults and clears all task errors.
+        self._RootCommandsNET.AcknowledgeAll()
         
-    def Execute(self,code:str):
-        self._ControllerNET.Commands.Execute(code)
- 
-    def ExecuteAsync(self,code:str):
-        self._ControllerNET.Commands.ExecuteAsync(code)
+    @property
+    def Advanced(self):  # Contains the Advanced Commands
+        return AdvancedCommands(self._RootCommandsNET.Advanced)
     
+    @property
+    def Axes(self):  # Allows execution of commands by selecting a set of axes to operate on
+        return AxesSelectionCommands(self._RootCommandsNET.Axes)
+    
+    @property
+    def DataAcquisition(self):  # Contains the DataAcquisition Commands
+        return DataAcquisitionCommands(self._RootCommandsNET.DataAcquisition)
+
+    def Execute(self,code:str):  # Executes an immediate command 
+        return self._RootCommandsNET.Execute(code)
+    
+    def ExecuteAsync(self,code:str):  # Executes an immediate command asynchronously 
+        return self._RootCommandsNET.ExecuteAsync(code)
+    
+    @property
+    def IO(self):  # Contains the IO Commands
+        return IOCommands(self._RootCommandsNET.IO)
+    
+    @property
+    def Motion(self):  # Contains the Motion Commands
+        return MotionCommands(self._RootCommandsNET.Motion)
+
+    @property
+    def PSO(self):  # Contains the PSO Commands
+        return PSOCommands(self._RootCommandsNET.PSO)
+    
+    @property
+    def Register(self):  # Contains the Register Commands
+        return RegisterCommands(self._RootCommandsNET.Register)
+    
+    @property
+    def Status(self):  # Contains the Status Commands
+        return StatusCommands(self._RootCommandsNET.Status)
+    
+    @property
+    def Tuning(self):  # Contains the Tuning Commands 
+        return TuningCommands(self._RootCommandsNET.Tuning) 
+  
 class StatusCommands(CommandCategory):
     _StatusCommandsNET=None
     def __init__(self,StatusCommandsNET=AerotechEnsembleCommandsNET.StatusCommands):
         self._StatusCommandsNET=StatusCommandsNET
         CommandCategory.__init__(self,StatusCommandsNET)
-            
-        # TODO
-    def EtherStatus():  # Gets the Ethernet status.
 
+    def EtherStatus(self):  # Gets the Ethernet status.
+        return EthernetStatus(self._StatusCommandsNET.EtherStatus())
+
+    def GetMode(self,ModeType:ModeType):  # Gets the setting of one of the modal variables. 
+        return self._StatusCommandsNET.GetMode(ModeType.value)
+    
     @multimethod
-    def PositionMarkerLatched(Int32):  # Gets the position feedback latched when the marker signal occurred during a home.
- 
+    def PositionMarkerLatched(self,Axis:int):  # Gets the position feedback latched when the marker signal occurred during a home.
+        return self._StatusCommandsNET.PositionMarkerLatched(Axis)
+    
     @multimethod
-    def PositionMarkerLatched(String):  # Gets the position feedback latched when the marker signal occurred during a home.
+    def PositionMarkerLatched(self,Axis:str):  # Gets the position feedback latched when the marker signal occurred during a home.
+        return self._StatusCommandsNET.PositionMarkerLatched(Axis)
  
 class TuningCommands(CommandCategory):
     _TuningCommandsNET=None
     def __init__(self,TuningCommandsNET=AerotechEnsembleCommandsNET.TuningCommands):
         self._TuningCommandsNET=TuningCommandsNET
         CommandCategory.__init__(self,TuningCommandsNET)
-                
-        # TODO
+
     @multimethod
-    def LoopTrans(Int32, LoopTransmissionMode, Double, Double, LoopTransmissionType):  # Initiates loop transmission mode.
+    def LoopTrans(self,Axis:int, Mode:LoopTransmissionMode, Amplitude:float, Frequency:float, Type:LoopTransmissionType):  # Initiates loop transmission mode.
+        self._TuningCommandsNET.LoopTrans(Axis, Mode.value, Amplitude, Frequency, Type.value)
     
     @multimethod
-    def LoopTrans(String, LoopTransmissionMode, Double, Double, LoopTransmissionType):  # Initiates loop transmission mode.
-    
+    def LoopTrans(self,Axis:str, Mode:LoopTransmissionMode, Amplitude:float, Frequency:float, Type:LoopTransmissionType):  # Initiates loop transmission mode.
+        self._TuningCommandsNET.LoopTrans(Axis, Mode.value, Amplitude, Frequency, Type.value)
+        
     @multimethod
-    def MComm(Int32, Double):  # Sends a direct current command to the servo loop.
-    
+    def MComm(self,Axis:int, Current:float):  # Sends a direct current command to the servo loop.
+        self._TuningCommandsNET.MComm(Axis,Current)
+        
     @multimethod
-    def  MComm(String, Double):  # Sends a direct current command to the servo loop.
-    
+    def MComm(self,Axis:str, Current:float):  # Sends a direct current command to the servo loop.
+        self._TuningCommandsNET.MComm(Axis,Current)
+        
     @multimethod
-    def MSet(Int32, Double, Int32):  # Generates an open-loop current command.
-    
+    def MSet(self,Axis:int, Current:float, Angle:int):  # Generates an open-loop current command.
+        self._TuningCommandsNET.MSet(Axis,Current, Angle)
+        
     @multimethod
-    def MSet(String, Double, Int32):  # Generates an open-loop current command.
-    
+    def MSet(self,Axis:str, Current:float, Angle:int):  # Generates an open-loop current command.
+        self._TuningCommandsNET.MSet(Axis,Current, Angle)
+        
     @multimethod
-    def Oscillate(Int32, Double, Double, Int32):  # Generates sinusoidal oscillation on an axis.
-    
+    def Oscillate(self,Axis:int, Distance:float, Frequency:float, Cycles:int):  # Generates sinusoidal oscillation on an axis.
+        self._TuningCommandsNET.Oscillate(Axis,Distance,Frequency,Cycles)
+        
     @multimethod
-    def Oscillate(String, Double, Double, Int32):  # Generates sinusoidal oscillation on an axis.
-    
+    def Oscillate(self,Axis:str, Distance:float, Frequency:float, Cycles:int):  # Generates sinusoidal oscillation on an axis.
+        self._TuningCommandsNET.Oscillate(Axis,Distance,Frequency,Cycles)
+        
     @multimethod
-    def Oscillate(Int32, Double, Double, Int32, Int32):  # Generates sinusoidal oscillation on an axis.
-    
+    def Oscillate(self,Axis:int, Distance:float, Frequency:float, Cycles:int, NumFreqs:int):  # Generates sinusoidal oscillation on an axis.
+        self._TuningCommandsNET.Oscillate(Axis,Distance,Frequency,Cycles, NumFreqs)
+        
     @multimethod
-    def Oscillate(String, Double, Double, Int32, Int32):  # Generates sinusoidal oscillation on an axis.
-    
+    def Oscillate(self,Axis:str, Distance:float, Frequency:float, Cycles:int, NumFreqs:int):  # Generates sinusoidal oscillation on an axis.
+        self._TuningCommandsNET.Oscillate(Axis,Distance,Frequency,Cycles, NumFreqs)
+        
     @multimethod
-    def SetGain(Int32, Double, Double, Double, Double):  # Sets four or nine servo loop gains at the same time.
-    
+    def SetGain(self,Axis:int, GainKp:float, GainKi:float, GainKpos:float, GainAff:float):  # Sets four or nine servo loop gains at the same time.
+        self._TuningCommandsNET.SetGain(Axis,GainKp,GainKi,GainKpos,GainAff)
+        
     @multimethod
-    def SetGain(String, Double, Double, Double, Double):  # Sets four or nine servo loop gains at the same time.
-    
+    def SetGain(self,Axis:str, GainKp:float, GainKi:float, GainKpos:float, GainAff:float):  # Sets four or nine servo loop gains at the same time.
+        self._TuningCommandsNET.SetGain(Axis,GainKp,GainKi,GainKpos,GainAff)
+        
     @multimethod
-    def SetGain(Int32, Double, Double, Double, Double, Double, Double, Double, Double, Double):  # Sets four or nine servo loop gains at the same time.
-    
+    def SetGain(self,Axis:int, GainKp:float,GainKi:float,GainKpos:float,GainAff:float,GainKd1:float,GainKpi:float,GainKp1:float, GainVff:float,GainPff:float):  # Sets four or nine servo loop gains at the same time.
+        self._TuningCommandsNET.SetGain(Axis,GainKp,GainKi,GainKpos,GainAff,GainKd1,GainKpi,GainKp1,GainVff,GainPff)
+        
     @multimethod
-    def SetGain(String, Double, Double, Double, Double, Double, Double, Double, Double, Double):  # Sets four or nine servo loop gains at the same time.
+    def SetGain(self,Axis:str, GainKp:float,GainKi:float,GainKpos:float,GainAff:float,GainKd1:float,GainKpi:float,GainKp1:float, GainVff:float,GainPff:float):  # Sets four or nine servo loop gains at the same time.
+        self._TuningCommandsNET.SetGain(Axis,GainKp,GainKi,GainKpos,GainAff,GainKd1,GainKpi,GainKp1,GainVff,GainPff)
+        
+        
+        
+
