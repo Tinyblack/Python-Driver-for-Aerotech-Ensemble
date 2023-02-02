@@ -10,7 +10,7 @@ Wrapper Progress:
 * Aerotech.Common => DONE => REVISED
 * Aerotech.Common.Collections => DONE => REVISED
 * Aerotech.Ensemble => DONE => REVISED
-* Aerotech.Ensemble.Commands => 60%
+* Aerotech.Ensemble.Commands => 90%
 * Aerotech.Ensemble.Communication => DONE => REVISED
 * Aerotech.Ensemble.Configuration => DONE => REVISED
 * Aerotech.Ensemble.DataCollection => DONE => REVISED

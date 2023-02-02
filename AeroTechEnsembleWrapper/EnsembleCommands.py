@@ -22,7 +22,10 @@ from aenum import extend_enum
 
 from multimethod import multimethod
 
+from collections.abc import Sequence
+
 import CommonCollections
+import Ensemble
 
 DEFAULT_DLL_PATH:str=os.path.join(os.path.join(os.path.dirname(__file__),'Aerotech_DotNet_dll'),'')
 DEFAULT_DLL_NAME:str='Aerotech.Ensemble'
@@ -34,6 +37,93 @@ try:
     import Aerotech.Ensemble.Commands as AerotechEnsembleCommandsNET
 except:
     raise RuntimeError
+
+class EthernetStatus(Enum):
+    DataInTransmitter=AerotechEnsembleCommandsNET.EthernetStatus.DataInTransmitter
+    DataInReceiver=AerotechEnsembleCommandsNET.EthernetStatus.DataInReceiver
+
+class LoopTransmissionMode(Enum):
+    Off=AerotechEnsembleCommandsNET.LoopTransmissionMode.Off
+    Sinusoid=AerotechEnsembleCommandsNET.LoopTransmissionMode.Sinusoid
+    SinusoidGantry=AerotechEnsembleCommandsNET.LoopTransmissionMode.SinusoidGantry
+    WhiteNoise=AerotechEnsembleCommandsNET.LoopTransmissionMode.WhiteNoise
+    WhiteNoiseGantry=AerotechEnsembleCommandsNET.LoopTransmissionMode.WhiteNoiseGantry
+
+class LoopTransmissionType(Enum):
+    OpenLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.OpenLoop
+    ClosedLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.ClosedLoop
+    CurrentLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.CurrentLoop
+    AFOpenLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.AFOpenLoop
+    AFClosedLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.AFClosedLoop
+
+class ModeType(Enum):
+    MotionMode=AerotechEnsembleCommandsNET.ModeType.MotionMode
+    WaitMode=AerotechEnsembleCommandsNET.ModeType.WaitMode
+    RampMode=AerotechEnsembleCommandsNET.ModeType.RampMode
+    VelocityMode=AerotechEnsembleCommandsNET.ModeType.RampMode
+    ScurveValue=AerotechEnsembleCommandsNET.ModeType.ScurveValue
+    TimeScaleValue=AerotechEnsembleCommandsNET.ModeType.TimeScaleValue
+    DefaultVelocityValue=AerotechEnsembleCommandsNET.ModeType.DefaultVelocityValue
+    AccelRateValue=AerotechEnsembleCommandsNET.ModeType.AccelRateValue
+    AccelTimeValue=AerotechEnsembleCommandsNET.ModeType.AccelTimeValue
+    AccelDistValue=AerotechEnsembleCommandsNET.ModeType.AccelDistValue
+    DecelRateValue=AerotechEnsembleCommandsNET.ModeType.DecelRateValue
+    DecelTimeValue=AerotechEnsembleCommandsNET.ModeType.DecelTimeValue
+    DecelDistValue=AerotechEnsembleCommandsNET.ModeType.DecelDistValue
+    Plane=AerotechEnsembleCommandsNET.ModeType.Plane
+    
+class OnOff(Enum):
+    Off=AerotechEnsembleCommandsNET.OnOff.Off
+    On=AerotechEnsembleCommandsNET.OnOff.On
+
+class PsoMode(Enum):
+    Reset=AerotechEnsembleCommandsNET.PsoMode.Reset
+    Off=AerotechEnsembleCommandsNET.PsoMode.Off
+    Arm=AerotechEnsembleCommandsNET.PsoMode.Arm
+    Fire=AerotechEnsembleCommandsNET.PsoMode.Fire
+    On=AerotechEnsembleCommandsNET.PsoMode.On
+    FireContinuous=AerotechEnsembleCommandsNET.PsoMode.FireContinuous
+
+class RampMode(Enum):
+    Dist=AerotechEnsembleCommandsNET.RampMode.Dist
+    Rate=AerotechEnsembleCommandsNET.RampMode.Rate
+    Time=AerotechEnsembleCommandsNET.RampMode.Time
+
+class RampType(Enum):
+    Linear=AerotechEnsembleCommandsNET.RampType.Linear
+    Scurve=AerotechEnsembleCommandsNET.RampType.Scurve
+    Sine=AerotechEnsembleCommandsNET.RampType.Sine
+
+class WaitOption(Enum):
+    InPosition=AerotechEnsembleCommandsNET.WaitOption.InPosition
+    MoveDone=AerotechEnsembleCommandsNET.WaitOption.MoveDone
+
+class WaitType(Enum):
+    NoWait=AerotechEnsembleCommandsNET.WaitType.NoWait
+    MoveDone=AerotechEnsembleCommandsNET.WaitType.MoveDone
+    InPos=AerotechEnsembleCommandsNET.WaitType.InPos
+    
+class Semaphores(Enum):
+    ModbusRegisters=AerotechEnsembleCommandsNET.Semaphores.ModbusRegisters
+    GlobalIntegers=AerotechEnsembleCommandsNET.Semaphores.GlobalIntegers
+    GlobalDoubles=AerotechEnsembleCommandsNET.Semaphores.GlobalDoubles 
+
+class RegisterType(Enum):
+    GlobalIntegers=AerotechEnsembleCommandsNET.RegisterType.GlobalIntegers
+    GlobalDoubles=AerotechEnsembleCommandsNET.RegisterType.GlobalDoubles
+    ConversionRegisters=AerotechEnsembleCommandsNET.RegisterType.ConversionRegisters
+    ModbusMasterInputWords=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterInputWords
+    ModbusMasterOutputWords=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterOutputWords
+    ModbusMasterInputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterInputBits
+    ModbusMasterOutputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterOutputBits
+    ModbusMasterStatusWords=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterStatusWords
+    ModbusMasterStatusBits=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterStatusBits
+    ModbusMasterVirtualInputs=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterVirtualInputs 
+    ModbusMasterVirtualOutputs=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterVirtualOutputs
+    ModbusSlaveInputWords=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveInputWords
+    ModbusSlaveOutputWords=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveOutputWords
+    ModbusSlaveInputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveInputBits
+    ModbusSlaveOutputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveOutputBits
 
 class AdvancedAnalogCommands(CommandCategory):
     _AdvancedAnalogCommandsNET=None
@@ -99,66 +189,100 @@ class AxesMotionCommands(CommandCategory):
     def __init__(self,AxesMotionCommandsNET=AerotechEnsembleCommandsNET.AxesMotionCommands):
         self._AxesMotionCommandsNET=AxesMotionCommandsNET
         
+            
+    def Abort(self):  # Aborts motion on the selected axes 
+        self._AxesMotionCommandsNET.Abort()
         
-Abort()()()():  # Aborts motion on the selected axes 
+    def AutoFocus(self,OnOff:OnOff):  # Turns on or turns off autofocus.
+        self._AxesMotionCommandsNET.AutoFocus(OnOff.value)
 
-AutoFocus(OnOff):  # Turns on or turns off autofocus.
+    def BlockMotion(self,OnOff:OnOff):  # Sets motion blocking to On or OFF.
+        self._AxesMotionCommandsNET.BlockMotion(OnOff.value)
 
-BlockMotion(OnOff):  # Sets motion blocking to On or OFF.
+    def Disable(self):  # Disables the axes.
+        self._AxesMotionCommandsNET.Disable()
 
-Disable()()()():  # Disables the axes.
+    def Enable(self):  # Enables the axes.
+        self._AxesMotionCommandsNET.Enable()
 
-Enable()()()():  # Enables the axes.
+    def FaultAck(self):  # Acknowledges and clears the fault on axes.
+        self._AxesMotionCommandsNET.FaultAck()
 
-FaultAck()()()():  # Acknowledges and clears the fault on axes.
+    def FreeRun(self,Speed):  # Freeruns the axes.
+        self._AxesMotionCommandsNET.FreeRun(Speed)
 
-FreeRun(array<Double>[]()[][]):  # Freeruns the axes.
+    def FreeRunStop(self):  # Freeruns the axes.
+        self._AxesMotionCommandsNET.FreeRunStop()
 
-FreeRunStop()()()():  # Freeruns the axes.
+    def Home(self):  # Homes the axes.
+        self._AxesMotionCommandsNET.Home()
 
-Home()()()():  # Homes the axes.
+    def HomeConditional(self):  # Homes the axes.
+        self._AxesMotionCommandsNET.HomeConditional()
 
-HomeConditional()()()():  # Homes the axes.
+    @multimethod
+    def Linear(self,Distance:list[float]):  # Executes a linear move on axes. 2 
+        self._AxesMotionCommandsNET.Linear(Distance)
+        
+    @multimethod
+    def Linear(self,Distance:list[float], CoordinatedSpeed):  # Executes a linear move on axes.
+        self._AxesMotionCommandsNET.Linear(Distance, CoordinatedSpeed)
+        
+    @multimethod
+    def MoveAbs(self,Distance:list[float]):  # Executes an absolute move on axes.
+        self._AxesMotionCommandsNET.MoveAbs(Distance)
+        
+    @multimethod
+    def MoveAbs(self,Distance:list[float], Speed:list[float]):  # Executes an absolute move on axes.
+        self._AxesMotionCommandsNET.MoveAbs(Distance, Speed)
+        
+    @multimethod
+    def MoveInc(self,Distance:list[float]):  # Executes an incremental move on axes.
+        self._AxesMotionCommandsNET.MoveInc(Distance)
+        
+    @multimethod
+    def MoveInc(self,Distance:list[float], Speed:list[float]):  # Executes an incremental move on axes.
+        self._AxesMotionCommandsNET.MoveInc(Distance, Speed)
 
-Linear(array<Double>[]()[][]):  # Executes a linear move on axes.
+    @property
+    def Setup(self):  # Contains the Setup Commands
+        return AxesMotionSetupCommands(self._AxesMotionCommandsNET.Setup)
 
-Linear(array<Double>[]()[][], Double):  # Executes a linear move on axes.
-
-MoveAbs(array<Double>[]()[][]):  # Executes an absolute move on axes.
-
-MoveAbs(array<Double>[]()[][], array<Double>[]()[][]):  # Executes an absolute move on axes.
-
-MoveInc(array<Double>[]()[][]):  # Executes an incremental move on axes.
-
-MoveInc(array<Double>[]()[][], array<Double>[]()[][]):  # Executes an incremental move on axes.
-
-Setup:  # Contains the Setup Commands
-
-WaitForMotionDone(WaitOption, Int32):  # Waits for the move to be done 
-
-WaitForMotionDone(WaitOption):  # Waits for the move to be done  
-
+    @multimethod
+    def WaitForMotionDone(self,waitOption:WaitOption, timeout:int):  # Waits for the move to be done 
+        return self._AxesMotionCommandsNET.WaitForMotionDone(waitOption.value,timeout)
+    
+    @multimethod
+    def WaitForMotionDone(self,waitOption:WaitOption):  # Waits for the move to be done  
+        return self._AxesMotionCommandsNET.WaitForMotionDone(waitOption.value)
 
 class AxesMotionSetupCommands(CommandCategory):
     _AxesMotionSetupCommandsNET=None
     def __init__(self,AxesMotionSetupCommandsNET=AerotechEnsembleCommandsNET.AxesMotionSetupCommands):
         self._AxesMotionSetupCommandsNET=AxesMotionSetupCommandsNET
         
-PosCap()()()():  # Retrieves the POSCAP positions.
+    @multimethod
+    def PosCap(self):  # Retrieves the POSCAP positions.
+        return CommonCollections.NamedMaskedConstantCollection(self._AxesMotionSetupCommandsNET.PosCap(),float,Ensemble.AxisMask)
+    
+    @multimethod
+    def PosCap(self,reArm:bool):  # Retrieves the POSCAP positions.
+        return CommonCollections.NamedMaskedConstantCollection(self._AxesMotionSetupCommandsNET.PosCap(reArm),float,Ensemble.AxisMask)
 
-PosCap(Boolean):  # Retrieves the POSCAP positions.
-
-RampDist(array<Double>[]()[][]):  # Specifies distance-based acceleration and deceleration.
-
-RampMode(RampMode):  # Specifies the ramp mode calculation type to use.
-
-RampRate(array<Double>[]()[][]):  # Specifies rate-based acceleration and deceleration.
-
-RampTime(array<Double>[]()[][]):  # Specifies time-based acceleration and deceleration.
-
-Reconcile()()()():  # Reconciles the position of the axes in the list on the plane to servo position.
- 
-
+    def RampDist(self,Value:list[float]):  # Specifies distance-based acceleration and deceleration.
+        self._AxesMotionSetupCommandsNET.RampDist(Value)
+        
+    def RampMode(self,Mode:RampMode):  # Specifies the ramp mode calculation type to use.
+        self._AxesMotionSetupCommandsNET.RampMode(Mode.value)
+        
+    def RampRate(self,Value:list[float]):  # Specifies rate-based acceleration and deceleration.
+        self._AxesMotionSetupCommandsNET.RampRate(Value)
+        
+    def RampTime(self,Value:list[float]):  # Specifies time-based acceleration and deceleration.
+        self._AxesMotionSetupCommandsNET.RampTime(Value)
+        
+    def Reconcile(self):  # Reconciles the position of the axes in the list on the plane to servo position.
+         self._AxesMotionSetupCommandsNET.Reconcile()
 
 class AxesRootCommands(CommandCategory):
     _AxesRootCommandsNET=None
@@ -173,9 +297,30 @@ class AxesRootCommands(CommandCategory):
     def Motion(self):  # Contains the Motion Commands
         return AxesMotionCommands(self._AxesRootCommandsNET.Motion)
 
-class AxesSelectionCommands():
-    def __init__(self):
+class AxesSelectionCommands(Sequence):
+    _AxesSelectionCommands=None
+    def __init__(self,AxesSelectionCommandsNET=AerotechEnsembleCommandsNET.AxesSelectionCommands):
+        self._AxesSelectionCommandsNET=AxesSelectionCommandsNET
+        Sequence.__init__(self)
+
+    def __getitem__(self, i):
+        return AxesRootCommands(self._AxesSelectionCommandsNET[i])
+
+    def __len__(self):
         pass
+
+    @multimethod
+    def Select(self, axisMasks:list[Ensemble.AxisMask]):  # Allows the selection of axes on which to execute the command 
+        _axisMasks=[mask.value for mask in axisMasks]
+        return AxesRootCommands(self._AxesSelectionCommandsNET.Select(_axisMasks))
+    
+    @multimethod
+    def Select(self, axisNames:list[str]):  # Allows the selection of axes on which to execute the command 
+        return AxesRootCommands(self._AxesSelectionCommandsNET.Select(axisNames))
+    
+    @multimethod
+    def Select(self, axisNumbers:list[int]):  # Allows the selection of axes on which to execute the command  
+        return AxesRootCommands(self._AxesSelectionCommandsNET.Select(axisNumbers))
 
 class CommandCategory():
     _CommandCategoryNET=None
@@ -187,101 +332,118 @@ class DataAcquisitionCommands(CommandCategory):
     def __init__(self,DataAcquisitionCommandsNET=AerotechEnsembleCommandsNET.DataAcquisitionCommands):
         self._DataAcquisitionCommandsNET=DataAcquisitionCommandsNET
 
-ArrayRead(Int32, Int32, Int32):  # Transfers drive array values into the specified controller array variables.
+    @multimethod
+    def ArrayRead(self,Axis:int, VariableStart:int, NumberOfElements:int):  # Transfers drive array values into the specified controller array variables.
+        self._DataAcquisitionCommandsNET.ArrayRead(Axis,VariableStart,NumberOfElements)
 
-ArrayRead(String, Int32, Int32):  # Transfers drive array values into the specified controller array variables.
-
-ArraySetup(Int32, Int32):  # Enables data collection.
-
-ArraySetup(String, Int32):  # Enables data collection.
-
-Input(Int32, Int32):  # Specifies the data element collected when a trigger occurs.
-
-Input(String, Int32):  # Specifies the data element collected when a trigger occurs.
-
-Off(Int32):  # Turns off data acquisition. All previously specified DATAACQ command configurations are cleared and must be re-specified if required.
-
-Off(String):  # Turns off data acquisition. All previously specified DATAACQ command configurations are cleared and must be re-specified if required.
-
-Trigger(Int32, Int32):  # Specifies which signal is monitored to collect data.
-
-Trigger(String, Int32):  # Specifies which signal is monitored to collect data. 
-
+    @multimethod
+    def ArrayRead(self,Axis:str, VariableStart:int, NumberOfElements:int):  # Transfers drive array values into the specified controller array variables.
+        self._DataAcquisitionCommandsNET.ArrayRead(Axis,VariableStart,NumberOfElements)
         
-class EthernetStatus(Enum):
-    DataInTransmitter=AerotechEnsembleCommandsNET.EthernetStatus.DataInTransmitter
-    DataInReceiver=AerotechEnsembleCommandsNET.EthernetStatus.DataInReceiver
-
+    @multimethod
+    def ArraySetup(self,Axis:int, NumberOfElements:int):  # Enables data collection.
+        self._DataAcquisitionCommandsNET.ArraySetup(Axis,NumberOfElements)
+        
+    @multimethod
+    def ArraySetup(self,Axis:str, NumberOfElements:int):  # Enables data collection.
+        self._DataAcquisitionCommandsNET.ArraySetup(Axis,NumberOfElements)
+        
+    @multimethod
+    def Input(self,Axis:int, SourceSignal:int):  # Specifies the data element collected when a trigger occurs.
+        self._DataAcquisitionCommandsNET.Input(Axis,SourceSignal)
+        
+    @multimethod
+    def Input(self,Axis:str, SourceSignal:int):  # Specifies the data element collected when a trigger occurs.
+        self._DataAcquisitionCommandsNET.Input(Axis,SourceSignal)
+        
+    @multimethod
+    def Off(self,Axis:int):  # Turns off data acquisition. All previously specified DATAACQ command configurations are cleared and must be re-specified if required.
+        self._DataAcquisitionCommandsNET.Off(Axis)
+        
+    @multimethod
+    def Off(self,Axis:str):  # Turns off data acquisition. All previously specified DATAACQ command configurations are cleared and must be re-specified if required.
+        self._DataAcquisitionCommandsNET.Off(Axis)
+        
+    @multimethod
+    def Trigger(self,Axis:int, TriggerSignal:int):  # Specifies which signal is monitored to collect data.
+        self._DataAcquisitionCommandsNET.Trigger(Axis,TriggerSignal)
+        
+    @multimethod
+    def Trigger(self,Axis:str, TriggerSignal:int):  # Specifies which signal is monitored to collect data. 
+        self._DataAcquisitionCommandsNET.Trigger(Axis,TriggerSignal)
+        
 class IOCommands(CommandCategory):
     _IOCommandsNET=None
     def __init__(self,IOCommandsNET=AerotechEnsembleCommandsNET.IOCommands):
         self._IOCommandsNET=IOCommandsNET
 
-AnalogInput(Int32, Int32):  # Reads the analog input voltage.
- 
-AnalogInput(String, Int32):  # Reads the analog input voltage.
-
-AnalogOutput(Int32, array<Int32>[]()[][], array<Double>[]()[][]):  # Sets the value of the analog output.
-
-AnalogOutput(String, array<Int32>[]()[][], array<Double>[]()[][]):  # Sets the value of the analog output.
-
-Brake(array<Int32>[]()[][], OnOff):  # Controls the brake output of axes.
-
-Brake(Int32, OnOff):  # Controls the brake output of axes.
-
-Brake(array<String>[]()[][], OnOff):  # Controls the brake output of axes.
-
-Brake(String, OnOff):  # Controls the brake output of axes.
-
-Brake(AxisMask, OnOff):  # Controls the brake output of axes.
-
-DigitalInput(Int32, Int32):  # Reads the digital input value.
-
-DigitalInput(String, Int32):  # Reads the digital input value.
-
-DigitalInputBit(Int32, Int32, Int32):  # Reads the digital input value.
-
-DigitalInputBit(String, Int32, Int32):  # Reads the digital input value.
-
-DigitalOutputByBits(Int32, Int32, array<Int32>[]()[][], array<Int32>[]()[][]):  # Sets the digital output.
-
-DigitalOutputByBits(String, Int32, array<Int32>[]()[][], array<Int32>[]()[][]):  # Sets the digital output.
-
-DigitalOutputEntire(Int32, Int32, Int32):  # Sets the digital output.
-
-DigitalOutputEntire(String, Int32, Int32):  # Sets the digital output. 
-
-    
-class LoopTransmissionMode(Enum):
-    Off=AerotechEnsembleCommandsNET.LoopTransmissionMode.Off
-    Sinusoid=AerotechEnsembleCommandsNET.LoopTransmissionMode.Sinusoid
-    SinusoidGantry=AerotechEnsembleCommandsNET.LoopTransmissionMode.SinusoidGantry
-    WhiteNoise=AerotechEnsembleCommandsNET.LoopTransmissionMode.WhiteNoise
-    WhiteNoiseGantry=AerotechEnsembleCommandsNET.LoopTransmissionMode.WhiteNoiseGantry
-
-class LoopTransmissionType(Enum):
-    OpenLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.OpenLoop
-    ClosedLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.ClosedLoop
-    CurrentLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.CurrentLoop
-    AFOpenLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.AFOpenLoop
-    AFClosedLoop=AerotechEnsembleCommandsNET.LoopTransmissionType.AFClosedLoop
-
-
-class ModeType(Enum):
-    MotionMode=AerotechEnsembleCommandsNET.ModeType.MotionMode
-    WaitMode=AerotechEnsembleCommandsNET.ModeType.WaitMode
-    RampMode=AerotechEnsembleCommandsNET.ModeType.RampMode
-    VelocityMode=AerotechEnsembleCommandsNET.ModeType.RampMode
-    ScurveValue=AerotechEnsembleCommandsNET.ModeType.ScurveValue
-    TimeScaleValue=AerotechEnsembleCommandsNET.ModeType.TimeScaleValue
-    DefaultVelocityValue=AerotechEnsembleCommandsNET.ModeType.DefaultVelocityValue
-    AccelRateValue=AerotechEnsembleCommandsNET.ModeType.AccelRateValue
-    AccelTimeValue=AerotechEnsembleCommandsNET.ModeType.AccelTimeValue
-    AccelDistValue=AerotechEnsembleCommandsNET.ModeType.AccelDistValue
-    DecelRateValue=AerotechEnsembleCommandsNET.ModeType.DecelRateValue
-    DecelTimeValue=AerotechEnsembleCommandsNET.ModeType.DecelTimeValue
-    DecelDistValue=AerotechEnsembleCommandsNET.ModeType.DecelDistValue
-    Plane=AerotechEnsembleCommandsNET.ModeType.Plane
+    @multimethod
+    def AnalogInput(self,Axis:int, Channel:int):  # Reads the analog input voltage.
+        self._IOCommandsNET.AnalogInput(Axis, Channel)
+        
+    @multimethod
+    def AnalogInput(self,Axis:str, Channel:int):  # Reads the analog input voltage.
+        self._IOCommandsNET.AnalogInput(Axis, Channel)
+        
+    @multimethod
+    def AnalogOutput(self,Axis:int, Channel:list[int], Value:list[float]):  # Sets the value of the analog output.
+        self._IOCommandsNET.AnalogOutput(Axis, Channel,Value)
+        
+    @multimethod
+    def AnalogOutput(self,Axis:str, Channel:list[int], Value:list[float]):  # Sets the value of the analog output.
+        self._IOCommandsNET.AnalogOutput(Axis, Channel,Value)
+        
+    @multimethod
+    def Brake(self,axisIndexes:list[int], OnOff:OnOff):  # Controls the brake output of axes.
+        self._IOCommandsNET.Brake(axisIndexes,OnOff.value)
+        
+    @multimethod
+    def Brake(self,axisIndex:int, OnOff:OnOff):  # Controls the brake output of axes.
+        self._IOCommandsNET.Brake(axisIndex,OnOff.value)
+        
+    @multimethod
+    def Brake(self,axisNames:list[str], OnOff:OnOff):  # Controls the brake output of axes.
+        self._IOCommandsNET.Brake(axisNames,OnOff.value)
+        
+    @multimethod
+    def Brake(self,axisName:str, OnOff:OnOff):  # Controls the brake output of axes.
+        self._IOCommandsNET.Brake(axisName,OnOff.value)
+        
+    @multimethod
+    def Brake(self,axisMask:Ensemble.AxisMask, OnOff:OnOff):  # Controls the brake output of axes.
+        self._IOCommandsNET.Brake(axisMask,OnOff.value)
+        
+    @multimethod
+    def DigitalInput(self,Axis:int, Port:int):  # Reads the digital input value.
+        self._IOCommandsNET.DigitalInput(Axis,Port)
+        
+    @multimethod
+    def DigitalInput(self,Axis:str, Port:int):  # Reads the digital input value.
+        self._IOCommandsNET.DigitalInput(Axis,Port)
+        
+    @multimethod
+    def DigitalInputBit(self,Axis:int, Port:int, Bit:int):  # Reads the digital input value.
+        self._IOCommandsNET.DigitalInputBit(Axis,Port,Bit)
+        
+    @multimethod
+    def DigitalInputBit(self,Axis:str, Port:int, Bit:int):  # Reads the digital input value.
+        self._IOCommandsNET.DigitalInputBit(Axis,Port,Bit)
+        
+    @multimethod
+    def DigitalOutputByBits(self,Axis:int, Port:int, Bits:list[int], Values:list[int]):  # Sets the digital output.
+        self._IOCommandsNET.DigitalOutputByBits(Axis,Port,Bits,Values)
+        
+    @multimethod
+    def DigitalOutputByBits(self,Axis:str, Port:int, Bits:list[int], Values:list[int]):  # Sets the digital output.
+        self._IOCommandsNET.DigitalOutputByBits(Axis,Port,Bits,Values)
+        
+    @multimethod
+    def DigitalOutputEntire(self,Axis:int, Port:int, Values:list[int]):  # Sets the digital output.
+        self._IOCommandsNET.DigitalOutputEntire(Axis,Port,Values)
+        
+    @multimethod
+    def DigitalOutputEntire(self,Axis:str, Port:int, Values:list[int]):  # Sets the digital output. 
+        self._IOCommandsNET.DigitalOutputEntire(Axis,Port,Values)
     
 class MotionAdvancedCommands(CommandCategory):
     _MotionAdvancedCommandsNET=None
@@ -314,434 +476,431 @@ class MotionAdvancedCommands(CommandCategory):
 
 class MotionCommands(CommandCategory):
     
-    # TODO
-    _ControllerNET=None
+    _MotionCommandNET=None
+    def __init__(self,MotionCommandNET:AerotechEnsembleNET.MotionCommand):
+        self._MotionCommandNET=MotionCommandNET
     
-    def __init__(self,controller:AerotechEnsembleNET.Controller):
-        self._ControllerNET=controller
-        self._Setup=MotionSetupCommands(controller)
-
     # ! Abort
     @multimethod  
     def Abort(self,axis:int):
-        self._ControllerNET.Commands.Montion.Abort(axis)
+        self._MotionCommandNET.Abort(axis)
 
     @multimethod
     def Abort(self,axes:list[int]):
-        self._ControllerNET.Commands.Montion.Abort(axes)
+        self._MotionCommandNET.Abort(axes)
         
     @multimethod
     def Abort(self,axis:str):
-        self._ControllerNET.Commands.Montion.Abort(axis)
+        self._MotionCommandNET.Abort(axis)
         
     @multimethod
     def Abort(self,axes:list[str]):
-        self._ControllerNET.Commands.Montion.Abort(axes)
+        self._MotionCommandNET.Abort(axes)
     
     @multimethod
-    def Abort(self,AxisMask:AerotechEnsembleNET.AxisMask):
-        self._ControllerNET.Commands.Montion.Abort(AxisMask)
+    def Abort(self,AxisMask:Ensemble.AxisMask):
+        self._MotionCommandNET.Abort(AxisMask.value)
         
     @property
     def Advanced(self):
-        return MotionAdvancedCommands(self._ControllerNET)
+        return MotionAdvancedCommands(self._MotionCommandNET.Advanced)
         
     # ! AutoFocus
     @multimethod
-    def AutoFocus(self,axis:int, OnOff:AerotechEnsembleCommandsNET.OnOff): 
-        self._ControllerNET.Commands.Motion.AutoFocus(axis,OnOff)
+    def AutoFocus(self,axis:int, OnOff:OnOff): 
+        self._MotionCommandNET.AutoFocus(axis,OnOff.value)
         
     @multimethod
-    def AutoFocus(self,axes:list[int], OnOff:AerotechEnsembleCommandsNET.OnOff): 
-        self._ControllerNET.Commands.Motion.AutoFocus(axes,OnOff)
+    def AutoFocus(self,axes:list[int], OnOff:OnOff): 
+        self._MotionCommandNET.AutoFocus(axes,OnOff.value)
     
     @multimethod
-    def AutoFocus(self,axis:str, OnOff:AerotechEnsembleCommandsNET.OnOff):
-        self._ControllerNET.Commands.Motion.AutoFocus(axis,OnOff)
+    def AutoFocus(self,axis:str, OnOff:OnOff):
+        self._MotionCommandNET.AutoFocus(axis,OnOff.value)
     
     @multimethod
-    def AutoFocus(self,axes:list[str], OnOff:AerotechEnsembleCommandsNET.OnOff):
-        self._ControllerNET.Commands.Motion.AutoFocus(axes,OnOff)
+    def AutoFocus(self,axes:list[str], OnOff:OnOff):
+        self._MotionCommandNET.AutoFocus(axes,OnOff.value)
     
     @multimethod
-    def AutoFocus(self,AxisMask:AerotechEnsembleNET.AxisMask, OnOff:AerotechEnsembleCommandsNET.OnOff):
-        self._ControllerNET.Commands.Motion.AutoFocus(AxisMask,OnOff)
+    def AutoFocus(self,AxisMask:Ensemble.AxisMask, OnOff:OnOff):
+        self._MotionCommandNET.AutoFocus(AxisMask.value,OnOff.value)
         
     # ! BlockMotion 
     @multimethod
-    def BlockMotion(self,axis:int, OnOff:AerotechEnsembleCommandsNET.OnOff): 
-        self._ControllerNET.Commands.Motion.BlockMotion(axis,OnOff)
+    def BlockMotion(self,axis:int, OnOff:OnOff): 
+        self._MotionCommandNET.BlockMotion(axis,OnOff.value)
         
     @multimethod
-    def BlockMotion(self,axes:list[int], OnOff:AerotechEnsembleCommandsNET.OnOff): 
-        self._ControllerNET.Commands.Motion.BlockMotion(axes,OnOff)
+    def BlockMotion(self,axes:list[int], OnOff:OnOff): 
+        self._MotionCommandNET.BlockMotion(axes,OnOff.value)
     
     @multimethod
-    def BlockMotion(self,axis:str, OnOff:AerotechEnsembleCommandsNET.OnOff):
-        self._ControllerNET.Commands.Motion.BlockMotion(axis,OnOff)
+    def BlockMotion(self,axis:str, OnOff:OnOff):
+        self._MotionCommandNET.BlockMotion(axis,OnOff.value)
     
     @multimethod
-    def BlockMotion(self,axes:list[str], OnOff:AerotechEnsembleCommandsNET.OnOff):
-        self._ControllerNET.Commands.Motion.BlockMotion(axes,OnOff)
+    def BlockMotion(self,axes:list[str], OnOff:OnOff):
+        self._MotionCommandNET.BlockMotion(axes,OnOff.value)
     
     @multimethod
-    def BlockMotion(self,AxisMask:AerotechEnsembleNET.AxisMask, OnOff:AerotechEnsembleCommandsNET.OnOff):
-        self._ControllerNET.Commands.Motion.BlockMotion(AxisMask,OnOff)
+    def BlockMotion(self,AxisMask:Ensemble.AxisMask, OnOff:OnOff):
+        self._MotionCommandNET.BlockMotion(AxisMask.value,OnOff.value)
         
     # ! CCWCenter
     @multimethod
     def CCWCenter(self,axis1:int, axis1End:float, axis2:int, axis2End:float, axis1Center:float, axis2Center:float):
-        self._ControllerNET.Commands.Motion.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
+        self._MotionCommandNET.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
     @multimethod
     def CCWCenter(self,axis1:str, axis1End:float, axis2:str, axis2End:float, axis1Center:float, axis2Center:float):
-        self._ControllerNET.Commands.Motion.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
+        self._MotionCommandNET.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
     @multimethod
     def CCWCenter(self,axis1:int, axis1End:float, axis2:int, axis2End:float, axis1Center:float, axis2Center:float,coordinatedSpeed:float):
-        self._ControllerNET.Commands.Motion.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
+        self._MotionCommandNET.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
     @multimethod
     def CCWCenter(self,axis1:str, axis1End:float, axis2:str, axis2End:float, axis1Center:float, axis2Center:float,coordinatedSpeed:float):
-        self._ControllerNET.Commands.Motion.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
+        self._MotionCommandNET.CCWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
         
     # ! CCWRadius
     @multimethod
     def CCWRadius(self,axis1:int, axis1End:float, axis2:int, axis2End:float, radius:float):
-        self._ControllerNET.Commands.Motion.CCWRadius(axis1, axis1End, axis2, axis2End, radius)
+        self._MotionCommandNET.CCWRadius(axis1, axis1End, axis2, axis2End, radius)
     @multimethod
     def CCWRadius(self,axis1:str, axis1End:float, axis2:str, axis2End:float, radius:float):
-        self._ControllerNET.Commands.Motion.CCWRadius(axis1, axis1End, axis2, axis2End, radius)
+        self._MotionCommandNET.CCWRadius(axis1, axis1End, axis2, axis2End, radius)
     @multimethod
     def CCWRadius(self,axis1:int, axis1End:float, axis2:int, axis2End:float, radius:float,coordinatedSpeed:float):
-        self._ControllerNET.Commands.Motion.CCWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed)
+        self._MotionCommandNET.CCWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed)
     @multimethod
     def CCWRadius(self,axis1:str, axis1End:float, axis2:str, axis2End:float, radius:float,coordinatedSpeed:float):
-        self._ControllerNET.Commands.Motion.CCWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed)
+        self._MotionCommandNET.CCWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed)
         
     # ! CWCenter
     @multimethod
     def CWCenter(self,axis1:int, axis1End:float, axis2:int, axis2End:float, axis1Center:float, axis2Center:float):
-        self._ControllerNET.Commands.Motion.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
+        self._MotionCommandNET.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
     @multimethod
     def CWCenter(self,axis1:str, axis1End:float, axis2:str, axis2End:float, axis1Center:float, axis2Center:float):
-        self._ControllerNET.Commands.Motion.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
+        self._MotionCommandNET.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center)
     @multimethod
     def CWCenter(self,axis1:int, axis1End:float, axis2:int, axis2End:float, axis1Center:float, axis2Center:float,coordinatedSpeed:float):
-        self._ControllerNET.Commands.Motion.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
+        self._MotionCommandNET.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
     @multimethod
     def CWCenter(self,axis1:str, axis1End:float, axis2:str, axis2End:float, axis1Center:float, axis2Center:float,coordinatedSpeed:float):
-        self._ControllerNET.Commands.Motion.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
+        self._MotionCommandNET.CWCenter(axis1, axis1End, axis2, axis2End, axis1Center, axis2Center,coordinatedSpeed)
         
     # ! CWRadius
     @multimethod
     def CWRadius(self,axis1:int, axis1End:float, axis2:int, axis2End:float, radius:float):
-        self._ControllerNET.Commands.Motion.CWRadius(axis1, axis1End, axis2, axis2End, radius)
+        self._MotionCommandNET.CWRadius(axis1, axis1End, axis2, axis2End, radius)
     @multimethod
     def CWRadius(self,axis1:str, axis1End:float, axis2:str, axis2End:float, radius:float):
-        self._ControllerNET.Commands.Motion.CWRadius(axis1, axis1End, axis2, axis2End, radius)
+        self._MotionCommandNET.CWRadius(axis1, axis1End, axis2, axis2End, radius)
     @multimethod
     def CWRadius(self,axis1:int, axis1End:float, axis2:int, axis2End:float, radius:float,coordinatedSpeed:float):
-        self._ControllerNET.Commands.Motion.CWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed)
+        self._MotionCommandNET.CWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed)
     @multimethod
     def CWRadius(self,axis1:str, axis1End:float, axis2:str, axis2End:float, radius:float,coordinatedSpeed:float):
-        self._ControllerNET.Commands.Motion.CWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed) 
+        self._MotionCommandNET.CWRadius(axis1, axis1End, axis2, axis2End, radius,coordinatedSpeed) 
 
     # ! Disable
     @multimethod
     def Disable(self,axis:int): 
-        self._ControllerNET.Commands.Motion.Disable(axis)
+        self._MotionCommandNET.Disable(axis)
         
     @multimethod
     def Disable(self,axes:list[int]): 
-        self._ControllerNET.Commands.Motion.Disable(axes)
+        self._MotionCommandNET.Disable(axes)
     
     @multimethod
     def Disable(self,axis:str):
-        self._ControllerNET.Commands.Motion.Disable(axis)
+        self._MotionCommandNET.Disable(axis)
     
     @multimethod
     def Disable(self,axes:list[str]):
-        self._ControllerNET.Commands.Motion.Disable(axes)
+        self._MotionCommandNET.Disable(axes)
     
     @multimethod
-    def Disable(self,AxisMask:AerotechEnsembleNET.AxisMask):
-        self._ControllerNET.Commands.Motion.Disable(AxisMask)
+    def Disable(self,AxisMask:Ensemble.AxisMask):
+        self._MotionCommandNET.Disable(AxisMask.value)
 
     # ! Enable
     @multimethod
     def Enable(self,axis:int): 
-        self._ControllerNET.Commands.Motion.Enable(axis)
+        self._MotionCommandNET.Enable(axis)
         
     @multimethod
     def Enable(self,axes:list[int]): 
-        self._ControllerNET.Commands.Motion.Enable(axes)
+        self._MotionCommandNET.Enable(axes)
     
     @multimethod
     def Enable(self,axis:str):
-        self._ControllerNET.Commands.Motion.Enable(axis)
+        self._MotionCommandNET.Enable(axis)
     
     @multimethod
     def Enable(self,axes:list[str]):
-        self._ControllerNET.Commands.Motion.Enable(axes)
+        self._MotionCommandNET.Enable(axes)
     
     @multimethod
-    def Enable(self,AxisMask:AerotechEnsembleNET.AxisMask):
-        self._ControllerNET.Commands.Motion.Enable(AxisMask)
+    def Enable(self,AxisMask:Ensemble.AxisMask):
+        self._MotionCommandNET.Enable(AxisMask.value)
         
     # ! FaultAck
     @multimethod
     def FaultAck(self,axis:int): 
-        self._ControllerNET.Commands.Motion.FaultAck(axis)
+        self._MotionCommandNET.FaultAck(axis)
         
     @multimethod
     def FaultAck(self,axes:list[int]): 
-        self._ControllerNET.Commands.Motion.FaultAck(axes)
+        self._MotionCommandNET.FaultAck(axes)
     
     @multimethod
     def FaultAck(self,axis:str):
-        self._ControllerNET.Commands.Motion.FaultAck(axis)
+        self._MotionCommandNET.FaultAck(axis)
     
     @multimethod
     def FaultAck(self,axes:list[str]):
-        self._ControllerNET.Commands.Motion.FaultAck(axes)
+        self._MotionCommandNET.FaultAck(axes)
     
     @multimethod
-    def FaultAck(self,AxisMask:AerotechEnsembleNET.AxisMask):
-        self._ControllerNET.Commands.Motion.FaultAck(AxisMask)
+    def FaultAck(self,AxisMask:Ensemble.AxisMask):
+        self._MotionCommandNET.FaultAck(AxisMask.value)
         
     # ! FreeRun
     @multimethod
     def FreeRun(self,axis:int,speed:float): 
-        self._ControllerNET.Commands.Motion.FreeRun(axis,speed)
+        self._MotionCommandNET.FreeRun(axis,speed)
         
     @multimethod
     def FreeRun(self,axes:list[int],speed:list[float]): 
-        self._ControllerNET.Commands.Motion.FreeRun(axes,speed)
+        self._MotionCommandNET.FreeRun(axes,speed)
     
     @multimethod
     def FreeRun(self,axis:str,speed:float):
-        self._ControllerNET.Commands.Motion.FreeRun(axis,speed)
+        self._MotionCommandNET.FreeRun(axis,speed)
     
     @multimethod
     def FreeRun(self,axes:list[str],speed:list[float]):
-        self._ControllerNET.Commands.Motion.FreeRun(axes,speed)
+        self._MotionCommandNET.FreeRun(axes,speed)
     
     @multimethod
-    def FreeRun(self,AxisMask:AerotechEnsembleNET.AxisMask,speed:float):
-        self._ControllerNET.Commands.Motion.FreeRun(AxisMask,speed)
+    def FreeRun(self,AxisMask:Ensemble.AxisMask,speed:float):
+        self._MotionCommandNET.FreeRun(AxisMask.value,speed)
         
     @multimethod
-    def FreeRun(self,AxisMask:AerotechEnsembleNET.AxisMask,speed:list[float]):
-        self._ControllerNET.Commands.Motion.FreeRun(AxisMask,speed)
+    def FreeRun(self,AxisMask:Ensemble.AxisMask,speed:list[float]):
+        self._MotionCommandNET.FreeRun(AxisMask.value,speed)
         
     # ! FreeRunStop
     @multimethod
     def FreeRunStop(self,axis:int): 
-        self._ControllerNET.Commands.Motion.FreeRunStop(axis)
+        self._MotionCommandNET.FreeRunStop(axis)
         
     @multimethod
     def FreeRunStop(self,axes:list[int]): 
-        self._ControllerNET.Commands.Motion.FreeRunStop(axes)
+        self._MotionCommandNET.FreeRunStop(axes)
     
     @multimethod
     def FreeRunStop(self,axis:str):
-        self._ControllerNET.Commands.Motion.FreeRunStop(axis)
+        self._MotionCommandNET.FreeRunStop(axis)
     
     @multimethod
     def FreeRunStop(self,axes:list[str]):
-        self._ControllerNET.Commands.Motion.FreeRunStop(axes)
+        self._MotionCommandNET.FreeRunStop(axes)
     
     @multimethod
-    def FreeRunStop(self,AxisMask:AerotechEnsembleNET.AxisMask):
-        self._ControllerNET.Commands.Motion.FreeRunStop(AxisMask)
+    def FreeRunStop(self,AxisMask:Ensemble.AxisMask):
+        self._MotionCommandNET.FreeRunStop(AxisMask.value)
         
     # ! Home
     @multimethod
     def Home(self,axis:int): 
-        self._ControllerNET.Commands.Motion.Home(axis)
+        self._MotionCommandNET.Home(axis)
         
     @multimethod
     def Home(self,axes:list[int]): 
-        self._ControllerNET.Commands.Motion.Home(axes)
+        self._MotionCommandNET.Home(axes)
     
     @multimethod
     def Home(self,axis:str):
-        self._ControllerNET.Commands.Motion.Home(axis)
+        self._MotionCommandNET.Home(axis)
     
     @multimethod
     def Home(self,axes:list[str]):
-        self._ControllerNET.Commands.Motion.Home(axes)
+        self._MotionCommandNET.Home(axes)
     
     @multimethod
-    def Home(self,AxisMask:AerotechEnsembleNET.AxisMask):
-        self._ControllerNET.Commands.Motion.Home(AxisMask)
+    def Home(self,AxisMask:Ensemble.AxisMask):
+        self._MotionCommandNET.Home(AxisMask.value)
             
     # ! HomeConditional
     @multimethod
     def HomeConditional(self,axis:int): 
-        self._ControllerNET.Commands.Motion.HomeConditional(axis)
+        self._MotionCommandNET.HomeConditional(axis)
         
     @multimethod
     def HomeConditional(self,axes:list[int]): 
-        self._ControllerNET.Commands.Motion.HomeConditional(axes)
+        self._MotionCommandNET.HomeConditional(axes)
     
     @multimethod
     def HomeConditional(self,axis:str):
-        self._ControllerNET.Commands.Motion.HomeConditional(axis)
+        self._MotionCommandNET.HomeConditional(axis)
     
     @multimethod
     def HomeConditional(self,axes:list[str]):
-        self._ControllerNET.Commands.Motion.HomeConditional(axes)
+        self._MotionCommandNET.HomeConditional(axes)
     
     @multimethod
-    def HomeConditional(self,AxisMask:AerotechEnsembleNET.AxisMask):
-        self._ControllerNET.Commands.Motion.HomeConditional(AxisMask)
+    def HomeConditional(self,AxisMask:Ensemble.AxisMask):
+        self._MotionCommandNET.HomeConditional(AxisMask.value)
         
         
     # ! Linear
     @multimethod
     def Linear(self,axis:int,distance:float): 
-        self._ControllerNET.Commands.Motion.Linear(axis,distance)
+        self._MotionCommandNET.Linear(axis,distance)
         
     @multimethod
     def Linear(self,axes:list[int],distance:list[float]): 
-        self._ControllerNET.Commands.Motion.Linear(axes,distance)
+        self._MotionCommandNET.Linear(axes,distance)
     
     @multimethod
     def Linear(self,axis:str,distance:float):
-        self._ControllerNET.Commands.Motion.Linear(axis,distance)
+        self._MotionCommandNET.Linear(axis,distance)
     
     @multimethod
     def Linear(self,axes:list[str],distance:list[float]):
-        self._ControllerNET.Commands.Motion.Linear(axes,distance)
+        self._MotionCommandNET.Linear(axes,distance)
     
     @multimethod
-    def Linear(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:float):
-        self._ControllerNET.Commands.Motion.Linear(AxisMask,distance)
+    def Linear(self,AxisMask:Ensemble.AxisMask,distance:float):
+        self._MotionCommandNET.Linear(AxisMask.value,distance)
         
     @multimethod
-    def Linear(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:list[float]):
-        self._ControllerNET.Commands.Motion.Linear(AxisMask,distance)
+    def Linear(self,AxisMask:Ensemble.AxisMask,distance:list[float]):
+        self._MotionCommandNET.Linear(AxisMask.value,distance)
 
     @multimethod
     def Linear(self,axis:int,distance:float,coordinatedSpeed:float): 
-        self._ControllerNET.Commands.Motion.Linear(axis,distance,coordinatedSpeed)
+        self._MotionCommandNET.Linear(axis,distance,coordinatedSpeed)
         
     @multimethod
     def Linear(self,axes:list[int],distance:list[float],coordinatedSpeed:float): 
-        self._ControllerNET.Commands.Motion.Linear(axes,distance,coordinatedSpeed)
+        self._MotionCommandNET.Linear(axes,distance,coordinatedSpeed)
     
     @multimethod
     def Linear(self,axis:str,distance:float,coordinatedSpeed:float):
-        self._ControllerNET.Commands.Motion.Linear(axis,distance,coordinatedSpeed)
+        self._MotionCommandNET.Linear(axis,distance,coordinatedSpeed)
     
     @multimethod
     def Linear(self,axes:list[str],distance:list[float],coordinatedSpeed:float):
-        self._ControllerNET.Commands.Motion.Linear(axes,distance,coordinatedSpeed)
+        self._MotionCommandNET.Linear(axes,distance,coordinatedSpeed)
     
     @multimethod
-    def Linear(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:float,coordinatedSpeed:float):
-        self._ControllerNET.Commands.Motion.Linear(AxisMask,distance,coordinatedSpeed)
+    def Linear(self,AxisMask:Ensemble.AxisMask,distance:float,coordinatedSpeed:float):
+        self._MotionCommandNET.Linear(AxisMask.value,distance,coordinatedSpeed)
         
     @multimethod
-    def Linear(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:list[float],coordinatedSpeed:float):
-        self._ControllerNET.Commands.Motion.Linear(AxisMask,distance,coordinatedSpeed)
+    def Linear(self,AxisMask:Ensemble.AxisMask,distance:list[float],coordinatedSpeed:float):
+        self._MotionCommandNET.Linear(AxisMask.value,distance,coordinatedSpeed)
         
     # ! MoveAbs
     @multimethod
     def MoveAbs(self,axis:int,distance:float): 
-        self._ControllerNET.Commands.Motion.MoveAbs(axis,distance)
+        self._MotionCommandNET.MoveAbs(axis,distance)
         
     @multimethod
     def MoveAbs(self,axes:list[int],distance:list[float]): 
-        self._ControllerNET.Commands.Motion.MoveAbs(axes,distance)
+        self._MotionCommandNET.MoveAbs(axes,distance)
     
     @multimethod
     def MoveAbs(self,axis:str,distance:float):
-        self._ControllerNET.Commands.Motion.MoveAbs(axis,distance)
+        self._MotionCommandNET.MoveAbs(axis,distance)
     
     @multimethod
     def MoveAbs(self,axes:list[str],distance:list[float]):
-        self._ControllerNET.Commands.Motion.MoveAbs(axes,distance)
+        self._MotionCommandNET.MoveAbs(axes,distance)
     
     @multimethod
-    def MoveAbs(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:float):
-        self._ControllerNET.Commands.Motion.MoveAbs(AxisMask,distance)
+    def MoveAbs(self,AxisMask:Ensemble.AxisMask,distance:float):
+        self._MotionCommandNET.MoveAbs(AxisMask.value,distance)
         
     @multimethod
-    def MoveAbs(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:list[float]):
-        self._ControllerNET.Commands.Motion.MoveAbs(AxisMask,distance)
+    def MoveAbs(self,AxisMask:Ensemble.AxisMask,distance:list[float]):
+        self._MotionCommandNET.MoveAbs(AxisMask.value,distance)
 
     @multimethod
     def MoveAbs(self,axis:int,distance:float,speed:float): 
-        self._ControllerNET.Commands.Motion.MoveAbs(axis,distance,speed)
+        self._MotionCommandNET.MoveAbs(axis,distance,speed)
         
     @multimethod
     def MoveAbs(self,axes:list[int],distance:list[float],speed:float): 
-        self._ControllerNET.Commands.Motion.MoveAbs(axes,distance,speed)
+        self._MotionCommandNET.MoveAbs(axes,distance,speed)
     
     @multimethod
     def MoveAbs(self,axis:str,distance:float,speed:float):
-        self._ControllerNET.Commands.Motion.MoveAbs(axis,distance,speed)
+        self._MotionCommandNET.MoveAbs(axis,distance,speed)
     
     @multimethod
     def MoveAbs(self,axes:list[str],distance:list[float],speed:float):
-        self._ControllerNET.Commands.Motion.MoveAbs(axes,distance,speed)
+        self._MotionCommandNET.MoveAbs(axes,distance,speed)
     
     @multimethod
-    def MoveAbs(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:float,speed:float):
-        self._ControllerNET.Commands.Motion.MoveAbs(AxisMask,distance,speed)
+    def MoveAbs(self,AxisMask:Ensemble.AxisMask,distance:float,speed:float):
+        self._MotionCommandNET.MoveAbs(AxisMask.value,distance,speed)
         
     @multimethod
-    def MoveAbs(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:list[float],speed:float):
-        self._ControllerNET.Commands.Motion.MoveAbs(AxisMask,distance,speed)
+    def MoveAbs(self,AxisMask:Ensemble.AxisMask,distance:list[float],speed:float):
+        self._MotionCommandNET.MoveAbs(AxisMask.value,distance,speed)
         
     # ! MoveInc
     @multimethod
     def MoveInc(self,axis:int,distance:float): 
-        self._ControllerNET.Commands.Motion.MoveInc(axis,distance)
+        self._MotionCommandNET.MoveInc(axis,distance)
         
     @multimethod
     def MoveInc(self,axes:list[int],distance:list[float]): 
-        self._ControllerNET.Commands.Motion.MoveInc(axes,distance)
+        self._MotionCommandNET.MoveInc(axes,distance)
     
     @multimethod
     def MoveInc(self,axis:str,distance:float):
-        self._ControllerNET.Commands.Motion.MoveInc(axis,distance)
+        self._MotionCommandNET.MoveInc(axis,distance)
     
     @multimethod
     def MoveInc(self,axes:list[str],distance:list[float]):
-        self._ControllerNET.Commands.Motion.MoveInc(axes,distance)
+        self._MotionCommandNET.MoveInc(axes,distance)
     
     @multimethod
-    def MoveInc(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:float):
-        self._ControllerNET.Commands.Motion.MoveInc(AxisMask,distance)
+    def MoveInc(self,AxisMask:Ensemble.AxisMask,distance:float):
+        self._MotionCommandNET.MoveInc(AxisMask.value,distance)
         
     @multimethod
-    def MoveInc(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:list[float]):
-        self._ControllerNET.Commands.Motion.MoveInc(AxisMask,distance)
+    def MoveInc(self,AxisMask:Ensemble.AxisMask,distance:list[float]):
+        self._MotionCommandNET.MoveInc(AxisMask.value,distance)
 
     @multimethod
     def MoveInc(self,axis:int,distance:float,speed:float): 
-        self._ControllerNET.Commands.Motion.MoveInc(axis,distance,speed)
+        self._MotionCommandNET.MoveInc(axis,distance,speed)
         
     @multimethod
     def MoveInc(self,axes:list[int],distance:list[float],speed:float): 
-        self._ControllerNET.Commands.Motion.MoveInc(axes,distance,speed)
+        self._MotionCommandNET.MoveInc(axes,distance,speed)
     
     @multimethod
     def MoveInc(self,axis:str,distance:float,speed:float):
-        self._ControllerNET.Commands.Motion.MoveInc(axis,distance,speed)
+        self._MotionCommandNET.MoveInc(axis,distance,speed)
     
     @multimethod
     def MoveInc(self,axes:list[str],distance:list[float],speed:float):
-        self._ControllerNET.Commands.Motion.MoveInc(axes,distance,speed)
+        self._MotionCommandNET.MoveInc(axes,distance,speed)
     
     @multimethod
-    def MoveInc(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:float,speed:float):
-        self._ControllerNET.Commands.Motion.MoveInc(AxisMask,distance,speed)
+    def MoveInc(self,AxisMask:Ensemble.AxisMask,distance:float,speed:float):
+        self._MotionCommandNET.MoveInc(AxisMask.value,distance,speed)
         
     @multimethod
-    def MoveInc(self,AxisMask:AerotechEnsembleNET.AxisMask,distance:list[float],speed:float):
-        self._ControllerNET.Commands.Motion.MoveInc(AxisMask,distance,speed)
+    def MoveInc(self,AxisMask:Ensemble.AxisMask,distance:list[float],speed:float):
+        self._MotionCommandNET.MoveInc(AxisMask.value,distance,speed)
 
     @property
     def Setup(self):
@@ -752,47 +911,47 @@ class MotionCommands(CommandCategory):
     
     # ! WaitForMotionDone 
     @multimethod
-    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axis:int): 
-        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axis)
+    def WaitForMotionDone (self,waitOption:WaitOption,axis:int): 
+        self._MotionCommandNET.WaitForMotionDone(waitOption.value,axis)
         
     @multimethod
-    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axes:list[int]): 
-        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axes)
+    def WaitForMotionDone (self,waitOption:WaitOption,axes:list[int]): 
+        self._MotionCommandNET.WaitForMotionDone(waitOption.value,axes)
     
     @multimethod
-    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axis:str):
-        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axis)
+    def WaitForMotionDone (self,waitOption:WaitOption,axis:str):
+        self._MotionCommandNET.WaitForMotionDone(waitOption.value,axis)
     
     @multimethod
-    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axes:list[str]):
-        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axes)
+    def WaitForMotionDone (self,waitOption:WaitOption,axes:list[str]):
+        self._MotionCommandNET.WaitForMotionDone(waitOption.value,axes)
     
     @multimethod
-    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,AxisMask:AerotechEnsembleNET.AxisMask):
-        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,AxisMask)
+    def WaitForMotionDone (self,waitOption:WaitOption,AxisMask:Ensemble.AxisMask):
+        self._MotionCommandNET.WaitForMotionDone(waitOption.value,AxisMask.value)
         
     @multimethod
-    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axis:int,timeout:int): 
-        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axis,timeout)
+    def WaitForMotionDone (self,waitOption:WaitOption,axis:int,timeout:int): 
+        self._MotionCommandNET.WaitForMotionDone(waitOption.value,axis,timeout)
         
     @multimethod
-    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axes:list[int],timeout:int): 
-        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axes,timeout)
+    def WaitForMotionDone (self,waitOption:WaitOption,axes:list[int],timeout:int): 
+        self._MotionCommandNET.WaitForMotionDone(waitOption.value,axes,timeout)
     
     @multimethod
-    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axis:str,timeout:int):
-        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axis,timeout)
+    def WaitForMotionDone (self,waitOption:WaitOption,axis:str,timeout:int):
+        self._MotionCommandNET.WaitForMotionDone(waitOption.value,axis,timeout)
     
     @multimethod
-    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,axes:list[str],timeout:int):
-        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,axes,timeout)
+    def WaitForMotionDone (self,waitOption:WaitOption,axes:list[str],timeout:int):
+        self._MotionCommandNET.WaitForMotionDone(waitOption.value,axes,timeout)
     
     @multimethod
-    def WaitForMotionDone (self,waitOption:AerotechEnsembleCommandsNET.WaitOption,AxisMask:AerotechEnsembleNET.AxisMask,timeout:int):
-        self._ControllerNET.Commands.Motion.WaitForMotionDone(waitOption,AxisMask,timeout)
+    def WaitForMotionDone (self,waitOption:WaitOption,AxisMask:Ensemble.AxisMask,timeout:int):
+        self._MotionCommandNET.WaitForMotionDone(waitOption.value,AxisMask.value,timeout)
         
-    def WaitMode(self,type:AerotechEnsembleCommandsNET.WaitType):
-        self._ControllerNET.Commands.Motion.WaitMode(type)
+    def WaitMode(self,type:WaitType):
+        self._MotionCommandNET.WaitMode(type.value)
     
 class MotionSetupCommands(CommandCategory):
     _MotionSetupCommandsNET=None
@@ -801,371 +960,626 @@ class MotionSetupCommands(CommandCategory):
         
 
 
-Absolute()()()():  # Sets motion commands to be in absolute mode.
-
-
-Incremental()()()():  # Sets motion commands to be in incremental mode.
-
-
-Plane(Int32):  # Sets the current plane of motion.
-
-PosCap(Int32):  # Retrieves the POSCAP position.
-
-PosCap(Int32, Boolean):  # Retrieves the POSCAP positions.
-
-PosCap(array<Int32>[]()[][]):  # Retrieves the POSCAP positions.
-
-PosCap(array<Int32>[]()[][], Boolean):  # Retrieves the POSCAP positions.
-
-PosCap(AxisMask):  # Retrieves the POSCAP positions.
-
-PosCap(AxisMask, Boolean):  # Retrieves the POSCAP positions.
-
-PosCap(String):  # Retrieves the POSCAP positions.
-
-PosCap(String, Boolean):  # Retrieves the POSCAP positions.
-
-PosCap(array<String>[]()[][]):  # Retrieves the POSCAP positions.
-
-PosCap(array<String>[]()[][], Boolean):  # Retrieves the POSCAP positions.
-
-PosOffsetClear(Int32):  # Sets or clears an arbitrary program offset position.
-
-PosOffsetClear(String):  # Sets or clears an arbitrary program offset position.
-
-PosOffsetSet(Int32, Double):  # Sets or clears an arbitrary program offset position.
-
-PosOffsetSet(String, Double):  # Sets or clears an arbitrary program offset position.
-
-RampDist(Double):  # Specifies distance-based acceleration and deceleration.
-
-RampDist(array<Int32>[]()[][], array<Double>[]()[][]):  # Specifies distance-based acceleration and deceleration.
-
-RampDist(Int32, Double):  # Specifies distance-based acceleration and deceleration.
-
-RampDist(array<String>[]()[][], array<Double>[]()[][]):  # Specifies distance-based acceleration and deceleration.
-
-RampDist(String, Double):  # Specifies distance-based acceleration and deceleration.
-
-RampDist(AxisMask, array<Double>[]()[][]):  # Specifies distance-based acceleration and deceleration.
-
-RampDist(AxisMask, Double):  # Specifies distance-based acceleration and deceleration.
-
-RampDistAccel(Double):  # Specifies distance-based acceleration and deceleration.
-
-RampDistDecel(Double):  # Specifies distance-based acceleration and deceleration.
-
-RampMode(RampMode):  # Specifies the ramp mode calculation type to use.
-
-RampMode(array<Int32>[]()[][], RampMode):  # Specifies the ramp mode calculation type to use.
-
-RampMode(Int32, RampMode):  # Specifies the ramp mode calculation type to use.
-
-RampMode(array<String>[]()[][], RampMode):  # Specifies the ramp mode calculation type to use.
-
-RampMode(String, RampMode):  # Specifies the ramp mode calculation type to use.
-
-RampMode(AxisMask, RampMode):  # Specifies the ramp mode calculation type to use.
-
-RampRate(Double):  # Specifies rate-based acceleration and deceleration.
-
-RampRate(array<Int32>[]()[][], array<Double>[]()[][]):  # Specifies rate-based acceleration and deceleration.
-
-RampRate(Int32, Double):  # Specifies rate-based acceleration and deceleration.
-
-RampRate(array<String>[]()[][], array<Double>[]()[][]):  # Specifies rate-based acceleration and deceleration.
-
-RampRate(String, Double):  # Specifies rate-based acceleration and deceleration.
-
-RampRate(AxisMask, array<Double>[]()[][]):  # Specifies rate-based acceleration and deceleration.
-
-RampRate(AxisMask, Double):  # Specifies rate-based acceleration and deceleration.
-
-RampRateAccel(Double):  # Specifies rate-based acceleration and deceleration.
-
-RampRateDecel(Double):  # Specifies rate-based acceleration and deceleration.
-
-RampTime(Double):  # Specifies time-based acceleration and deceleration.
-
-RampTime(array<Int32>[]()[][], array<Double>[]()[][]):  # Specifies time-based acceleration and deceleration.
-
-RampTime(Int32, Double):  # Specifies time-based acceleration and deceleration.
-
-RampTime(array<String>[]()[][], array<Double>[]()[][]):  # Specifies time-based acceleration and deceleration.
-
-RampTime(String, Double):  # Specifies time-based acceleration and deceleration.
-
-RampTime(AxisMask, array<Double>[]()[][]):  # Specifies time-based acceleration and deceleration.
-
-RampTime(AxisMask, Double):  # Specifies time-based acceleration and deceleration.
-
-RampTimeAccel(Double):  # Specifies time-based acceleration and deceleration.
-
-RampTimeDecel(Double):  # Specifies time-based acceleration and deceleration.
-
-Reconcile(array<Int32>[]()[][]):  # Reconciles the position of the axes in the list on the plane to servo position.
-
-Reconcile(Int32):  # Reconciles the position of the axes in the list on the plane to servo position.
-
-Reconcile(array<String>[]()[][]):  # Reconciles the position of the axes in the list on the plane to servo position.
-
-Reconcile(String):  # Reconciles the position of the axes in the list on the plane to servo position.
-
-Reconcile(AxisMask):  # Reconciles the position of the axes in the list on the plane to servo position.
-
-ScaleFactorClear(Int32):  # Sets or clears the scale factor for an axis.
-
-ScaleFactorClear(String):  # Sets or clears the scale factor for an axis.
-
-ScaleFactorSet(Int32, Double):  # Sets or clears the scale factor for an axis.
-
-ScaleFactorSet(String, Double):  # Sets or clears the scale factor for an axis.
-
-Scurve(Double):  # Specifies the S-curve value to use.
-
-Servo(Int32, OnOff):  # Changes between open-loop and closed-loop mode for piezo stages.
-
-Servo(String, OnOff):  # Changes between open-loop and closed-loop mode for piezo stages.
-
-SetExtPos(Int32, Double):  # Sets an arbitrary position value, in encoder counts, in external position register.
-
-SetExtPos(String, Double):  # Sets an arbitrary position value, in encoder counts, in external position register.
-
-TimeScale(Double):  # Specifies the time scale to use. 
-
-    
-class OnOff(Enum):
-    Off=AerotechEnsembleCommandsNET.OnOff.Off
-    On=AerotechEnsembleCommandsNET.OnOff.On
+    def Absolute(self):  # Sets motion commands to be in absolute mode.
+        self._MotionSetupCommandsNET.Absolute()
+
+    def Incremental(self):  # Sets motion commands to be in incremental mode.
+        self._MotionSetupCommandsNET.Incremental()
+
+    def Plane(self,PlaneNumber:int):  # Sets the current plane of motion.
+        self._MotionSetupCommandsNET.Plane(PlaneNumber)
+        
+    @multimethod
+    def PosCap(self,axisIndex:int):  # Retrieves the POSCAP position.
+        return self._MotionSetupCommandsNET.PosCap(axisIndex)
+ 
+    @multimethod
+    def PosCap(self,axisIndex:int, reArm:bool):  # Retrieves the POSCAP positions.
+        return self._MotionSetupCommandsNET.PosCap(axisIndex,reArm)
+ 
+    @multimethod
+    def PosCap(self,axisIndexes:list[int]):  # Retrieves the POSCAP positions.
+        return CommonCollections.NamedMaskedConstantCollection(self._MotionSetupCommandsNET.PosCap(axisIndexes),float,Ensemble.AxisMask)
+ 
+    @multimethod
+    def PosCap(self,axisIndexes:list[int], reArm:bool):  # Retrieves the POSCAP positions.
+        return CommonCollections.NamedMaskedConstantCollection(self._MotionSetupCommandsNET.PosCap(axisIndexes,reArm),float,Ensemble.AxisMask)
+ 
+    @multimethod
+    def PosCap(self,axisMask:Ensemble.AxisMask):  # Retrieves the POSCAP positions.
+        return CommonCollections.NamedMaskedConstantCollection(self._MotionSetupCommandsNET.PosCap(axisMask.value),float,Ensemble.AxisMask)
+ 
+    @multimethod
+    def PosCap(self,axisMask:Ensemble.AxisMask, reArm:bool):  # Retrieves the POSCAP positions.
+        return CommonCollections.NamedMaskedConstantCollection(self._MotionSetupCommandsNET.PosCap(axisMask.value,reArm),float,Ensemble.AxisMask)
+ 
+    @multimethod
+    def PosCap(self,axisName:str):  # Retrieves the POSCAP positions.
+        return self._MotionSetupCommandsNET.PosCap(axisName)
+ 
+    @multimethod
+    def PosCap(self,axisName:str, reArm:bool):  # Retrieves the POSCAP positions.
+        return self._MotionSetupCommandsNET.PosCap(axisName,reArm)
+ 
+    @multimethod
+    def PosCap(self,axisNames:list[str]):  # Retrieves the POSCAP positions.
+        return CommonCollections.NamedMaskedConstantCollection(self._MotionSetupCommandsNET.PosCap(axisNames),float,Ensemble.AxisMask)
+ 
+    @multimethod
+    def PosCap(self,axisNames:list[str], reArm:bool):  # Retrieves the POSCAP positions.
+        return CommonCollections.NamedMaskedConstantCollection(self._MotionSetupCommandsNET.PosCap(axisNames,reArm),float,Ensemble.AxisMask)
+ 
+    @multimethod
+    def PosOffsetClear(self,Axis:int):  # Sets or clears an arbitrary program offset position.
+        self._MotionSetupCommandsNET.PosOffsetClear(Axis)
+ 
+    @multimethod
+    def PosOffsetClear(self,Axis:str):  # Sets or clears an arbitrary program offset position.
+        self._MotionSetupCommandsNET.PosOffsetClear(Axis)
+        
+    @multimethod
+    def PosOffsetSet(self,Axis:int, Value:float):  # Sets or clears an arbitrary program offset position.
+        self._MotionSetupCommandsNET.PosOffsetSet(Axis, Value)
+        
+    @multimethod
+    def PosOffsetSet(self,Axis:str, Value:float):  # Sets or clears an arbitrary program offset position.
+        self._MotionSetupCommandsNET.PosOffsetSet(Axis, Value)
+        
+    @multimethod
+    def RampDist(self,Value:float):  # Specifies distance-based acceleration and deceleration.
+        self._MotionSetupCommandsNET.RampDist(Value)
+
+    @multimethod
+    def RampDist(self,axisIndexes:list[int],Value:list[float]):  # Specifies distance-based acceleration and deceleration.
+        self._MotionSetupCommandsNET.RampDist(axisIndexes,Value)
+        
+    @multimethod
+    def RampDist(self,axisIndex:int,Value:float):  # Specifies distance-based acceleration and deceleration.
+        self._MotionSetupCommandsNET.RampDist(axisIndex,Value)
+        
+    @multimethod
+    def RampDist(self,axisNames:list[str],Value:list[float]):  # Specifies distance-based acceleration and deceleration.
+        self._MotionSetupCommandsNET.RampDist(axisNames,Value)
+        
+    @multimethod
+    def RampDist(self,axisName:str,Value:float):  # Specifies distance-based acceleration and deceleration.
+        self._MotionSetupCommandsNET.RampDist(axisName,Value)
+        
+    @multimethod
+    def RampDist(self,axisMask:Ensemble.AxisMask,Value:list[float]):  # Specifies distance-based acceleration and deceleration.
+        self._MotionSetupCommandsNET.RampDist(axisMask.value,Value)
+        
+    @multimethod
+    def RampDist(self,axisMask:Ensemble.AxisMask,Value:float):  # Specifies distance-based acceleration and deceleration.
+        self._MotionSetupCommandsNET.RampDist(axisMask.value,Value)
+        
+    def RampDistAccel(self,Value:float):  # Specifies distance-based acceleration and deceleration.
+        self._MotionSetupCommandsNET.RampDistAccel(Value)
+        
+    def RampDistDecel(self,Value:float):  # Specifies distance-based acceleration and deceleration.
+        self._MotionSetupCommandsNET.RampDistDecel(Value)
+        
+    @multimethod
+    def RampMode(self,Mode:RampMode):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampMode(Mode.value)
+        
+    @multimethod
+    def RampMode(self,axisIndexes:list[int], Mode:RampMode):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampMode(axisIndexes,Mode.value)
+        
+    @multimethod
+    def RampMode(self,axisIndex:int, Mode:RampMode):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampMode(axisIndex,Mode.value)
+        
+    @multimethod
+    def RampMode(self,axisNames:list[str], Mode:RampMode):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampMode(axisNames,Mode.value)
+        
+    @multimethod
+    def RampMode(self,axisName:str, Mode:RampMode):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampMode(axisName,Mode.value)
+        
+    @multimethod
+    def RampMode(self,axisMask:Ensemble.AxisMask, Mode:RampMode):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampMode(axisMask.value,Mode.value)
+        
+    @multimethod
+    def RampRate(self,Value:float):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampRate(Value)
+        
+    @multimethod
+    def RampRate(self,axisIndexes:list[int], Value:list[float]):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampRate(axisIndexes,Value)
+        
+    @multimethod
+    def RampRate(self,axisIndex:int, Value:float):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampRate(axisIndex,Value)
+        
+    @multimethod
+    def RampRate(self,axisNames:list[str], Value:list[float]):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampRate(axisNames,Value)
+        
+    @multimethod
+    def RampRate(self,axisName:str, Value:float):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampRate(axisName,Value)
+        
+    @multimethod
+    def RampRate(self,axisMask:Ensemble.AxisMask, Value:float):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampRate(axisMask.value,Value)
+        
+    @multimethod
+    def RampRate(self,axisMask:Ensemble.AxisMask, Value:list[float]):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampRate(axisMask.value,Value)
+
+    def RampRateAccel(self,Value:float):  # Specifies distance-based acceleration and deceleration.
+        self._MotionSetupCommandsNET.RampRateAccel(Value)
+        
+    def RampRateDecel(self,Value:float):  # Specifies distance-based acceleration and deceleration.
+        self._MotionSetupCommandsNET.RampRateDecel(Value)
+
+    @multimethod
+    def RampTime(self,Value:float):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampTime(Value)
+        
+    @multimethod
+    def RampTime(self,axisIndexes:list[int], Value:list[float]):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampTime(axisIndexes,Value)
+        
+    @multimethod
+    def RampTime(self,axisIndex:int, Value:float):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampTime(axisIndex,Value)
+        
+    @multimethod
+    def RampTime(self,axisNames:list[str], Value:list[float]):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampTime(axisNames,Value)
+        
+    @multimethod
+    def RampTime(self,axisName:str, Value:float):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampTime(axisName,Value)
+        
+    @multimethod
+    def RampTime(self,axisMask:Ensemble.AxisMask, Value:float):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampTime(axisMask.value,Value)
+        
+    @multimethod
+    def RampTime(self,axisMask:Ensemble.AxisMask, Value:list[float]):  # Specifies the ramp mode calculation type to use.
+        self._MotionSetupCommandsNET.RampTime(axisMask.value,Value)
+
+    def RampTimeAccel(self,Value:float):  # Specifies distance-based acceleration and deceleration.
+        self._MotionSetupCommandsNET.RampRateAccel(Value)
+        
+    def RampTimeDecel(self,Value:float):  # Specifies distance-based acceleration and deceleration.
+        self._MotionSetupCommandsNET.RampRateDecel(Value)
+
+    @multimethod
+    def Reconcile(self,axisIndexes:list[int]):  # Reconciles the position of the axes in the list on the plane to servo position.
+        self._MotionSetupCommandsNET.Reconcile(axisIndexes)
+
+    @multimethod
+    def Reconcile(self,axisIndex:int):  # Reconciles the position of the axes in the list on the plane to servo position.
+        self._MotionSetupCommandsNET.Reconcile(axisIndex)
+        
+    @multimethod
+    def Reconcile(self,axisNames:list[str]):  # Reconciles the position of the axes in the list on the plane to servo position.
+        self._MotionSetupCommandsNET.Reconcile(axisNames)
+        
+    @multimethod
+    def Reconcile(self,axisName:str):  # Reconciles the position of the axes in the list on the plane to servo position.
+        self._MotionSetupCommandsNET.Reconcile(axisName)
+        
+    @multimethod
+    def Reconcile(self,axisMask:Ensemble.AxisMask):  # Reconciles the position of the axes in the list on the plane to servo position.
+        self._MotionSetupCommandsNET.Reconcile(axisMask)
+        
+    @multimethod
+    def ScaleFactorClear(self,Axis:int):  # Sets or clears the scale factor for an axis.
+        self._MotionSetupCommandsNET.ScaleFactorClear(Axis)
+        
+    @multimethod
+    def ScaleFactorClear(self,Axis:str):  # Sets or clears the scale factor for an axis.
+        self._MotionSetupCommandsNET.ScaleFactorClear(Axis)
+        
+    @multimethod
+    def ScaleFactorSet(self,Axis:int, Value:float):  # Sets or clears the scale factor for an axis.
+        self._MotionSetupCommandsNET.ScaleFactorSet(Axis, Value)
+
+    @multimethod
+    def ScaleFactorSet(self,Axis:str, Value:float):  # Sets or clears the scale factor for an axis.
+        self._MotionSetupCommandsNET.ScaleFactorSet(Axis, Value)
+        
+    def Scurve(self,Value:float):  # Specifies the S-curve value to use.
+        self._MotionSetupCommandsNET.Scurve(Value)
+
+    @multimethod
+    def Servo(self,Axis:int, OnOff:OnOff):  # Changes between open-loop and closed-loop mode for piezo stages.
+        self._MotionSetupCommandsNET.Servo(Axis,OnOff.value)
+
+    @multimethod
+    def Servo(self,Axis:str, OnOff:OnOff):  # Changes between open-loop and closed-loop mode for piezo stages.
+        self._MotionSetupCommandsNET.Servo(Axis,OnOff.value)
+        
+    @multimethod
+    def SetExtPos(self,Axis:int, Value:float):  # Sets an arbitrary position value, in encoder counts, in external position register.
+        self._MotionSetupCommandsNET.SetExtPos(Axis,Value)
+
+    @multimethod
+    def SetExtPos(self,Axis:str, Value:float):  # Sets an arbitrary position value, in encoder counts, in external position register.
+        self._MotionSetupCommandsNET.SetExtPos(Axis,Value)
+
+    def TimeScale(self,Percentage:float):  # Specifies the time scale to use. 
+        self._MotionSetupCommandsNET.TimeScale(Percentage)
 
 class PSOCommands(CommandCategory):
     _PSOCommandsNET=None
     def __init__(self,PSOCommandsNET:AerotechEnsembleNET.PSOCommands):
         self._PSOCommandsNET=PSOCommandsNET
     
-Array(Int32, Int32, Int32):  # Sends data into the PSO array.
-
-Array(String, Int32, Int32):  # Sends data into the PSO array.
-
-ArrayFifoSelectDistance(Int32, Int32, Int32):  # Sends data into the PSO array.
-
-ArrayFifoSelectDistance(String, Int32, Int32):  # Sends data into the PSO array.
-
-ArrayFifoSelectLaser(Int32, Int32, Int32):  # Sends data into the PSO array.
-
-ArrayFifoSelectLaser(String, Int32, Int32):  # Sends data into the PSO array.
-
-ArrayFifoSelectWindow1(Int32, Int32, Int32):  # Sends data into the PSO array.
-
-ArrayFifoSelectWindow1(String, Int32, Int32):  # Sends data into the PSO array.
-
-ArrayFifoSelectWindow2(Int32, Int32, Int32):  # Sends data into the PSO array.
-
-ArrayFifoSelectWindow2(String, Int32, Int32):  # Sends data into the PSO array.
-
-Control(Int32, PsoMode):  # Enables and disables the PSO hardware.
-
-Control(String, PsoMode):  # Enables and disables the PSO hardware.
-
-DistanceArray(Int32):  # Sets the distance to travel between firing events.
-
-DistanceArray(String):  # Sets the distance to travel between firing events.
-
-DistanceFixed(Int32, Double):  # Sets the distance to travel between firing events.
-
-DistanceFixed(String, Double):  # Sets the distance to travel between firing events.
-
-OutputBitMap(Int32):  # Sets the PSO output mode.
-
-OutputBitMap(String):  # Sets the PSO output mode.
-
-OutputBitMap(Int32, Int32):  # Sets the PSO output mode.
-
-OutputBitMap(String, Int32):  # Sets the PSO output mode.
-
-OutputControl(Int32, Int32):  # Sets the PSO output mode.
-
-OutputControl(String, Int32):  # Sets the PSO output mode.
-
-OutputPulse(Int32):  # Sets the PSO output mode.
-
-OutputPulse(String):  # Sets the PSO output mode.
-
-OutputPulseBitMask(Int32):  # Sets the PSO output mode.
-
-OutputPulseBitMask(String):  # Sets the PSO output mode.
-
-OutputPulseExtSync(Int32):  # Sets the PSO output mode.
-
-OutputPulseExtSync(String):  # Sets the PSO output mode.
-
-OutputPulseWindowBitMask(Int32):  # Sets the PSO output mode.
-
-OutputPulseWindowBitMask(String):  # Sets the PSO output mode.
-
-OutputPulseWindowBitMaskEdgeMode(Int32, Int32):  # Sets the PSO output mode.
-
-OutputPulseWindowBitMaskEdgeMode(String, Int32):  # Sets the PSO output mode.
-
-OutputPulseWindowMask(Int32):  # Sets the PSO output mode.
-
-OutputPulseWindowMask(String):  # Sets the PSO output mode.
-
-OutputPulseWindowMaskEdgeMode(Int32, Int32):  # Sets the PSO output mode.
-
-OutputPulseWindowMaskEdgeMode(String, Int32):  # Sets the PSO output mode.
-
-OutputPulseWindowMaskHard(Int32):  # Sets the PSO output mode.
-
-OutputPulseWindowMaskHard(String):  # Sets the PSO output mode.
-
-OutputToggle(Int32):  # Sets the PSO output mode.
-
-OutputToggle(String):  # Sets the PSO output mode.
-
-OutputWindow(Int32):  # Sets the PSO output mode.
-
-OutputWindow(String):  # Sets the PSO output mode.
-
-Pulse(Int32, Double, Double):  # Configures the pulse sequence that is used for PSO.
-
-Pulse(String, Double, Double):  # Configures the pulse sequence that is used for PSO.
-
-PulseCyclesOrDelayCyclesAndDelay(Int32, Double, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
-
-PulseCyclesOrDelayCyclesAndDelay(String, Double, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
-
-PulseCyclesOrDelayCyclesOnly(Int32, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
-
-PulseCyclesOrDelayCyclesOnly(String, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
-
-PulseCyclesOrDelayDelayOnly(Int32, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
-
-PulseCyclesOrDelayDelayOnly(String, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
-
-Status(Int32):  # Gets the PSO status information.
-
-Status(String):  # Gets the PSO status information.
-
-TrackDirection(Int32, Int32):  # Configures the PSO distance tracking counters.
-
-TrackDirection(String, Int32):  # Configures the PSO distance tracking counters.
-
-TrackInput(Int32, Int32):  # Configures the PSO distance tracking counters.
-
-TrackInput(String, Int32):  # Configures the PSO distance tracking counters.
-
-TrackInput(Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
-
-TrackInput(String, Int32, Int32):  # Configures the PSO distance tracking counters.
-
-TrackInput(Int32, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
-
-TrackInput(String, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
-
-TrackReset(Int32, Int32):  # Configures the PSO distance tracking counters.
-
-TrackReset(String, Int32):  # Configures the PSO distance tracking counters.
-
-TrackScale(Int32, Int32):  # Configures the PSO distance tracking counters.
-
-TrackScale(String, Int32):  # Configures the PSO distance tracking counters.
-
-TrackScale(Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
-
-TrackScale(String, Int32, Int32):  # Configures the PSO distance tracking counters.
-
-TrackScale(Int32, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
-
-TrackScale(String, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
-
-WindowInput(Int32, Int32, Int32):  # Configures which encoder channel is connected to each window.
-
-WindowInput(String, Int32, Int32):  # Configures which encoder channel is connected to each window.
-
-WindowInputInvert(Int32, Int32, Int32):  # Configures which encoder channel is connected to each window.
-
-WindowInputInvert(String, Int32, Int32):  # Configures which encoder channel is connected to each window.
-
-WindowLoad(Int32, Int32, Int32):  # Loads the specified window counter with a value.
-
-WindowLoad(String, Int32, Int32):  # Loads the specified window counter with a value.
-
-WindowOff(Int32, Int32):  # Disables the PSO Window Hardware.
-
-WindowOff(String, Int32):  # Disables the PSO Window Hardware.
-
-WindowOn(Int32, Int32):  # Enables the PSO Window Hardware.
-
-WindowOn(String, Int32):  # Enables the PSO Window Hardware.
-
-WindowOnInvert(Int32, Int32):  # Enables the PSO Window Hardware.
-
-WindowOnInvert(String, Int32):  # Enables the PSO Window Hardware.
-
-WindowRange(Int32, Int32, Double, Double):  # Specifies the low and high comparison values for specified PSO window.
-
-WindowRange(String, Int32, Double, Double):  # Specifies the low and high comparison values for specified PSO window.
-
-WindowRangeArray(Int32, Int32):  # Specifies the array mode parameters for the specified PSO window.
-
-WindowRangeArray(String, Int32):  # Specifies the array mode parameters for the specified PSO window.
-
-WindowRangeArrayEdge(Int32, Int32, Double):  # Specifies the array mode parameters for the specified PSO window.
-
-WindowRangeArrayEdge(String, Int32, Double):  # Specifies the array mode parameters for the specified PSO window.
-
-WindowReset(Int32, Int32, Int32):  # Resets the window counter to 0 based on the encoder marker signal.
-
-WindowReset(String, Int32, Int32):  # Resets the window counter to 0 based on the encoder marker signal. 
-
+    @multimethod
+    def Array(self,Axis:int, Int32, Int32):  # Sends data into the PSO array.
+        return self._PSOCommandsNET.
     
-
-class PsoMode(Enum):
-    Reset=AerotechEnsembleCommandsNET.PsoMode.Reset
-    Off=AerotechEnsembleCommandsNET.PsoMode.Off
-    Arm=AerotechEnsembleCommandsNET.PsoMode.Arm
-    Fire=AerotechEnsembleCommandsNET.PsoMode.Fire
-    On=AerotechEnsembleCommandsNET.PsoMode.On
-    FireContinuous=AerotechEnsembleCommandsNET.PsoMode.FireContinuous
-
-class RampMode(Enum):
-    Dist=AerotechEnsembleCommandsNET.RampMode.Dist
-    Rate=AerotechEnsembleCommandsNET.RampMode.Rate
-    Time=AerotechEnsembleCommandsNET.RampMode.Time
-
-class RampType(Enum):
-    Linear=AerotechEnsembleCommandsNET.RampType.Linear
-    Scurve=AerotechEnsembleCommandsNET.RampType.Scurve
-    Sine=AerotechEnsembleCommandsNET.RampType.Sine
+    @multimethod
+    def Array(self,Axis:str, Int32, Int32):  # Sends data into the PSO array.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def ArrayFifoSelectDistance(self,Axis:int, Int32, Int32):  # Sends data into the PSO array.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def ArrayFifoSelectDistance(self,Axis:str, Int32, Int32):  # Sends data into the PSO array.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def ArrayFifoSelectLaser(self,Axis:int, Int32, Int32):  # Sends data into the PSO array.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def ArrayFifoSelectLaser(self,Axis:str, Int32, Int32):  # Sends data into the PSO array.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def ArrayFifoSelectWindow1(self,Axis:int, Int32, Int32):  # Sends data into the PSO array.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def ArrayFifoSelectWindow1(self,Axis:str, Int32, Int32):  # Sends data into the PSO array.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def ArrayFifoSelectWindow2(self,Axis:int, Int32, Int32):  # Sends data into the PSO array.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def ArrayFifoSelectWindow2(self,Axis:str, Int32, Int32):  # Sends data into the PSO array.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def Control(self,Axis:int, PsoMode):  # Enables and disables the PSO hardware.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def Control(self,Axis:str, PsoMode):  # Enables and disables the PSO hardware.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def DistanceArray(self,Axis:int):  # Sets the distance to travel between firing events.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def DistanceArray(self,Axis:str):  # Sets the distance to travel between firing events.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def DistanceFixed(self,Axis:int, Double):  # Sets the distance to travel between firing events.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def DistanceFixed(self,Axis:str, Double):  # Sets the distance to travel between firing events.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputBitMap(self,Axis:int):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputBitMap(self,Axis:str):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputBitMap(self,Axis:int, Int32):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputBitMap(self,Axis:str, Int32):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputControl(self,Axis:int, Int32):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputControl(self,Axis:str, Int32):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulse(self,Axis:int):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulse(self,Axis:str):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulseBitMask(self,Axis:int):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulseBitMask(self,Axis:str):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulseExtSync(self,Axis:int):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulseExtSync(self,Axis:str):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulseWindowBitMask(self,Axis:int):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulseWindowBitMask(self,Axis:str):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulseWindowBitMaskEdgeMode(self,Axis:int, Int32):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulseWindowBitMaskEdgeMode(self,Axis:str, Int32):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulseWindowMask(self,Axis:int):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulseWindowMask(self,Axis:str):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulseWindowMaskEdgeMode(self,Axis:int, Int32):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulseWindowMaskEdgeMode(self,Axis:str, Int32):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulseWindowMaskHard(self,Axis:int):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputPulseWindowMaskHard(self,Axis:str):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputToggle(self,Axis:int):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputToggle(self,Axis:str):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputWindow(self,Axis:int):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def OutputWindow(self,Axis:str):  # Sets the PSO output mode.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def Pulse(self,Axis:int, Double, Double):  # Configures the pulse sequence that is used for PSO.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def Pulse(self,Axis:str, Double, Double):  # Configures the pulse sequence that is used for PSO.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def PulseCyclesOrDelayCyclesAndDelay(self,Axis:int, Double, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def PulseCyclesOrDelayCyclesAndDelay(self,Axis:str, Double, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def PulseCyclesOrDelayCyclesOnly(self,Axis:int, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def PulseCyclesOrDelayCyclesOnly(self,Axis:str, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def PulseCyclesOrDelayDelayOnly(self,Axis:int, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def PulseCyclesOrDelayDelayOnly(self,Axis:str, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def Status(self,Axis:int):  # Gets the PSO status information.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def Status(self,Axis:str):  # Gets the PSO status information.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackDirection(self,Axis:int, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackDirection(self,Axis:str, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackInput(self,Axis:int, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackInput(self,Axis:str, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackInput(self,Axis:int, Int32, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackInput(self,Axis:str, Int32, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackInput(self,Axis:int, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackInput(self,Axis:str, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackReset(self,Axis:int, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackReset(self,Axis:str, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackScale(self,Axis:int, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackScale(self,Axis:str, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackScale(self,Axis:int, Int32, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackScale(self,Axis:str, Int32, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackScale(self,Axis:int, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def TrackScale(self,Axis:str, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowInput(self,Axis:int, Int32, Int32):  # Configures which encoder channel is connected to each window.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowInput(self,Axis:str, Int32, Int32):  # Configures which encoder channel is connected to each window.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowInputInvert(self,Axis:int, Int32, Int32):  # Configures which encoder channel is connected to each window.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowInputInvert(self,Axis:str, Int32, Int32):  # Configures which encoder channel is connected to each window.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowLoad(self,Axis:int, Int32, Int32):  # Loads the specified window counter with a value.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowLoad(self,Axis:str, Int32, Int32):  # Loads the specified window counter with a value.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowOff(self,Axis:int, Int32):  # Disables the PSO Window Hardware.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowOff(self,Axis:str, Int32):  # Disables the PSO Window Hardware.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowOn(self,Axis:int, Int32):  # Enables the PSO Window Hardware.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowOn(self,Axis:str, Int32):  # Enables the PSO Window Hardware.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowOnInvert(self,Axis:int, Int32):  # Enables the PSO Window Hardware.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowOnInvert(self,Axis:str, Int32):  # Enables the PSO Window Hardware.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowRange(self,Axis:int, Int32, Double, Double):  # Specifies the low and high comparison values for specified PSO window.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowRange(self,Axis:str, Int32, Double, Double):  # Specifies the low and high comparison values for specified PSO window.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowRangeArray(self,Axis:int, Int32):  # Specifies the array mode parameters for the specified PSO window.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowRangeArray(self,Axis:str, Int32):  # Specifies the array mode parameters for the specified PSO window.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowRangeArrayEdge(self,Axis:int, Int32, Double):  # Specifies the array mode parameters for the specified PSO window.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowRangeArrayEdge(self,Axis:str, Int32, Double):  # Specifies the array mode parameters for the specified PSO window.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowReset(self,Axis:int, Int32, Int32):  # Resets the window counter to 0 based on the encoder marker signal.
+        return self._PSOCommandsNET.
+    
+    @multimethod
+    def WindowReset(self,Axis:str, Int32, Int32):  # Resets the window counter to 0 based on the encoder marker signal. 
+        return self._PSOCommandsNET.
+    
 
 class RegisterCommands(CommandCategory):
     _RegisterCommandsNET=None
     def __init__(self,RegisterCommandsNET:AerotechEnsembleNET.RegisterCommands):
         self._RegisterCommandsNET=RegisterCommandsNET
+        
+        # TODO
     
-class RegisterType(Enum):
-    GlobalIntegers=AerotechEnsembleCommandsNET.RegisterType.GlobalIntegers
-    GlobalDoubles=AerotechEnsembleCommandsNET.RegisterType.GlobalDoubles
-    ConversionRegisters=AerotechEnsembleCommandsNET.RegisterType.ConversionRegisters
-    ModbusMasterInputWords=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterInputWords
-    ModbusMasterOutputWords=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterOutputWords
-    ModbusMasterInputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterInputBits
-    ModbusMasterOutputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterOutputBits
-    ModbusMasterStatusWords=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterStatusWords
-    ModbusMasterStatusBits=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterStatusBits
-    ModbusMasterVirtualInputs=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterVirtualInputs 
-    ModbusMasterVirtualOutputs=AerotechEnsembleCommandsNET.RegisterType.ModbusMasterVirtualOutputs
-    ModbusSlaveInputWords=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveInputWords
-    ModbusSlaveOutputWords=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveOutputWords
-    ModbusSlaveInputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveInputBits
-    ModbusSlaveOutputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveOutputBits
-
 class RootCommands(CommandCategory):
     _RootCommandsNET=None
     def __init__(self,RootCommandsNET:AerotechEnsembleNET.RootCommands):
         self._RootCommandsNET=RootCommandsNET
-    
+            
+        # TODO
     @property
     def Motion(self):
         return MotionCommands(self._ControllerNET)
@@ -1179,17 +1593,13 @@ class RootCommands(CommandCategory):
     def ExecuteAsync(self,code:str):
         self._ControllerNET.Commands.ExecuteAsync(code)
     
-class Semaphores(Enum):
-    ModbusRegisters=AerotechEnsembleCommandsNET.Semaphores.ModbusRegisters
-    GlobalIntegers=AerotechEnsembleCommandsNET.Semaphores.GlobalIntegers
-    GlobalDoubles=AerotechEnsembleCommandsNET.Semaphores.GlobalDoubles 
-
 class StatusCommands(CommandCategory):
     _StatusCommandsNET=None
     def __init__(self,StatusCommandsNET=AerotechEnsembleCommandsNET.StatusCommands):
         self._StatusCommandsNET=StatusCommandsNET
         CommandCategory.__init__(self,StatusCommandsNET)
-    
+            
+        # TODO
     def EtherStatus():  # Gets the Ethernet status.
 
     @multimethod
@@ -1198,13 +1608,13 @@ class StatusCommands(CommandCategory):
     @multimethod
     def PositionMarkerLatched(String):  # Gets the position feedback latched when the marker signal occurred during a home.
  
-
 class TuningCommands(CommandCategory):
     _TuningCommandsNET=None
     def __init__(self,TuningCommandsNET=AerotechEnsembleCommandsNET.TuningCommands):
         self._TuningCommandsNET=TuningCommandsNET
         CommandCategory.__init__(self,TuningCommandsNET)
-        
+                
+        # TODO
     @multimethod
     def LoopTrans(Int32, LoopTransmissionMode, Double, Double, LoopTransmissionType):  # Initiates loop transmission mode.
     
@@ -1246,13 +1656,3 @@ class TuningCommands(CommandCategory):
     
     @multimethod
     def SetGain(String, Double, Double, Double, Double, Double, Double, Double, Double, Double):  # Sets four or nine servo loop gains at the same time.
-
-    
-class WaitOption(Enum):
-    InPosition=AerotechEnsembleCommandsNET.WaitOption.InPosition
-    MoveDone=AerotechEnsembleCommandsNET.WaitOption.MoveDone
-
-class WaitType(Enum):
-    NoWait=AerotechEnsembleCommandsNET.WaitType.NoWait
-    MoveDone=AerotechEnsembleCommandsNET.WaitType.MoveDone
-    InPos=AerotechEnsembleCommandsNET.WaitType.InPos
