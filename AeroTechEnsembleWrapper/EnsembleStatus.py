@@ -7,8 +7,6 @@ sys.path.insert(0, os.path.abspath('.'))
 sys.path.extend(glob.glob(f'{pathlib.Path(__file__).parents[0].resolve()}/*/**/', recursive=True))
 
 import clr
-clr.AddReference('System')
-from System.ComponentModel import ProgressChangedEventHandler
 
 from multimethod import multimethod
 from enum import Enum
@@ -17,9 +15,6 @@ from aenum import extend_enum
 import Common
 import Ensemble
 import EnsembleTasks
-import EnsembleTasksDebug
-import EnsembleStatus
-import EnsembleFileSystem
 import CommonCollections
 
 DEFAULT_DLL_PATH:str=os.path.join(os.path.join(os.path.dirname(__file__),'Aerotech_DotNet_dll'),'')
@@ -240,17 +235,330 @@ class AxisDiagPacket():
  
 class AxisFault():  # Represents the faults of an axis
     _AxisFaultNET=None
+    @multimethod
     def __init__(self,AxisFaultNET=AerotechEnsembleStatusNET.AxisFault):
         self._AxisFaultNET=AxisFaultNET
-     # TODO
+        
+    @multimethod
+    def __init__(self):  # Creates a new instance with all things unset (false)
+        self._AxisFaultNET=AerotechEnsembleStatusNET.AxisFault()
+        
+    @multimethod
+    def __init__(self,maskValue:int):  # Creates a new instance with given mask value
+        self._AxisFaultNET=AerotechEnsembleStatusNET.AxisFault(maskValue)
+ 
+    @property
+    def ActiveBits(self):  # Returns a list of the active bit names.
+        # TODO deal with ReadOnlyCollection
+        return self._AxisFaultNET.ActiveBits
+    
+    @property
+    def AmplifierFault(self):  # Amplifier Fault
+        return self._AxisFaultNET.AmplifierFault
+    
+    @property
+    def AmplifierTemperatureFault(self):  # Amplifier Temperature Fault
+        return self._AxisFaultNET.AmplifierTemperatureFault
+    
+    @property
+    def BitHelpLinks(self):  # Returns a dictionary of bit value names (keys) and the associated help file link (values) 
+        # TODO deal with IDictionary
+        return self._AxisFaultNET.BitHelpLinks
+    
+    @property
+    def BitValues(self):  # Returns a listing of the bit names and their corresponding values 
+        # TODO deal with IDictionary
+        return self._AxisFaultNET.BitValues
+    
+    @property
+    def CcwEndOfTravelLimitFault(self):  # CCW/Negative End-of-Travel Limit Fault
+        return self._AxisFaultNET.CcwEndOfTravelLimitFault
+    
+    @property
+    def CcwSoftwareLimitFault(self):  # CCW/Low Software Limit Fault
+        return self._AxisFaultNET.CcwSoftwareLimitFault
+    
+    @property
+    def CommunicationLostFault(self):  # Communication Lost Fault
+        return self._AxisFaultNET.CommunicationLostFault
+    
+    @property
+    def CwEndOfTravelLimitFault(self):  # CW/Positive End-of-Travel Limit Fault
+        return self._AxisFaultNET.CwEndOfTravelLimitFault
+    
+    @property
+    def CwSoftwareLimitFault(self):  # CW/High Software Limit Fault
+        return self._AxisFaultNET.CwSoftwareLimitFault
+    
+    @property
+    def EmergencyStopFault(self):  # Emergency Stop Fault
+        return self._AxisFaultNET.EmergencyStopFault
+    
+    @property
+    def EncoderFault(self):  # Encoder Fault
+        return self._AxisFaultNET.EncoderFault
+    
+    @property
+    def ExternalFault(self):  # External Fault
+        return self._AxisFaultNET.ExternalFault
+    
+    @property
+    def FeedbackScalingFault(self):  # Feedback Scaling Fault
+        return self._AxisFaultNET.FeedbackScalingFault
+    
+    @property
+    def HallSensorFault(self):  # Hall Sensor Fault
+        return self._AxisFaultNET.HallSensorFault
+    
+    @property
+    def InternalFault(self):  # Internal Fault
+        return self._AxisFaultNET.InternalFault
+    
+    @property
+    def MarkerSearchFault(self):  # Marker Search Fault
+        return self._AxisFaultNET.MarkerSearchFault
+    
+    @property
+    def MaskValue(self):  # The underlying mask value 
+        return self._AxisFaultNET.MaskValue
+    
+    @property
+    def MaxVelocityCommandFault(self):  # Maximum Velocity Command Fault
+        return self._AxisFaultNET.MaxVelocityCommandFault
+    
+    @property
+    def MotorTemperatureFault(self):  # Motor Temperature Fault
+        return self._AxisFaultNET.MotorTemperatureFault
+    
+    @property
+    def OverCurrentFault(self):  # Over Current Fault
+        return self._AxisFaultNET.OverCurrentFault
+    
+    @property
+    def PositionErrorFault(self):  # Position Error Fault
+        return self._AxisFaultNET.PositionErrorFault
+    
+    @property
+    def PositionFeedbackFault(self):  # Position Feedback Fault
+        return self._AxisFaultNET.PositionFeedbackFault
+    
+    @property
+    def PowerSupplyFault(self):  # Power Supply Fault
+        return self._AxisFaultNET.PowerSupplyFault
+    
+    @property
+    def ValueNames(self):  # Returns a mapping of values to their human readable form. 
+        # TODO deal with IDictionary
+        return self._AxisFaultNET.ValueNames
+    
+    @property
+    def VelocityErrorFault(self):  # Velocity Error Fault
+        return self._AxisFaultNET.VelocityErrorFault
+    
+    @property
+    def VelocityFeedbackFault(self):  # Velocity Feedback Fault
+        return self._AxisFaultNET.VelocityFeedbackFault
+    
+    @property
+    def VoltageClampFault(self):  # Voltage Clamp Fault 
+        return self._AxisFaultNET.VoltageClampFault 
+        
 class AxisStatus():  # Represents an axis status
     _AxisStatusNET=None
-    def __init__(self,AxisStatusNET=AerotechEnsembleStatusNET.AxisStatus):
+    @multimethod
+    def __init__(self,AxisStatusNET:AerotechEnsembleStatusNET.AxisStatus=AerotechEnsembleStatusNET.AxisStatus):
         self._AxisStatusNET=AxisStatusNET
-        # TODO
+        
+    @multimethod
+    def __init__(self):  # Creates a new instance with all things unset (false)
+        self._AxisStatusNET=AerotechEnsembleStatusNET.AxisStatus()
  
+    @multimethod
+    def __init__(self,maskValue:int):  # Creates a new instance with given mask value
+        self._AxisStatusNET=AerotechEnsembleStatusNET.AxisStatus(maskValue)
+
+    @property
+    def AccelerationPhase(self):  # Acceleration Phase
+        return self._AxisStatusNET.AccelerationPhase
+    
+    @property
+    def ActiveBits(self):  # Returns a list of the active bit names.
+        # TODO deal with ReadOnlyCollection
+        return self._AxisStatusNET.ActiveBits
+    
+    @property
+    def AutofocusActive(self):  # Autofocus Active
+        return self._AxisStatusNET.AutofocusActive
+    
+    @property
+    def BitHelpLinks(self):  # Returns a dictionary of bit value names (keys) and the associated help file link (values) 
+        # TODO deal with IDictionary
+        return self._AxisStatusNET.BitHelpLinks
+    
+    @property
+    def BitValues(self):  # Returns a listing of the bit names and their corresponding values 
+        # TODO deal with IDictionary
+        return self._AxisStatusNET.BitValue
+    
+    @property
+    def BrakeOutput(self):  # Brake Output Level
+        return self._AxisStatusNET.BrakeOutput
+    
+    @property
+    def CalibrationActive(self):  # Calibration Active
+        return self._AxisStatusNET.CalibrationActive
+    
+    @property
+    def CalibrationEnabled(self):  # Calibration Enabled
+        return self._AxisStatusNET.CalibrationEnabled
+    
+    @property
+    def CcwEndOfTravelLimitInput(self):  # CCW End Of Travel Limit Input Level
+        return self._AxisStatusNET.CcwEndOfTravelLimitInput
+    
+    @property
+    def CommandShapingFilterDone(self):  # Command Shaping Filter Done
+        return self._AxisStatusNET.CommandShapingFilterDone
+    
+    @property
+    def CosineEncoderError(self):  # Cosine Encoder Input Error
+        return self._AxisStatusNET.CosineEncoderError
+    
+    @property
+    def CurrentClamp(self):  # Current Clamp
+        return self._AxisStatusNET.CurrentClamp
+    
+    @property
+    def CwEndOfTravelLimitInput(self):  # CW End Of Travel Limit Input Level
+        return self._AxisStatusNET.CwEndOfTravelLimitInput
+    
+    @property
+    def DecelerationPhase(self):  # Deceleration Phase
+        return self._AxisStatusNET.DecelerationPhase
+    
+    @property
+    def EmergencyStopInput(self):  # Emergency Stop Input Level
+        return self._AxisStatusNET.EmergencyStopInput
+    
+    @property
+    def Enabled(self):  # Enabled
+        return self._AxisStatusNET.Enabled
+    
+    @property
+    def GantryMasterActive(self):  # Gantry Master Active
+        return self._AxisStatusNET.GantryMasterActive
+    
+    @property
+    def GantryModeActive(self):  # Gantry Mode Active
+        return self._AxisStatusNET.GantryModeActive
+    
+    @property
+    def HallAInput(self):  # Hall A Input Level
+        return self._AxisStatusNET.HallAInput
+    
+    @property
+    def HallBInput(self):  # Hall B Input Level
+        return self._AxisStatusNET.HallBInput
+    
+    @property
+    def HallCInput(self):  # Hall C Input Level
+        return self._AxisStatusNET.HallCInput
+    
+    @property
+    def Homed(self):  # Homed
+        return self._AxisStatusNET.Homed
+    
+    @property
+    def HomeLimitInput(self):  # Home Limit Input Level
+        return self._AxisStatusNET.HomeLimitInput
+    
+    @property
+    def Homing(self):  # Homing
+        return self._AxisStatusNET.Homing
+    
+    @property
+    def InPosition(self):  # In Position
+        return self._AxisStatusNET.InPosition
+    
+    @property
+    def InPosition2(self):  # In Position 2
+        return self._AxisStatusNET.InPosition2
+    
+    @property
+    def JoystickControl(self):  # Joystick Control
+        return self._AxisStatusNET.JoystickControl
+    
+    @property
+    def MarkerInput(self):  # Marker Input Level
+        return self._AxisStatusNET.MarkerInput
+    
+    @property
+    def MaskValue(self):  # The underlying mask value 
+        return self._AxisStatusNET.MaskValue
+    
+    @property
+    def MasterMotionSuppressed(self):  # Master Motion Suppressed
+        return self._AxisStatusNET.MasterMotionSuppressed
+    
+    @property
+    def MasterSlaveControl(self):  # Gearing or camming active
+        return self._AxisStatusNET.MasterSlaveControl
+    
+    @property
+    def MotionIsCw(self):  # Motion Direction (1 = CW)
+        return self._AxisStatusNET.MotionIsCw
+    
+    @property
+    def MoveActive(self):  # Move Active
+        return self._AxisStatusNET.MoveActive
+    
+    @property
+    def PositionCaptureActive(self):  # Position Capture Active
+        return self._AxisStatusNET.PositionCaptureActive
+    
+    @property
+    def ServoControl(self):  # Servo Control
+        return self._AxisStatusNET.ServoControl
+    
+    @property
+    def SineEncoderError(self):  # Sine Encoder Input Error
+        return self._AxisStatusNET.SineEncoderError
+    
+    @property
+    def ValueNames(self):  # Returns a mapping of values to their human readable form.  
+        # TODO deal with IDictionary
+        return self._AxisStatusNET.ValueNames 
+        
 class CallbacksPoller():  # Allows to poll for callback information from a controller in the background  
-    # TODO
+    _CallbacksPollerNET=None
+    def __init__(self,CallbacksPollerNET=AerotechEnsembleStatusNET.CallbacksPoller):
+        self._CallbacksPollerNET=CallbacksPollerNET
+
+    @property
+    def AutoStart(self):  # Whether to start polling when someone subscribes to the NewTaskStatesArrived
+        return self._CallbacksPollerNET.AutoStart
+ 
+    # ErrorOccurred  Raised when an error occurs during retrieval of data from the controller 
+ 
+    @property
+    def IsExecutingEvent(self):  # Tells whether there is currenty an event being executed 
+        return self._CallbacksPollerNET.IsExecutingEvent
+ 
+    @property
+    def IsSuspended(self):  # Whether the polling is suspended 
+        return self._CallbacksPollerNET.IsSuspended
+ 
+    @classmethod
+    @property
+    def RefreshInterval(self):  # he interval of retrieving of data 
+        return AerotechEnsembleStatusNET.CallbacksPoller.RefreshInterval
+            
+    def Resume(self):  # Resumes the polling for task state information 
+        self._CallbacksPollerNET.Resume()
+ 
+    def Suspend(self):  # Suspends the polling for task state information 
+        self._CallbacksPollerNET.Suspend()
+ 
     
 class ControlCenter():  # Retrieves diagnostic data, callbacks, and task states in the background from a controller 
     _ControlCenterNET=None
@@ -628,4 +936,3 @@ class TaskStatesPoller(): # Allows to poll for task state information from a con
  
     def Suspend(self):  # Suspends the polling for task state information 
         self._TaskStatesPollerNET.Suspend()
- 

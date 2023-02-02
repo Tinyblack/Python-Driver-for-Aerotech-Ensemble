@@ -35,49 +35,222 @@ try:
 except:
     raise RuntimeError
 
-class AdvancedAnalogCommands():
-    def __init__(self):
-        pass
+class AdvancedAnalogCommands(CommandCategory):
+    _AdvancedAnalogCommandsNET=None
+    def __init__(self,AdvancedAnalogCommandsNET=AerotechEnsembleCommandsNET.AdvancedAnalogCommands):
+        self._AdvancedAnalogCommandsNET=AdvancedAnalogCommandsNET
 
-class AdvancedCommands():
-    def __init__(self):
-        pass
+    @multimethod
+    def AnalogControlOff(self,Axis:int):  # Configures an axis to generate its position command based on an analog input signal.
+        self._AdvancedAnalogCommandsNET.AnalogControlOff(Axis)
+    @multimethod
+    def AnalogControlOff(self,Axis:str):  # Configures an axis to generate its position command based on an analog input signal.
+        self._AdvancedAnalogCommandsNET.AnalogControlOff(Axis)
+    @multimethod
+    def AnalogControlOn(self,Axis:int, AnalogInput:int, ScaleFactor:float, OffsetValue:float):  # Configures an axis to generate its position command based on an analog input signal.
+        self._AdvancedAnalogCommandsNET.AnalogControlOn(Axis, AnalogInput, ScaleFactor, OffsetValue)
+    @multimethod
+    def AnalogControlOn(self,Axis:str, AnalogInput:int, ScaleFactor:float, OffsetValue:float):  # Configures an axis to generate its position command based on an analog input signal.
+        self._AdvancedAnalogCommandsNET.AnalogControlOn(Axis, AnalogInput, ScaleFactor, OffsetValue)
+    @multimethod
+    def AnalogControlOn(self,Axis:int, AnalogInput:int, ScaleFactor:float, OffsetValue:float, SpeedValue:float):  # Configures an axis to generate its position command based on an analog input signal.
+        self._AdvancedAnalogCommandsNET.AnalogControlOn(Axis, AnalogInput, ScaleFactor, OffsetValue, SpeedValue)
+    @multimethod
+    def AnalogControlOn(self,Axis:str, AnalogInput:int, ScaleFactor:float, OffsetValue:float, SpeedValue:float):  # Configures an axis to generate its position command based on an analog input signal.
+        self._AdvancedAnalogCommandsNET.AnalogControlOn(Axis, AnalogInput, ScaleFactor, OffsetValue, SpeedValue)
+    @multimethod
+    def AnalogTrack(self,Axis:int, AnalogInput:int, ScaleFactor:float, OffsetValue:float):  # Configures the system to continuously set an analog output to be a real-time internal servo loop value.
+        self._AdvancedAnalogCommandsNET.AnalogTrack(Axis, AnalogInput, ScaleFactor, OffsetValue)
+    @multimethod
+    def AnalogTrack(self,Axis:str, AnalogInput:int, ScaleFactor:float, OffsetValue:float):  # Configures the system to continuously set an analog output to be a real-time internal servo loop value.
+        self._AdvancedAnalogCommandsNET.AnalogTrack(Axis, AnalogInput, ScaleFactor, OffsetValue)
+    @multimethod
+    def AnalogTrack(self,Axis:int, AnalogInput:int, ScaleFactor:float, OffsetValue:float, SpeedValue:float):  # Configures the system to continuously set an analog output to be a real-time internal servo loop value.
+        self._AdvancedAnalogCommandsNET.AnalogTrack(Axis, AnalogInput, ScaleFactor, OffsetValue, SpeedValue)
+    @multimethod
+    def AnalogTrack(self,Axis:str, AnalogInput:int, ScaleFactor:float, OffsetValue:float, SpeedValue:float):  # Configures the system to continuously set an analog output to be a real-time internal servo loop value.
+        self._AdvancedAnalogCommandsNET.AnalogTrack(Axis, AnalogInput, ScaleFactor, OffsetValue, SpeedValue)
+    @multimethod
+    def AnalogTrack(self,Axis:int, AnalogInput:int, ScaleFactor:float, OffsetValue:float, SpeedValue:float, MinVoltage:float, MaxVoltage:float):  # Configures the system to continuously set an analog output to be a real-time internal servo loop value.
+        self._AdvancedAnalogCommandsNET.AnalogTrack(Axis, AnalogInput, ScaleFactor, OffsetValue, SpeedValue, MinVoltage, MaxVoltage)
+    @multimethod
+    def AnalogTrack(self,Axis:str, AnalogInput:int, ScaleFactor:float, OffsetValue:float, SpeedValue:float, MinVoltage:float, MaxVoltage:float):  # Configures the system to continuously set an analog output to be a real-time internal servo loop value. 
+        self._AdvancedAnalogCommandsNET.AnalogTrack(Axis, AnalogInput, ScaleFactor, OffsetValue, SpeedValue, MinVoltage, MaxVoltage)
 
-class AxesIOCommands():
-    def __init__(self):
-        pass
+class AdvancedCommands(CommandCategory):
+    _AdvancedCommandsNET=None
+    def __init__(self,AdvancedCommandsNET=AerotechEnsembleCommandsNET.AdvancedCommands):
+        self._AdvancedCommandsNET=AdvancedCommandsNET
+    
+    @property
+    def Analog(self):  # Contains the Analog Commands 
+        return AdvancedAnalogCommands(self._AdvancedCommandsNET.Analog)
 
-class AxesMotionCommands():
-    def __init__(self):
-        pass
+class AxesIOCommands(CommandCategory):
+    _AxesIOCommandsNET=None
+    def __init__(self,AxesIOCommandsNET=AerotechEnsembleCommandsNET.AxesIOCommands):
+        self._AxesIOCommandsNET=AxesIOCommandsNET
+        
+    def Brake(self,OnOff:OnOff):  # Controls the brake output of axes. 
+        return self._AxesIOCommandsNET.Brake(OnOff.value)
 
-class AxesMotionSetupCommands():
-    def __init__(self):
-        pass
+class AxesMotionCommands(CommandCategory):
+    _AxesMotionCommandsNET=None
+    def __init__(self,AxesMotionCommandsNET=AerotechEnsembleCommandsNET.AxesMotionCommands):
+        self._AxesMotionCommandsNET=AxesMotionCommandsNET
+        
+        
+Abort()()()():  # Aborts motion on the selected axes 
 
-class AxesRootCommands():
-    def __init__(self):
-        pass
+AutoFocus(OnOff):  # Turns on or turns off autofocus.
+
+BlockMotion(OnOff):  # Sets motion blocking to On or OFF.
+
+Disable()()()():  # Disables the axes.
+
+Enable()()()():  # Enables the axes.
+
+FaultAck()()()():  # Acknowledges and clears the fault on axes.
+
+FreeRun(array<Double>[]()[][]):  # Freeruns the axes.
+
+FreeRunStop()()()():  # Freeruns the axes.
+
+Home()()()():  # Homes the axes.
+
+HomeConditional()()()():  # Homes the axes.
+
+Linear(array<Double>[]()[][]):  # Executes a linear move on axes.
+
+Linear(array<Double>[]()[][], Double):  # Executes a linear move on axes.
+
+MoveAbs(array<Double>[]()[][]):  # Executes an absolute move on axes.
+
+MoveAbs(array<Double>[]()[][], array<Double>[]()[][]):  # Executes an absolute move on axes.
+
+MoveInc(array<Double>[]()[][]):  # Executes an incremental move on axes.
+
+MoveInc(array<Double>[]()[][], array<Double>[]()[][]):  # Executes an incremental move on axes.
+
+Setup:  # Contains the Setup Commands
+
+WaitForMotionDone(WaitOption, Int32):  # Waits for the move to be done 
+
+WaitForMotionDone(WaitOption):  # Waits for the move to be done  
+
+
+class AxesMotionSetupCommands(CommandCategory):
+    _AxesMotionSetupCommandsNET=None
+    def __init__(self,AxesMotionSetupCommandsNET=AerotechEnsembleCommandsNET.AxesMotionSetupCommands):
+        self._AxesMotionSetupCommandsNET=AxesMotionSetupCommandsNET
+        
+PosCap()()()():  # Retrieves the POSCAP positions.
+
+PosCap(Boolean):  # Retrieves the POSCAP positions.
+
+RampDist(array<Double>[]()[][]):  # Specifies distance-based acceleration and deceleration.
+
+RampMode(RampMode):  # Specifies the ramp mode calculation type to use.
+
+RampRate(array<Double>[]()[][]):  # Specifies rate-based acceleration and deceleration.
+
+RampTime(array<Double>[]()[][]):  # Specifies time-based acceleration and deceleration.
+
+Reconcile()()()():  # Reconciles the position of the axes in the list on the plane to servo position.
+ 
+
+
+class AxesRootCommands(CommandCategory):
+    _AxesRootCommandsNET=None
+    def __init__(self,AxesRootCommandsNET=AerotechEnsembleCommandsNET.AxesRootCommands):
+        self._AxesRootCommandsNET=AxesRootCommandsNET
+        
+    @property
+    def IO(self):  # Contains the IO Commands 
+        return AxesIOCommands(self._AxesRootCommandsNET.IO)
+    
+    @property
+    def Motion(self):  # Contains the Motion Commands
+        return AxesMotionCommands(self._AxesRootCommandsNET.Motion)
 
 class AxesSelectionCommands():
     def __init__(self):
         pass
 
 class CommandCategory():
-    def __init__(self):
-        pass
+    _CommandCategoryNET=None
+    def __init__(self,CommandCategoryNET=AerotechEnsembleCommandsNET.CommandCategory):
+        self._CommandCategoryNET=CommandCategoryNET
 
-class DataAcquisitionCommands():
-    def __init__(self):
-        pass
+class DataAcquisitionCommands(CommandCategory):
+    _DataAcquisitionCommandsNET=None
+    def __init__(self,DataAcquisitionCommandsNET=AerotechEnsembleCommandsNET.DataAcquisitionCommands):
+        self._DataAcquisitionCommandsNET=DataAcquisitionCommandsNET
 
+ArrayRead(Int32, Int32, Int32):  # Transfers drive array values into the specified controller array variables.
+
+ArrayRead(String, Int32, Int32):  # Transfers drive array values into the specified controller array variables.
+
+ArraySetup(Int32, Int32):  # Enables data collection.
+
+ArraySetup(String, Int32):  # Enables data collection.
+
+Input(Int32, Int32):  # Specifies the data element collected when a trigger occurs.
+
+Input(String, Int32):  # Specifies the data element collected when a trigger occurs.
+
+Off(Int32):  # Turns off data acquisition. All previously specified DATAACQ command configurations are cleared and must be re-specified if required.
+
+Off(String):  # Turns off data acquisition. All previously specified DATAACQ command configurations are cleared and must be re-specified if required.
+
+Trigger(Int32, Int32):  # Specifies which signal is monitored to collect data.
+
+Trigger(String, Int32):  # Specifies which signal is monitored to collect data. 
+
+        
 class EthernetStatus(Enum):
     DataInTransmitter=AerotechEnsembleCommandsNET.EthernetStatus.DataInTransmitter
     DataInReceiver=AerotechEnsembleCommandsNET.EthernetStatus.DataInReceiver
 
-class IOCommands():
-    def __init__(self):
-        pass
+class IOCommands(CommandCategory):
+    _IOCommandsNET=None
+    def __init__(self,IOCommandsNET=AerotechEnsembleCommandsNET.IOCommands):
+        self._IOCommandsNET=IOCommandsNET
+
+AnalogInput(Int32, Int32):  # Reads the analog input voltage.
+ 
+AnalogInput(String, Int32):  # Reads the analog input voltage.
+
+AnalogOutput(Int32, array<Int32>[]()[][], array<Double>[]()[][]):  # Sets the value of the analog output.
+
+AnalogOutput(String, array<Int32>[]()[][], array<Double>[]()[][]):  # Sets the value of the analog output.
+
+Brake(array<Int32>[]()[][], OnOff):  # Controls the brake output of axes.
+
+Brake(Int32, OnOff):  # Controls the brake output of axes.
+
+Brake(array<String>[]()[][], OnOff):  # Controls the brake output of axes.
+
+Brake(String, OnOff):  # Controls the brake output of axes.
+
+Brake(AxisMask, OnOff):  # Controls the brake output of axes.
+
+DigitalInput(Int32, Int32):  # Reads the digital input value.
+
+DigitalInput(String, Int32):  # Reads the digital input value.
+
+DigitalInputBit(Int32, Int32, Int32):  # Reads the digital input value.
+
+DigitalInputBit(String, Int32, Int32):  # Reads the digital input value.
+
+DigitalOutputByBits(Int32, Int32, array<Int32>[]()[][], array<Int32>[]()[][]):  # Sets the digital output.
+
+DigitalOutputByBits(String, Int32, array<Int32>[]()[][], array<Int32>[]()[][]):  # Sets the digital output.
+
+DigitalOutputEntire(Int32, Int32, Int32):  # Sets the digital output.
+
+DigitalOutputEntire(String, Int32, Int32):  # Sets the digital output. 
+
     
 class LoopTransmissionMode(Enum):
     Off=AerotechEnsembleCommandsNET.LoopTransmissionMode.Off
@@ -110,36 +283,38 @@ class ModeType(Enum):
     DecelDistValue=AerotechEnsembleCommandsNET.ModeType.DecelDistValue
     Plane=AerotechEnsembleCommandsNET.ModeType.Plane
     
-class MotionAdvancedCommands():
-    _ControllerNET=None
-    def __init__(self,controller:AerotechEnsembleNET.Controller):
-        self._ControllerNET=controller
+class MotionAdvancedCommands(CommandCategory):
+    _MotionAdvancedCommandsNET=None
+    def __init__(self,MotionAdvancedCommandsNET:AerotechEnsembleNET.MotionAdvancedCommands):
+        self._MotionAdvancedCommandsNET=MotionAdvancedCommandsNET
         
     @multimethod
     def MoveOutLim(self,Axis:int):
-        self._ControllerNET.Commands.Motion.Advanced.MoveOutLim(Axis)
+        self._MotionAdvancedCommandsNET.MoveOutLim(Axis)
     
     @multimethod
     def MoveOutLim(self,Axis:str):
-        self._ControllerNET.Commands.Motion.Advanced.MoveOutLim(Axis)
+        self._MotionAdvancedCommandsNET.MoveOutLim(Axis)
     
     @multimethod
     def MoveToLimCCW(self,Axis:int):
-        self._ControllerNET.Commands.Motion.Advanced.MoveToLimCCW(Axis)
+        self._MotionAdvancedCommandsNET.MoveToLimCCW(Axis)
     
     @multimethod
     def MoveToLimCCW(self,Axis:str):
-        self._ControllerNET.Commands.Motion.Advanced.MoveToLimCCW(Axis)
+        self._MotionAdvancedCommandsNET.MoveToLimCCW(Axis)
 
     @multimethod
     def MoveToLimCW(self,Axis:int):
-        self._ControllerNET.Commands.Motion.Advanced.MoveToLimCW(Axis)
+        self._MotionAdvancedCommandsNET.MoveToLimCW(Axis)
     
     @multimethod
     def MoveToLimCW(self,Axis:str):
-        self._ControllerNET.Commands.Motion.Advanced.MoveToLimCW(Axis)
+        self._MotionAdvancedCommandsNET.MoveToLimCW(Axis)
 
-class MotionCommands():
+class MotionCommands(CommandCategory):
+    
+    # TODO
     _ControllerNET=None
     
     def __init__(self,controller:AerotechEnsembleNET.Controller):
@@ -619,18 +794,333 @@ class MotionCommands():
     def WaitMode(self,type:AerotechEnsembleCommandsNET.WaitType):
         self._ControllerNET.Commands.Motion.WaitMode(type)
     
-class MotionSetupCommands():
-    def __init__(self,controller:AerotechEnsembleNET.Controller):
-        self._ControllerNET=controller
+class MotionSetupCommands(CommandCategory):
+    _MotionSetupCommandsNET=None
+    def __init__(self,MotionSetupCommandsNET:AerotechEnsembleNET.MotionSetupCommands):
+        self._MotionSetupCommandsNET=MotionSetupCommandsNET
+        
+
+
+Absolute()()()():  # Sets motion commands to be in absolute mode.
+
+
+Incremental()()()():  # Sets motion commands to be in incremental mode.
+
+
+Plane(Int32):  # Sets the current plane of motion.
+
+PosCap(Int32):  # Retrieves the POSCAP position.
+
+PosCap(Int32, Boolean):  # Retrieves the POSCAP positions.
+
+PosCap(array<Int32>[]()[][]):  # Retrieves the POSCAP positions.
+
+PosCap(array<Int32>[]()[][], Boolean):  # Retrieves the POSCAP positions.
+
+PosCap(AxisMask):  # Retrieves the POSCAP positions.
+
+PosCap(AxisMask, Boolean):  # Retrieves the POSCAP positions.
+
+PosCap(String):  # Retrieves the POSCAP positions.
+
+PosCap(String, Boolean):  # Retrieves the POSCAP positions.
+
+PosCap(array<String>[]()[][]):  # Retrieves the POSCAP positions.
+
+PosCap(array<String>[]()[][], Boolean):  # Retrieves the POSCAP positions.
+
+PosOffsetClear(Int32):  # Sets or clears an arbitrary program offset position.
+
+PosOffsetClear(String):  # Sets or clears an arbitrary program offset position.
+
+PosOffsetSet(Int32, Double):  # Sets or clears an arbitrary program offset position.
+
+PosOffsetSet(String, Double):  # Sets or clears an arbitrary program offset position.
+
+RampDist(Double):  # Specifies distance-based acceleration and deceleration.
+
+RampDist(array<Int32>[]()[][], array<Double>[]()[][]):  # Specifies distance-based acceleration and deceleration.
+
+RampDist(Int32, Double):  # Specifies distance-based acceleration and deceleration.
+
+RampDist(array<String>[]()[][], array<Double>[]()[][]):  # Specifies distance-based acceleration and deceleration.
+
+RampDist(String, Double):  # Specifies distance-based acceleration and deceleration.
+
+RampDist(AxisMask, array<Double>[]()[][]):  # Specifies distance-based acceleration and deceleration.
+
+RampDist(AxisMask, Double):  # Specifies distance-based acceleration and deceleration.
+
+RampDistAccel(Double):  # Specifies distance-based acceleration and deceleration.
+
+RampDistDecel(Double):  # Specifies distance-based acceleration and deceleration.
+
+RampMode(RampMode):  # Specifies the ramp mode calculation type to use.
+
+RampMode(array<Int32>[]()[][], RampMode):  # Specifies the ramp mode calculation type to use.
+
+RampMode(Int32, RampMode):  # Specifies the ramp mode calculation type to use.
+
+RampMode(array<String>[]()[][], RampMode):  # Specifies the ramp mode calculation type to use.
+
+RampMode(String, RampMode):  # Specifies the ramp mode calculation type to use.
+
+RampMode(AxisMask, RampMode):  # Specifies the ramp mode calculation type to use.
+
+RampRate(Double):  # Specifies rate-based acceleration and deceleration.
+
+RampRate(array<Int32>[]()[][], array<Double>[]()[][]):  # Specifies rate-based acceleration and deceleration.
+
+RampRate(Int32, Double):  # Specifies rate-based acceleration and deceleration.
+
+RampRate(array<String>[]()[][], array<Double>[]()[][]):  # Specifies rate-based acceleration and deceleration.
+
+RampRate(String, Double):  # Specifies rate-based acceleration and deceleration.
+
+RampRate(AxisMask, array<Double>[]()[][]):  # Specifies rate-based acceleration and deceleration.
+
+RampRate(AxisMask, Double):  # Specifies rate-based acceleration and deceleration.
+
+RampRateAccel(Double):  # Specifies rate-based acceleration and deceleration.
+
+RampRateDecel(Double):  # Specifies rate-based acceleration and deceleration.
+
+RampTime(Double):  # Specifies time-based acceleration and deceleration.
+
+RampTime(array<Int32>[]()[][], array<Double>[]()[][]):  # Specifies time-based acceleration and deceleration.
+
+RampTime(Int32, Double):  # Specifies time-based acceleration and deceleration.
+
+RampTime(array<String>[]()[][], array<Double>[]()[][]):  # Specifies time-based acceleration and deceleration.
+
+RampTime(String, Double):  # Specifies time-based acceleration and deceleration.
+
+RampTime(AxisMask, array<Double>[]()[][]):  # Specifies time-based acceleration and deceleration.
+
+RampTime(AxisMask, Double):  # Specifies time-based acceleration and deceleration.
+
+RampTimeAccel(Double):  # Specifies time-based acceleration and deceleration.
+
+RampTimeDecel(Double):  # Specifies time-based acceleration and deceleration.
+
+Reconcile(array<Int32>[]()[][]):  # Reconciles the position of the axes in the list on the plane to servo position.
+
+Reconcile(Int32):  # Reconciles the position of the axes in the list on the plane to servo position.
+
+Reconcile(array<String>[]()[][]):  # Reconciles the position of the axes in the list on the plane to servo position.
+
+Reconcile(String):  # Reconciles the position of the axes in the list on the plane to servo position.
+
+Reconcile(AxisMask):  # Reconciles the position of the axes in the list on the plane to servo position.
+
+ScaleFactorClear(Int32):  # Sets or clears the scale factor for an axis.
+
+ScaleFactorClear(String):  # Sets or clears the scale factor for an axis.
+
+ScaleFactorSet(Int32, Double):  # Sets or clears the scale factor for an axis.
+
+ScaleFactorSet(String, Double):  # Sets or clears the scale factor for an axis.
+
+Scurve(Double):  # Specifies the S-curve value to use.
+
+Servo(Int32, OnOff):  # Changes between open-loop and closed-loop mode for piezo stages.
+
+Servo(String, OnOff):  # Changes between open-loop and closed-loop mode for piezo stages.
+
+SetExtPos(Int32, Double):  # Sets an arbitrary position value, in encoder counts, in external position register.
+
+SetExtPos(String, Double):  # Sets an arbitrary position value, in encoder counts, in external position register.
+
+TimeScale(Double):  # Specifies the time scale to use. 
+
     
 class OnOff(Enum):
     Off=AerotechEnsembleCommandsNET.OnOff.Off
     On=AerotechEnsembleCommandsNET.OnOff.On
 
-class PSOCommands():
-    def __init__(self):
-        pass
+class PSOCommands(CommandCategory):
+    _PSOCommandsNET=None
+    def __init__(self,PSOCommandsNET:AerotechEnsembleNET.PSOCommands):
+        self._PSOCommandsNET=PSOCommandsNET
     
+Array(Int32, Int32, Int32):  # Sends data into the PSO array.
+
+Array(String, Int32, Int32):  # Sends data into the PSO array.
+
+ArrayFifoSelectDistance(Int32, Int32, Int32):  # Sends data into the PSO array.
+
+ArrayFifoSelectDistance(String, Int32, Int32):  # Sends data into the PSO array.
+
+ArrayFifoSelectLaser(Int32, Int32, Int32):  # Sends data into the PSO array.
+
+ArrayFifoSelectLaser(String, Int32, Int32):  # Sends data into the PSO array.
+
+ArrayFifoSelectWindow1(Int32, Int32, Int32):  # Sends data into the PSO array.
+
+ArrayFifoSelectWindow1(String, Int32, Int32):  # Sends data into the PSO array.
+
+ArrayFifoSelectWindow2(Int32, Int32, Int32):  # Sends data into the PSO array.
+
+ArrayFifoSelectWindow2(String, Int32, Int32):  # Sends data into the PSO array.
+
+Control(Int32, PsoMode):  # Enables and disables the PSO hardware.
+
+Control(String, PsoMode):  # Enables and disables the PSO hardware.
+
+DistanceArray(Int32):  # Sets the distance to travel between firing events.
+
+DistanceArray(String):  # Sets the distance to travel between firing events.
+
+DistanceFixed(Int32, Double):  # Sets the distance to travel between firing events.
+
+DistanceFixed(String, Double):  # Sets the distance to travel between firing events.
+
+OutputBitMap(Int32):  # Sets the PSO output mode.
+
+OutputBitMap(String):  # Sets the PSO output mode.
+
+OutputBitMap(Int32, Int32):  # Sets the PSO output mode.
+
+OutputBitMap(String, Int32):  # Sets the PSO output mode.
+
+OutputControl(Int32, Int32):  # Sets the PSO output mode.
+
+OutputControl(String, Int32):  # Sets the PSO output mode.
+
+OutputPulse(Int32):  # Sets the PSO output mode.
+
+OutputPulse(String):  # Sets the PSO output mode.
+
+OutputPulseBitMask(Int32):  # Sets the PSO output mode.
+
+OutputPulseBitMask(String):  # Sets the PSO output mode.
+
+OutputPulseExtSync(Int32):  # Sets the PSO output mode.
+
+OutputPulseExtSync(String):  # Sets the PSO output mode.
+
+OutputPulseWindowBitMask(Int32):  # Sets the PSO output mode.
+
+OutputPulseWindowBitMask(String):  # Sets the PSO output mode.
+
+OutputPulseWindowBitMaskEdgeMode(Int32, Int32):  # Sets the PSO output mode.
+
+OutputPulseWindowBitMaskEdgeMode(String, Int32):  # Sets the PSO output mode.
+
+OutputPulseWindowMask(Int32):  # Sets the PSO output mode.
+
+OutputPulseWindowMask(String):  # Sets the PSO output mode.
+
+OutputPulseWindowMaskEdgeMode(Int32, Int32):  # Sets the PSO output mode.
+
+OutputPulseWindowMaskEdgeMode(String, Int32):  # Sets the PSO output mode.
+
+OutputPulseWindowMaskHard(Int32):  # Sets the PSO output mode.
+
+OutputPulseWindowMaskHard(String):  # Sets the PSO output mode.
+
+OutputToggle(Int32):  # Sets the PSO output mode.
+
+OutputToggle(String):  # Sets the PSO output mode.
+
+OutputWindow(Int32):  # Sets the PSO output mode.
+
+OutputWindow(String):  # Sets the PSO output mode.
+
+Pulse(Int32, Double, Double):  # Configures the pulse sequence that is used for PSO.
+
+Pulse(String, Double, Double):  # Configures the pulse sequence that is used for PSO.
+
+PulseCyclesOrDelayCyclesAndDelay(Int32, Double, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
+
+PulseCyclesOrDelayCyclesAndDelay(String, Double, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
+
+PulseCyclesOrDelayCyclesOnly(Int32, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
+
+PulseCyclesOrDelayCyclesOnly(String, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
+
+PulseCyclesOrDelayDelayOnly(Int32, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
+
+PulseCyclesOrDelayDelayOnly(String, Double, Double, Double):  # Configures the pulse sequence that is used for PSO.
+
+Status(Int32):  # Gets the PSO status information.
+
+Status(String):  # Gets the PSO status information.
+
+TrackDirection(Int32, Int32):  # Configures the PSO distance tracking counters.
+
+TrackDirection(String, Int32):  # Configures the PSO distance tracking counters.
+
+TrackInput(Int32, Int32):  # Configures the PSO distance tracking counters.
+
+TrackInput(String, Int32):  # Configures the PSO distance tracking counters.
+
+TrackInput(Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
+
+TrackInput(String, Int32, Int32):  # Configures the PSO distance tracking counters.
+
+TrackInput(Int32, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
+
+TrackInput(String, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
+
+TrackReset(Int32, Int32):  # Configures the PSO distance tracking counters.
+
+TrackReset(String, Int32):  # Configures the PSO distance tracking counters.
+
+TrackScale(Int32, Int32):  # Configures the PSO distance tracking counters.
+
+TrackScale(String, Int32):  # Configures the PSO distance tracking counters.
+
+TrackScale(Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
+
+TrackScale(String, Int32, Int32):  # Configures the PSO distance tracking counters.
+
+TrackScale(Int32, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
+
+TrackScale(String, Int32, Int32, Int32):  # Configures the PSO distance tracking counters.
+
+WindowInput(Int32, Int32, Int32):  # Configures which encoder channel is connected to each window.
+
+WindowInput(String, Int32, Int32):  # Configures which encoder channel is connected to each window.
+
+WindowInputInvert(Int32, Int32, Int32):  # Configures which encoder channel is connected to each window.
+
+WindowInputInvert(String, Int32, Int32):  # Configures which encoder channel is connected to each window.
+
+WindowLoad(Int32, Int32, Int32):  # Loads the specified window counter with a value.
+
+WindowLoad(String, Int32, Int32):  # Loads the specified window counter with a value.
+
+WindowOff(Int32, Int32):  # Disables the PSO Window Hardware.
+
+WindowOff(String, Int32):  # Disables the PSO Window Hardware.
+
+WindowOn(Int32, Int32):  # Enables the PSO Window Hardware.
+
+WindowOn(String, Int32):  # Enables the PSO Window Hardware.
+
+WindowOnInvert(Int32, Int32):  # Enables the PSO Window Hardware.
+
+WindowOnInvert(String, Int32):  # Enables the PSO Window Hardware.
+
+WindowRange(Int32, Int32, Double, Double):  # Specifies the low and high comparison values for specified PSO window.
+
+WindowRange(String, Int32, Double, Double):  # Specifies the low and high comparison values for specified PSO window.
+
+WindowRangeArray(Int32, Int32):  # Specifies the array mode parameters for the specified PSO window.
+
+WindowRangeArray(String, Int32):  # Specifies the array mode parameters for the specified PSO window.
+
+WindowRangeArrayEdge(Int32, Int32, Double):  # Specifies the array mode parameters for the specified PSO window.
+
+WindowRangeArrayEdge(String, Int32, Double):  # Specifies the array mode parameters for the specified PSO window.
+
+WindowReset(Int32, Int32, Int32):  # Resets the window counter to 0 based on the encoder marker signal.
+
+WindowReset(String, Int32, Int32):  # Resets the window counter to 0 based on the encoder marker signal. 
+
+    
+
 class PsoMode(Enum):
     Reset=AerotechEnsembleCommandsNET.PsoMode.Reset
     Off=AerotechEnsembleCommandsNET.PsoMode.Off
@@ -649,9 +1139,10 @@ class RampType(Enum):
     Scurve=AerotechEnsembleCommandsNET.RampType.Scurve
     Sine=AerotechEnsembleCommandsNET.RampType.Sine
 
-class RegisterCommands():
-    def __init__(self):
-        pass
+class RegisterCommands(CommandCategory):
+    _RegisterCommandsNET=None
+    def __init__(self,RegisterCommandsNET:AerotechEnsembleNET.RegisterCommands):
+        self._RegisterCommandsNET=RegisterCommandsNET
     
 class RegisterType(Enum):
     GlobalIntegers=AerotechEnsembleCommandsNET.RegisterType.GlobalIntegers
@@ -670,19 +1161,10 @@ class RegisterType(Enum):
     ModbusSlaveInputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveInputBits
     ModbusSlaveOutputBits=AerotechEnsembleCommandsNET.RegisterType.ModbusSlaveOutputBits
 
-class RootCommands():
-    _ControllerNET=None
-    def __init__(self,controller:AerotechEnsembleNET.Controller):
-        self._ControllerNET=controller
-        #self.Motion=MotionCommands(controller)
-        #self.Advanced=AdvancedCommands(controller)
-        #self.Axes=AxesSelectionCommands(controller)
-        #self.DataAcquisition=DataAcquisitionCommands(controller)
-        #self.IO=IOCommands(controller)
-        #self.PSO=PSOCommands(controller)
-        #self.Register=RegisterCommands(controller)
-        #self.Status=StatusCommands(controller)
-        #self.Tuning=TuningCommands(controller)
+class RootCommands(CommandCategory):
+    _RootCommandsNET=None
+    def __init__(self,RootCommandsNET:AerotechEnsembleNET.RootCommands):
+        self._RootCommandsNET=RootCommandsNET
     
     @property
     def Motion(self):
