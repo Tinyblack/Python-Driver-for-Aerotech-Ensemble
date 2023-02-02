@@ -5,7 +5,7 @@ Currently, this project is still 'work in porogress'.
 
 However, the basic motion function has been finished and tested.
 
-Wrapper Progress:
+Wrapper Progress: [ALL DONE]
 
 * Aerotech.Common => DONE => REVISED
 * Aerotech.Common.Collections => DONE => REVISED
@@ -18,10 +18,12 @@ Wrapper Progress:
 * Aerotech.Ensemble.FileSystem => DONE => REVISED
 * Aerotech.Ensemble.Firmware => DONE => REVISED
 * Aerotech.Ensemble.Information => DONE => REVISED
-* Aerotech.Ensemble.Parameters => 70%
+* Aerotech.Ensemble.Parameters => DONE => REVISED
 * Aerotech.Ensemble.Status => DONE => REVISED
 * Aerotech.Ensemble.Tasks => DONE => REVISED
 * Aerotech.Ensemble.Tasks.Debug => DONE => REVISED
+
+Core components will be tested when writing the interface file and others will be tested gradually.
 
 
 

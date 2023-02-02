@@ -17,9 +17,7 @@ from enum import Enum
 from aenum import extend_enum
 
 import Ensemble
-import EnsembleTasksDebug
 import EnsembleStatus
-import EnsembleFileSystem
 import CommonCollections
 
 DEFAULT_DLL_PATH:str=os.path.join(os.path.join(os.path.dirname(__file__),'Aerotech_DotNet_dll'),'')
@@ -31,6 +29,101 @@ try:
     import Aerotech.Ensemble.Parameters as AerotechEnsembleParametersNET
 except:
     raise RuntimeError
+
+# ! DONE 
+class HomeType(Enum):  # Represents the home type
+    PastLimittoMarker=AerotechEnsembleParametersNET.HomeType.PastLimittoMarker  # Home Past Limit to Marker
+    ToLimitandReversetoMarker=AerotechEnsembleParametersNET.HomeType.ToLimitandReversetoMarker # Home to Limit and Reverse to Marker
+    ToMarkerOnly=AerotechEnsembleParametersNET.HomeType.ToMarkerOnly  # Home to Marker Only
+    ToLimitOnly=AerotechEnsembleParametersNET.HomeType.ToLimitOnly # Home to Limit Only
+    AtCurrentPosition=AerotechEnsembleParametersNET.HomeType.AtCurrentPosition  # Home at Current Position
+    AtCurrentPositionAbsolute=AerotechEnsembleParametersNET.HomeType.AtCurrentPositionAbsolute  # Home at Current Position Absolute 
+
+# ! DONE 
+class MotorType(Enum):  # Represents the motor type
+    ACBrushlessHallEffect=AerotechEnsembleParametersNET.MotorType.ACBrushlessHallEffect  # AC Brushless (Hall-Effect Switches)
+    ACBrushlessAutoMSET=AerotechEnsembleParametersNET.MotorType.ACBrushlessAutoMSET  # AC Brushless (Auto-MSET)
+    DCBrush=AerotechEnsembleParametersNET.MotorType.DCBrush  # DC Brush
+    StepperMotor=AerotechEnsembleParametersNET.MotorType.StepperMotor  # Stepper Motor
+    TwoPhaseACBrushless=AerotechEnsembleParametersNET.MotorType.TwoPhaseACBrushless  # 2-Phase AC Brushless
+    ACBrushlessCommutationSearch=AerotechEnsembleParametersNET.MotorType.ACBrushlessCommutationSearch  # AC Brushless (Commutation Search)
+    PiezoActuator=AerotechEnsembleParametersNET.MotorType.PiezoActuator  # Piezo Actuator 
+
+# ! DONE
+class ParameterContext(Enum):  # Represents the context of a parameter (system, axis, or task) 
+    System=AerotechEnsembleParametersNET.ParameterContext.System  # A system parameter 
+    Axis=AerotechEnsembleParametersNET.ParameterContext.Axis  # An axis parameter 
+    Task=AerotechEnsembleParametersNET.ParameterContext.Task # A task parameter  
+
+# ! DONE
+class PiezoDefaultServoState(Enum):  # Represents the piezo default servo state.
+    Off=AerotechEnsembleParametersNET.PiezoDefaultServoState.Off  # Servo Off
+    On=AerotechEnsembleParametersNET.PiezoDefaultServoState.Off  # Servo On 
+
+# ! DONE
+class PositionFeedbackChannel(Enum):  # Represents the position feedback channel type
+    Default=AerotechEnsembleParametersNET.PositionFeedbackChannel.Default  # Default
+    Channel0=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel0  # Channel 0
+    Channel1=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel1  # Channel 1
+    Channel2=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel2  # Channel 2
+    Channel3=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel3  # Channel 3
+    Channel4=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel4  # Channel 4 
+
+# ! DONE
+class PositionFeedbackType(Enum):  # Represents the position feedback type
+    LocalEncoderCounter=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # Local Encoder Counter
+    EncoderMultiplier=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # Encoder Multiplier
+    AnalogInput=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # Analog Input
+    EnDatAbsoluteEncoder=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # EnDat Absolute Encoder
+    HallEffectSwitches=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # Hall-Effect Switches
+    Resolver=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # Resolver
+    ResoluteAbsoluteEncoder=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # Resolute Absolute Encoder
+    CapacitanceSensor=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # Capacitance Sensor 
+extend_enum(PositionFeedbackType,'None',getattr(AerotechEnsembleParametersNET.PositionFeedbackType,'None'))
+
+# ! DONE
+class PrimitiveType(Enum):  # Represents a primitive type in AeroBasic 
+    Integer=AerotechEnsembleParametersNET.PrimitiveType.Integer  # 32-bit integer 
+    Double=AerotechEnsembleParametersNET.PrimitiveType.Double  # 64-bit floating point, ANSI/IEEE Standard 754-1985 
+    Single=AerotechEnsembleParametersNET.PrimitiveType.Single  # 32-bit floating point, ANSI/IEEE Standard 754-1985 
+    Long=AerotechEnsembleParametersNET.PrimitiveType.Long  # 64-bit integer 
+    String=AerotechEnsembleParametersNET.PrimitiveType.String  # ASCII null-terminated string 
+    
+# ! DONE
+class VelocityFeedbackChannel(Enum):  # Represents the velocity feedback channel type
+    Default=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Default  # Default
+    Channel0=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel0  #   Channel 0
+    Channel1=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel1  #   Channel 1
+    Channel2=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel2  #   Channel 2
+    Channel3=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel3  #   Channel 3
+    Channel4=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel4  #   Channel 4 
+
+# ! DONE
+class VelocityFeedbackType(Enum):  # Represents the velocity feedback type 
+    LocalEncoderCounter=AerotechEnsembleParametersNET.VelocityFeedbackType.LocalEncoderCounter # Encoder Counter
+    EncoderMultiplier=AerotechEnsembleParametersNET.VelocityFeedbackType.EncoderMultiplier  # Encoder Multiplier
+    AnalogInput=AerotechEnsembleParametersNET.VelocityFeedbackType.AnalogInput  # Analog Input
+    Resolver=AerotechEnsembleParametersNET.VelocityFeedbackType.Resolver # Resolver 
+extend_enum(VelocityFeedbackType,'None',getattr(AerotechEnsembleParametersNET.VelocityFeedbackType,'None'))
+
+# ! DONE
+class ParameterCategory(CommonCollections.NamedConstantCollection):  # The base type for categories containing parameters 
+    _ParameterCategoryNET=None
+    def __init__(self,ParameterCategoryNET):
+        self._ParameterCategoryNET=ParameterCategoryNET
+        CommonCollections.NamedConstantCollection.__init__(self,ParameterCategoryNET,Parameter)
+    
+    @property
+    def All(self):  # Contains all the parameters in this category and its child categories 
+        return ParametersAllCollection(self._ParameterCategoryNET.All)
+    
+    @property
+    def Categories(self):  # Gets the subcategories of this category. 
+        return CommonCollections.NamedConstantCollection(self._ParameterCategoryNET.Categories,ParameterCategory)
+    
+    @property
+    def Name(self):  # The name of the category 
+        return self._ParameterCategoryNET.Name
 
 # ! DONE
 class AxisAutofocusLoopParameterCategory(ParameterCategory):  # Contains the Autofocus Loop Parameters
@@ -629,8 +722,7 @@ class AxisFaultThresholdsParameterCategory(ParameterCategory):  # Contains the T
     @property
     def VelocityErrorThreshold(self): # Allows access to the VelocityErrorThreshold Parameter 
         return TypedParameter(self._AxisFaultThresholdsParameterCategoryNET.VelocityErrorThreshold,float)
-    
-        
+      
 class AxisFeedbackCapSensorParameterCategory(ParameterCategory):  # Contains the Cap Sensor Parameters
     _AxisFeedbackCapSensorParameterCategoryNET=None
     def __init__(self,AxisFeedbackCapSensorParameterCategoryNET=AerotechEnsembleParametersNET.AxisFeedbackCapSensorParameterCategory):
@@ -652,8 +744,7 @@ class AxisFeedbackCapSensorParameterCategory(ParameterCategory):  # Contains the
     @property
     def CapSensorThresholdLow(self): # Allows access to the CapSensorThresholdLow Parameter 
         return TypedParameter(self._AxisFeedbackCapSensorParameterCategoryNET.CapSensorThresholdLow,float)
-        
-        
+           
 class AxisFeedbackEnDatEncoderParameterCategory(ParameterCategory):  # Contains the EnDat Encoder Parameters
     _AxisFeedbackEnDatEncoderParameterCategoryNET=None
     def __init__(self,AxisFeedbackEnDatEncoderParameterCategoryNET=AerotechEnsembleParametersNET.AxisFeedbackEnDatEncoderParameterCategory):
@@ -729,71 +820,66 @@ class AxisFeedbackMultiplierParameterCategory(ParameterCategory):  # Contains th
     @property
     def EncoderSineOffset(self): # Allows access to the EncoderSineOffset Parameter 
         return TypedParameter(self._AxisFeedbackMultiplierParameterCategoryNET.EncoderSineOffset,int)
-        
-        
+            
 class AxisFeedbackParameterCategory(ParameterCategory):  # Contains the Feedback Parameters
     _AxisFeedbackParameterCategoryNET=None
     def __init__(self,AxisFeedbackParameterCategoryNET=AerotechEnsembleParametersNET.AxisFeedbackParameterCategory):
         self._AxisFeedbackParameterCategoryNET=AxisFeedbackParameterCategoryNET
         ParameterCategory.__init__(self,AxisFeedbackParameterCategoryNET)
         
-    
     @property
     def AbsoluteFeedbackOffset(self): # Allows access to the AbsoluteFeedbackOffset Parameter
-
+        return TypedParameter(self._AxisFeedbackParameterCategoryNET.AbsoluteFeedbackOffset,float)
     @property
     def CapSensor(self): # Contains the Cap Sensor Parameters
-
+        return AxisFeedbackCapSensorParameterCategory(self._AxisFeedbackParameterCategoryNET.CapSensor)
     @property
     def EnDatEncoder(self): # Contains the EnDat Encoder Parameters
-
+        return AxisFeedbackEnDatEncoderParameterCategory(self._AxisFeedbackParameterCategoryNET.EnDatEncoder)
     @property
     def ExternalVelocityAverageTime(self): # Allows access to the ExternalVelocityAverageTime Parameter
-
+        return TypedParameter(self._AxisFeedbackParameterCategoryNET.ExternalVelocityAverageTime,int)
     @property
     def FeedbackSetup(self): # Allows access to the FeedbackSetup Parameter
-
+        return TypedParameter(self._AxisFeedbackParameterCategoryNET.FeedbackSetup,int)
     @property
     def Multiplier(self): # Contains the Multiplier Parameters
-
+        return AxisFeedbackMultiplierParameterCategory(self._AxisFeedbackParameterCategoryNET.Multiplier,int)
     @property
     def PositionFeedbackChannel(self): # Allows access to the PositionFeedbackChannel Parameter
-
+        return TypedParameter(self._AxisFeedbackParameterCategoryNET.PositionFeedbackChannel,int)
     @property
     def PositionFeedbackType(self): # Allows access to the PositionFeedbackType Parameter
-
+        return TypedParameter(self._AxisFeedbackParameterCategoryNET.PositionFeedbackType,int)
     @property
     def ResoluteEncoder(self): # Contains the Resolute Encoder Parameters
-
+        return AxisFeedbackResoluteEncoderParameterCategory(self._AxisFeedbackParameterCategoryNET.ResoluteEncoder,int)
     @property
     def Resolver(self): # Contains the Resolver Parameters
-
+        return AxisFeedbackResolverParameterCategory(self._AxisFeedbackParameterCategoryNET.Resolver,int)
     @property
     def VelocityFeedbackChannel(self): # Allows access to the VelocityFeedbackChannel Parameter
-
+        return TypedParameter(self._AxisFeedbackParameterCategoryNET.VelocityFeedbackChannel,int)
     @property
     def VelocityFeedbackType(self): # Allows access to the VelocityFeedbackType Parameter 
-
-        
-        
+        return TypedParameter(self._AxisFeedbackParameterCategoryNET.VelocityFeedbackType,int)
+             
 class AxisFeedbackResoluteEncoderParameterCategory(ParameterCategory):  # Contains the Resolute Encoder Parameters
     _AxisFeedbackResoluteEncoderParameterCategoryNET=None
     def __init__(self,AxisFeedbackResoluteEncoderParameterCategoryNET=AerotechEnsembleParametersNET.AxisFeedbackResoluteEncoderParameterCategory):
         self._AxisFeedbackResoluteEncoderParameterCategoryNET=AxisFeedbackResoluteEncoderParameterCategoryNET
         ParameterCategory.__init__(self,AxisFeedbackResoluteEncoderParameterCategoryNET)
         
-        
     @property
     def ResoluteEncoderResolution(self): # Allows access to the ResoluteEncoderResolution Parameter
-
+        return TypedParameter(self._AxisFeedbackResoluteEncoderParameterCategoryNET.ResoluteEncoderResolution,int)
     @property
     def ResoluteEncoderSetup(self): # Allows access to the ResoluteEncoderSetup Parameter
-
+        return TypedParameter(self._AxisFeedbackResoluteEncoderParameterCategoryNET.ResoluteEncoderSetup,int)
     @property
     def ResoluteEncoderUserResolution(self): # Allows access to the ResoluteEncoderUserResolution Parameter 
-
-        
-        
+        return TypedParameter(self._AxisFeedbackResoluteEncoderParameterCategoryNET.ResoluteEncoderUserResolution,int)
+             
 class AxisFeedbackResolverParameterCategory(ParameterCategory):  # Contains the Resolver Parameters
     _AxisFeedbackResolverParameterCategoryNET=None
     def __init__(self,AxisFeedbackResolverParameterCategoryNET=AerotechEnsembleParametersNET.AxisFeedbackResolverParameterCategory):
@@ -802,24 +888,23 @@ class AxisFeedbackResolverParameterCategory(ParameterCategory):  # Contains the 
 
     @property
     def ResolverCoarseChannel(self): # Allows access to the ResolverCoarseChannel Parameter
-
+        return TypedParameter(self._AxisFeedbackResolverParameterCategoryNET.ResolverCoarseChannel,int)
     @property
     def ResolverFeedbackOffset(self): # Allows access to the ResolverFeedbackOffset Parameter
-
+        return TypedParameter(self._AxisFeedbackResolverParameterCategoryNET.ResolverFeedbackOffset,int)
     @property
     def ResolverFeedbackRatio(self): # Allows access to the ResolverFeedbackRatio Parameter
-
+        return TypedParameter(self._AxisFeedbackResolverParameterCategoryNET.ResolverFeedbackRatio,float)
     @property
     def ResolverReferenceGain(self): # Allows access to the ResolverReferenceGain Parameter
-
+        return TypedParameter(self._AxisFeedbackResolverParameterCategoryNET.ResolverReferenceGain,int)
     @property
     def ResolverReferencePhase(self): # Allows access to the ResolverReferencePhase Parameter
-
+        return TypedParameter(self._AxisFeedbackResolverParameterCategoryNET.ResolverReferencePhase,float)
     @property
     def ResolverSetup(self): # Allows access to the ResolverSetup Parameter 
-
-        
-        
+        return TypedParameter(self._AxisFeedbackResolverParameterCategoryNET.ResolverSetup,int)
+               
 class AxisIOAnalogFiltersParameterCategory(ParameterCategory):  # Contains the Analog Filters Parameters
     _AxisIOAnalogFiltersParameterCategoryNET=None
     def __init__(self,AxisIOAnalogFiltersParameterCategoryNET=AerotechEnsembleParametersNET.AxisIOAnalogFiltersParameterCategory):
@@ -828,68 +913,68 @@ class AxisIOAnalogFiltersParameterCategory(ParameterCategory):  # Contains the A
         
     @property
     def Analog0Filter0CoeffD1(self): # Allows access to the Analog0Filter0CoeffD1 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog0Filter0CoeffD1,float)
     @property
     def Analog0Filter0CoeffD2(self): # Allows access to the Analog0Filter0CoeffD2 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog0Filter0CoeffD2,float)
     @property
     def Analog0Filter0CoeffN0(self): # Allows access to the Analog0Filter0CoeffN0 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog0Filter0CoeffN0,float)
     @property
     def Analog0Filter0CoeffN1(self): # Allows access to the Analog0Filter0CoeffN1 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog0Filter0CoeffN1,float)
     @property
     def Analog0Filter0CoeffN2(self): # Allows access to the Analog0Filter0CoeffN2 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog0Filter0CoeffN2,float)
     @property
     def Analog0Filter1CoeffD1(self): # Allows access to the Analog0Filter1CoeffD1 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog0Filter1CoeffD1,float)
     @property
     def Analog0Filter1CoeffD2(self): # Allows access to the Analog0Filter1CoeffD2 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog0Filter1CoeffD2,float)
     @property
     def Analog0Filter1CoeffN0(self): # Allows access to the Analog0Filter1CoeffN0 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog0Filter1CoeffN0,float)
     @property
     def Analog0Filter1CoeffN1(self): # Allows access to the Analog0Filter1CoeffN1 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog0Filter1CoeffN1,float)
     @property
     def Analog0Filter1CoeffN2(self): # Allows access to the Analog0Filter1CoeffN2 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog0Filter1CoeffN2,float)
     @property
     def Analog1Filter0CoeffD1(self): # Allows access to the Analog1Filter0CoeffD1 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog1Filter0CoeffD1,float)
     @property
     def Analog1Filter0CoeffD2(self): # Allows access to the Analog1Filter0CoeffD2 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog1Filter0CoeffD2,float)
     @property
     def Analog1Filter0CoeffN0(self): # Allows access to the Analog1Filter0CoeffN0 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog1Filter0CoeffN0,float)
     @property
     def Analog1Filter0CoeffN1(self): # Allows access to the Analog1Filter0CoeffN1 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog1Filter0CoeffN1,float)
     @property
     def Analog1Filter0CoeffN2(self): # Allows access to the Analog1Filter0CoeffN2 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog1Filter0CoeffN2,float)
     @property
     def Analog1Filter1CoeffD1(self): # Allows access to the Analog1Filter1CoeffD1 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog1Filter1CoeffD1,float)
     @property
     def Analog1Filter1CoeffD2(self): # Allows access to the Analog1Filter1CoeffD2 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog1Filter1CoeffD2,float)
     @property
     def Analog1Filter1CoeffN0(self): # Allows access to the Analog1Filter1CoeffN0 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog1Filter1CoeffN0,float)
     @property
     def Analog1Filter1CoeffN1(self): # Allows access to the Analog1Filter1CoeffN1 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog1Filter1CoeffN1,float)
     @property
     def Analog1Filter1CoeffN2(self): # Allows access to the Analog1Filter1CoeffN2 Parameter
-
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.Analog1Filter1CoeffN2,float)
     @property
     def AnalogFilterSetup(self): # Allows access to the AnalogFilterSetup Parameter 
-
-   
+        return TypedParameter(self._AxisIOAnalogFiltersParameterCategoryNET.AnalogFilterSetup,int)
+ 
 class AxisIOBrakeParameterCategory(ParameterCategory):  # Contains the Brake Parameters
     _AxisIOBrakeParameterCategoryNET=None
     def __init__(self,AxisIOBrakeParameterCategoryNET=AerotechEnsembleParametersNET.AxisIOBrakeParameterCategory):
@@ -898,16 +983,20 @@ class AxisIOBrakeParameterCategory(ParameterCategory):  # Contains the Brake Par
         
     @property
     def BrakeDisableDelay(self): # Allows access to the BrakeDisableDelay Parameter
+        return TypedParameter(self._AxisIOBrakeParameterCategoryNET.BrakeDisableDelay,int)
 
     @property
     def BrakeEnableDelay(self): # Allows access to the BrakeEnableDelay Parameter
+        return TypedParameter(self._AxisIOBrakeParameterCategoryNET.BrakeEnableDelay,int)
 
     @property
     def BrakeOutput(self): # Allows access to the BrakeOutput Parameter 
+        return TypedParameter(self._AxisIOBrakeParameterCategoryNET.BrakeOutput,int)
 
     @property
     def EnableBrakeControl(self): # Allows access to the EnableBrakeControl Parameter 
-  
+        return TypedParameter(self._AxisIOBrakeParameterCategoryNET.EnableBrakeControl,int)
+
 class AxisIOParameterCategory(ParameterCategory):  # Contains the I/O Parameters
     _AxisIOParameterCategoryNET=None
     def __init__(self,AxisIOParameterCategoryNET=AerotechEnsembleParametersNET.AxisIOParameterCategory):
@@ -916,32 +1005,40 @@ class AxisIOParameterCategory(ParameterCategory):  # Contains the I/O Parameters
         
     @property
     def Analog0InputOffset(self): # Allows access to the Analog0InputOffset Parameter
-
+        return TypedParameter(self._AxisIOParameterCategoryNET.Analog0InputOffset,float)
+    
     @property
     def Analog1InputOffset(self): # Allows access to the Analog1InputOffset Parameter
-
+        return TypedParameter(self._AxisIOParameterCategoryNET.Analog1InputOffset,float)
+    
     @property
     def Analog2InputOffset(self): # Allows access to the Analog2InputOffset Parameter
-
+        return TypedParameter(self._AxisIOParameterCategoryNET.Analog2InputOffset,float)
+    
     @property
     def Analog3InputOffset(self): # Allows access to the Analog3InputOffset Parameter
-
+        return TypedParameter(self._AxisIOParameterCategoryNET.Analog3InputOffset,float)
+    
     @property
     def AnalogFilters(self): # Contains the Analog Filters Parameters
-
+        return AxisIOAnalogFiltersParameterCategory(self._AxisIOParameterCategoryNET.AnalogFilters)
+    
     @property
     def Brake(self): # Contains the Brake Parameters 
-
+        return AxisIOBrakeParameterCategory(self._AxisIOParameterCategoryNET.Brake)
+    
     @property
     def IOSetup(self): # Allows access to the IOSetup Parameter 
-
+        return TypedParameter(self._AxisIOParameterCategoryNET.IOSetup,int)
+    
     @property
     def SSINet1Setup(self): # Allows access to the SSINet1Setup Parameter
-
+        return TypedParameter(self._AxisIOParameterCategoryNET.SSINet1Setup,int)
+    
     @property
     def SSINet2Setup(self): # Allows access to the SSINet2Setup Parameter 
-
-
+        return TypedParameter(self._AxisIOParameterCategoryNET.SSINet2Setup,int)
+    
 class AxisLimitsParameterCategory(ParameterCategory):  # Contains the Limits Parameters
     _AxisLimitsParameterCategoryNET=None
     def __init__(self,AxisLimitsParameterCategoryNET=AerotechEnsembleParametersNET.AxisLimitsParameterCategory):
@@ -950,25 +1047,31 @@ class AxisLimitsParameterCategory(ParameterCategory):  # Contains the Limits Par
         
     @property
     def EndOfTravelLimitSetup(self): # Allows access to the EndOfTravelLimitSetup Parameter
-
+        return TypedParameter(self._AxisLimitsParameterCategoryNET.EndOfTravelLimitSetup,int)
+    
     @property
     def LimitDebounceDistance(self): # Allows access to the LimitDebounceDistance Parameter
-
+        return TypedParameter(self._AxisLimitsParameterCategoryNET.LimitDebounceDistance,float)
+    
     @property
     def LimitDebounceTime(self): # Allows access to the LimitDebounceTime Parameter
-
+        return TypedParameter(self._AxisLimitsParameterCategoryNET.LimitDebounceTime,int)
+    
     @property
     def LimitDecelDistance(self): # Allows access to the LimitDecelDistance Parameter 
-        
+        return TypedParameter(self._AxisLimitsParameterCategoryNET.LimitDecelDistance,float)
+    
     @property
     def SoftwareLimitHigh(self): # Allows access to the SoftwareLimitHigh Parameter
-
+        return TypedParameter(self._AxisLimitsParameterCategoryNET.SoftwareLimitHigh,float)
+    
     @property
     def SoftwareLimitLow(self): # Allows access to the SoftwareLimitLow Parameter
-
+        return TypedParameter(self._AxisLimitsParameterCategoryNET.SoftwareLimitLow,float)
+    
     @property
     def SoftwareLimitSetup(self): # Allows access to the SoftwareLimitSetup Parameter 
-        
+        return TypedParameter(self._AxisLimitsParameterCategoryNET.SoftwareLimitSetup,int) 
         
 class AxisMotionGearCamParameterCategory(ParameterCategory):  # Contains the Gear/Cam Parameters
     _AxisMotionGearCamParameterCategoryNET=None
@@ -978,16 +1081,19 @@ class AxisMotionGearCamParameterCategory(ParameterCategory):  # Contains the Gea
         
     @property
     def GearCamAnalogDeadband(self): # Allows access to the GearCamAnalogDeadband Parameter
-
+        return TypedParameter(self._AxisMotionGearCamParameterCategoryNET.GearCamAnalogDeadband,float)
+    
     @property
     def GearCamIndex(self): # Allows access to the GearCamIndex Parameter
-
+        return TypedParameter(self._AxisMotionGearCamParameterCategoryNET.GearCamIndex,int)
+    
     @property
     def GearCamScaleFactor(self): # Allows access to the GearCamScaleFactor Parameter
-
+        return TypedParameter(self._AxisMotionGearCamParameterCategoryNET.GearCamScaleFactor,float)
+    
     @property
     def GearCamSource(self): # Allows access to the GearCamSource Parameter 
-
+        return TypedParameter(self._AxisMotionGearCamParameterCategoryNET.GearCamSource,int)
         
 class AxisMotionHomeParameterCategory(ParameterCategory):  # Contains the Home Parameters
     _AxisMotionHomeParameterCategoryNET=None
@@ -997,22 +1103,27 @@ class AxisMotionHomeParameterCategory(ParameterCategory):  # Contains the Home P
         
     @property
     def HomeOffset(self): # Allows access to the HomeOffset Parameter
-
+        return TypedParameter(self._AxisMotionHomeParameterCategoryNET.HomeOffset,float)
+    
     @property
     def HomePositionSet(self): # Allows access to the HomePositionSet Parameter
-
+        return TypedParameter(self._AxisMotionHomeParameterCategoryNET.HomePositionSet,float)
+    
     @property
     def HomeRampRate(self): # Allows access to the HomeRampRate Parameter
-
+        return TypedParameter(self._AxisMotionHomeParameterCategoryNET.HomeRampRate,float)
+    
     @property
     def HomeSetup(self): # Allows access to the HomeSetup Parameter
-
+        return TypedParameter(self._AxisMotionHomeParameterCategoryNET.HomeSetup,int)
+    
     @property
     def HomeSpeed(self): # Allows access to the HomeSpeed Parameter
-
+        return TypedParameter(self._AxisMotionHomeParameterCategoryNET.HomeSpeed,float)
+    
     @property
     def HomeType(self): # Allows access to the HomeType Parameter 
-
+        return TypedParameter(self._AxisMotionHomeParameterCategoryNET.HomeType,int)
         
 class AxisMotionInPositionParameterCategory(ParameterCategory):  # Contains the In Position Parameters
     _AxisMotionInPositionParameterCategoryNET=None
@@ -1020,73 +1131,88 @@ class AxisMotionInPositionParameterCategory(ParameterCategory):  # Contains the 
         self._AxisMotionInPositionParameterCategoryNET=AxisMotionInPositionParameterCategoryNET
         ParameterCategory.__init__(self,AxisMotionInPositionParameterCategoryNET)
         
-    
     @property
     def InPosition2Distance(self): # Allows access to the InPosition2Distance Parameter
-
+        return TypedParameter(self._AxisMotionInPositionParameterCategoryNET.InPosition2Distance,float)
+    
     @property
     def InPosition2Time(self): # Allows access to the InPosition2Time Parameter
+        return TypedParameter(self._AxisMotionInPositionParameterCategoryNET.InPosition2Time,int)
 
     @property
     def InPositionDistance(self): # Allows access to the InPositionDistance Parameter
-
+        return TypedParameter(self._AxisMotionInPositionParameterCategoryNET.InPositionDistance,float)
+    
     @property
     def InPositionTime(self): # Allows access to the InPositionTime Parameter 
-
-        
+        return TypedParameter(self._AxisMotionInPositionParameterCategoryNET.InPositionTime,int)
+      
 class AxisMotionParameterCategory(ParameterCategory):  # Contains the Motion Parameters
     _AxisMotionParameterCategoryNET=None
     def __init__(self,AxisMotionParameterCategoryNET=AerotechEnsembleParametersNET.AxisMotionParameterCategory):
         self._AxisMotionParameterCategoryNET=AxisMotionParameterCategoryNET
         ParameterCategory.__init__(self,AxisMotionParameterCategoryNET)
         
+    @property
+    def AbortDecelRate(self): # Allows access to the DefaultRampDistance Parameter
+        return TypedParameter(self._AxisMotionParameterCategoryNET.AbortDecelRate,float)
         
     @property
     def DefaultRampDistance(self): # Allows access to the DefaultRampDistance Parameter
-
+        return TypedParameter(self._AxisMotionParameterCategoryNET.DefaultRampDistance,float)
+                              
     @property
     def DefaultRampMode(self): # Allows access to the DefaultRampMode Parameter
-
+        return TypedParameter(self._AxisMotionParameterCategoryNET.DefaultRampMode,int)
+                              
     @property
     def DefaultRampRate(self): # Allows access to the DefaultRampRate Parameter
-
+        return TypedParameter(self._AxisMotionParameterCategoryNET.DefaultRampRate,float)
+                              
     @property
     def DefaultRampTime(self): # Allows access to the DefaultRampTime Parameter
-
+        return TypedParameter(self._AxisMotionParameterCategoryNET.DefaultRampTime,float)
+                              
     @property
     def DefaultRampType(self): # Allows access to the DefaultRampType Parameter
-
+        return TypedParameter(self._AxisMotionParameterCategoryNET.DefaultRampType,int)
+                              
     @property
     def DefaultSpeed(self): # Allows access to the DefaultSpeed Parameter 
-
+        return TypedParameter(self._AxisMotionParameterCategoryNET.DefaultSpeed,float)
+                              
     @property
     def GearCam(self): # Contains the Gear/Cam Parameters 
-
+        return AxisMotionGearCamParameterCategory(self._AxisMotionParameterCategoryNET.GearCam)
+                              
     @property
     def Home(self): # Contains the Home Parameters
-
+        return AxisMotionHomeParameterCategory(self._AxisMotionParameterCategoryNET.Home)
+                              
     @property
     def InPosition(self): # Contains the In Position Parameters 
-
+        return AxisMotionInPositionParameterCategory(self._AxisMotionParameterCategoryNET.InPosition)
+                              
     @property
     def JoystickHighSpeed(self): # Allows access to the JoystickHighSpeed Parameter
-
+        return TypedParameter(self._AxisMotionParameterCategoryNET.JoystickHighSpeed,float)
+                              
     @property
     def JoystickLowSpeed(self): # Allows access to the JoystickLowSpeed Parameter
-
+        return TypedParameter(self._AxisMotionParameterCategoryNET.JoystickLowSpeed,float)
+                              
     @property
     def MaxJogDistance(self): # Allows access to the MaxJogDistance Parameter
-
+        return TypedParameter(self._AxisMotionParameterCategoryNET.MaxJogDistance,float)
+                              
     @property
     def MaxJogSpeed(self): # Allows access to the MaxJogSpeed Parameter 
-
+        return TypedParameter(self._AxisMotionParameterCategoryNET.MaxJogSpeed,float)
+                              
     @property
     def ReverseMotionDirection(self): # Allows access to the ReverseMotionDirection Parameter 
-
-
-
-        
-        
+        return TypedParameter(self._AxisMotionParameterCategoryNET.ReverseMotionDirection,int)
+                              
 class AxisMotorParameterCategory(ParameterCategory):  # Contains the Motor Parameters
     _AxisMotorParameterCategoryNET=None
     def __init__(self,AxisMotorParameterCategoryNET=AerotechEnsembleParametersNET.AxisMotorParameterCategory):
@@ -1095,34 +1221,40 @@ class AxisMotorParameterCategory(ParameterCategory):  # Contains the Motor Param
         
     @property
     def AutoMsetCurrent(self): # Allows access to the AutoMsetCurrent Parameter
-
+        return TypedParameter(self._AxisMotorParameterCategoryNET.AutoMsetCurrent,float)
+                              
     @property
     def AutoMsetTime(self): # Allows access to the AutoMsetTime Parameter
-
+        return TypedParameter(self._AxisMotorParameterCategoryNET.AutoMsetTime,int)
+                   
     @property
     def CommutationOffset(self): # Allows access to the CommutationOffset Parameter 
-
+        return TypedParameter(self._AxisMotorParameterCategoryNET.CommutationOffset,int)
+                   
     @property
     def CountsPerRev(self): # Allows access to the CountsPerRev Parameter
-
+        return TypedParameter(self._AxisMotorParameterCategoryNET.CountsPerRev,float)
+                   
     @property
     def CyclesPerRev(self): # Allows access to the CyclesPerRev Parameter 
-
+        return TypedParameter(self._AxisMotorParameterCategoryNET.CyclesPerRev,int)
+                   
     @property
     def MaxCurrentClamp(self): # Allows access to the MaxCurrentClamp Parameter 
-
+        return TypedParameter(self._AxisMotorParameterCategoryNET.MaxCurrentClamp,float)
+                   
     @property
     def MotorType(self): # Allows access to the MotorType Parameter 
-
+        return TypedParameter(self._AxisMotorParameterCategoryNET.MotorType,int)
+                   
     @property
     def Piezo(self): # Contains the Piezo Parameters
-
+        return AxisMotorPiezoParameterCategory(self._AxisMotorParameterCategoryNET.Piezo)
+    
     @property
     def Stepper(self): # Contains the Stepper Parameters 
+        return AxisMotorStepperParameterCategory(self._AxisMotorParameterCategoryNET.Stepper)
 
-
-        
-        
 class AxisMotorPiezoParameterCategory(ParameterCategory):  # Contains the Piezo Parameters
     _AxisMotorPiezoParameterCategoryNET=None
     def __init__(self,AxisMotorPiezoParameterCategoryNET=AerotechEnsembleParametersNET.AxisMotorPiezoParameterCategory):
@@ -1131,20 +1263,23 @@ class AxisMotorPiezoParameterCategory(ParameterCategory):  # Contains the Piezo 
         
     @property
     def PiezoDefaultServoState(self): # Allows access to the PiezoDefaultServoState Parameter
-
+        return TypedParameter(self._AxisMotorPiezoParameterCategoryNET.PiezoDefaultServoState,int)
+                              
     @property
     def PiezoSlewRateClamp(self): # Allows access to the PiezoSlewRateClamp Parameter
-
+        return TypedParameter(self._AxisMotorPiezoParameterCategoryNET.PiezoSlewRateClamp,float)
+                              
     @property
     def PiezoVoltageClampHigh(self): # Allows access to the PiezoVoltageClampHigh Parameter
-
+        return TypedParameter(self._AxisMotorPiezoParameterCategoryNET.PiezoVoltageClampHigh,float)
+                              
     @property
     def PiezoVoltageClampLow(self): # Allows access to the PiezoVoltageClampLow Parameter
-
+        return TypedParameter(self._AxisMotorPiezoParameterCategoryNET.PiezoVoltageClampLow,float)
+                              
     @property
     def PiezoVoltsPerUnit(self): # Allows access to the PiezoVoltsPerUnit Parameter 
-
-        
+        return TypedParameter(self._AxisMotorPiezoParameterCategoryNET.PiezoVoltsPerUnit,float)              
         
 class AxisMotorStepperParameterCategory(ParameterCategory):  # Contains the Stepper Parameters
     _AxisMotorStepperParameterCategoryNET=None
@@ -1154,26 +1289,31 @@ class AxisMotorStepperParameterCategory(ParameterCategory):  # Contains the Step
         
     @property
     def StepperDampingCutoffFrequency(self): # Allows access to the StepperDampingCutoffFrequency Parameter
-
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.StepperDampingCutoffFrequency,float)
+    
     @property
     def StepperDampingGain(self): # Allows access to the StepperDampingGain Parameter
-
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.StepperDampingGain,float)
+    
     @property
     def StepperHoldingCurrent(self): # Allows access to the StepperHoldingCurrent Parameter
-
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.StepperHoldingCurrent,float)
+    
     @property
     def StepperResolution(self): # Allows access to the StepperResolution Parameter
-
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.StepperResolution,int)
+    
     @property
     def StepperRunningCurrent(self): # Allows access to the StepperRunningCurrent Parameter
-
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.StepperRunningCurrent,float)
+    
     @property
     def StepperRunningCurrentDelay(self): # Allows access to the StepperRunningCurrentDelay Parameter
-
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.StepperRunningCurrentDelay,int)
+    
     @property
     def StepperVerificationSpeed(self): # Allows access to the StepperVerificationSpeed Parameter 
-
-        
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.StepperVerificationSpeed,float)
         
 class AxisParameterCategory(ParameterCategory):  # Contains the Axis Parameters The root category of parameters for a given axis 
     _AxisMotorStepperParameterCategoryNET=None
@@ -1183,75 +1323,96 @@ class AxisParameterCategory(ParameterCategory):  # Contains the Axis Parameters 
            
     @property
     def AutofocusLoop(self): # Contains the Autofocus Loop Parameters
-        return AxisAutofocusLoopParameterCategory(AerotechEnsembleParametersNET.BaseParameters.AutofocusLoop)
+        return AxisAutofocusLoopParameterCategory(self._AxisMotorStepperParameterCategoryNET.AutofocusLoop)
     
     @property
     def AxisName(self): # The axis name 
- 
+        return self._AxisMotorStepperParameterCategoryNET.AxisName
   # AxisNameChanged  Raised when AxisName property changes 
  
     @property
     def AxisNumber(self): # The axis number 
- 
+        return self._AxisMotorStepperParameterCategoryNET.AxisNumber
+    
     @property
     def AxisType(self): # Allows access to the AxisType Parameter
- 
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.AxisType,int)
+    
     @property
     def BacklashDistance(self): # Allows access to the BacklashDistance Parameter
- 
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.BacklashDistance,float)
+    
     @property
     def CurrentLoop(self): # Contains the Current Loop Parameters
- 
+        return AxisCurrentLoopParameterCategory(self._AxisMotorStepperParameterCategoryNET.CurrentLoop)
+    
     @property
     def DynamicControlsToolbox(self): # Contains the Dynamic Controls Toolbox Parameters
- 
+        return AxisDynamicControlsToolboxParameterCategory(self._AxisMotorStepperParameterCategoryNET.DynamicControlsToolbox)
+    
     @property
     def EnhancedThroughputModule(self): # Contains the Enhanced Throughput Module Parameters
- 
+        return AxisEnhancedThroughputModuleParameterCategory(self._AxisMotorStepperParameterCategoryNET.EnhancedThroughputModule)
+    
     @property
     def EnhancedTrackingControl(self): # Contains the Enhanced Tracking Control Parameters
-
+        return AxisEnhancedTrackingControlParameterCategory(self._AxisMotorStepperParameterCategoryNET.EnhancedTrackingControl)
+    
     @property
     def Fault(self): # Contains the Fault Parameters
- 
+        return AxisFaultParameterCategory(self._AxisMotorStepperParameterCategoryNET.Fault)
+    
     @property
     def Feedback(self): # Contains the Feedback Parameters
- 
+        return AxisFeedbackParameterCategory(self._AxisMotorStepperParameterCategoryNET.Feedback)
+    
     @property
     def GantryMasterAxis(self): # Allows access to the GantryMasterAxis Parameter
- 
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.GantryMasterAxis,int)
+    
     @property
     def GantrySetup(self): # Allows access to the GantrySetup Parameter
-
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.GantrySetup,int)
+    
     @property
     def IO(self): # Contains the I/O Parameters
- 
+        return AxisIOParameterCategory(self._AxisMotorStepperParameterCategoryNET.IO)
+    
     @property
     def Limits(self): # Contains the Limits Parameters
- 
+        return AxisLimitsParameterCategory(self._AxisMotorStepperParameterCategoryNET.Limits)
+    
     @property
     def Motion(self): # Contains the Motion Parameters
- 
+        return AxisMotionParameterCategory(self._AxisMotorStepperParameterCategoryNET.Motion)
+    
     @property
     def Motor(self): # Contains the Motor Parameters
- 
+        return AxisMotorParameterCategory(self._AxisMotorStepperParameterCategoryNET.Motor)
+    
     @property
     def PiezoSetup(self): # Allows access to the PiezoSetup Parameter
- 
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.PiezoSetup,int)
+    
     @property
     def RequiredStageSerialNumber(self): # Allows access to the RequiredStageSerialNumber Parameter
- 
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.RequiredStageSerialNumber,str)
+    
     @property
     def RolloverCounts(self): # Allows access to the RolloverCounts Parameter
- 
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.RolloverCounts,float)
+    
     @property
     def RolloverMode(self): # Allows access to the RolloverMode Parameter
- 
+        return TypedParameter(self._AxisMotorStepperParameterCategoryNET.RolloverMode.int)
+    
     @property
     def ServoLoop(self): # Contains the Servo Loop Parameters
- 
+        return AxisServoLoopParameterCategory(self._AxisMotorStepperParameterCategoryNET.ServoLoop)
+    
     @property
     def Units(self): # Contains the Units Parameters 
+        return AxisUnitsParameterCategory(self._AxisMotorStepperParameterCategoryNET.Units)
 
 class AxisServoLoopAmpProtectionParameterCategory(ParameterCategory):  # Contains the Amp Protection Parameters
     _AxisServoLoopAmpProtectionParameterCategoryNET=None
@@ -1261,21 +1422,24 @@ class AxisServoLoopAmpProtectionParameterCategory(ParameterCategory):  # Contain
         
     @property
     def LinearAmpBusVoltage(self): # Allows access to the LinearAmpBusVoltage Parameter
-
+        return TypedParameter(self._AxisServoLoopAmpProtectionParameterCategoryyNET.LinearAmpBusVoltage,float)
+    
     @property
     def LinearAmpDeratingFactor(self): # Allows access to the LinearAmpDeratingFactor Parameter
-
+        return TypedParameter(self._AxisServoLoopAmpProtectionParameterCategoryyNET.LinearAmpDeratingFactor,float)
+    
     @property
     def LinearAmpMaxPower(self): # Allows access to the LinearAmpMaxPower Parameter
-
+        return TypedParameter(self._AxisServoLoopAmpProtectionParameterCategoryyNET.LinearAmpMaxPower,float)
+    
     @property
     def MotorBackEMFConstant(self): # Allows access to the MotorBackEMFConstant Parameter
-
+        return TypedParameter(self._AxisServoLoopAmpProtectionParameterCategoryyNET.MotorBackEMFConstant,float)
+    
     @property
     def MotorResistance(self): # Allows access to the MotorResistance Parameter 
+        return TypedParameter(self._AxisServoLoopAmpProtectionParameterCategoryyNET.MotorResistance,float)
 
-        
-        
 class AxisServoLoopFiltersParameterCategory(ParameterCategory):  # Contains the Filters Parameters
     _AxisServoLoopFiltersParameterCategoryNET=None
     def __init__(self,AxisServoLoopFiltersParameterCategoryNET=AerotechEnsembleParametersNET.AxisServoLoopFiltersParameterCategory):
@@ -1284,127 +1448,128 @@ class AxisServoLoopFiltersParameterCategory(ParameterCategory):  # Contains the 
         
     @property
     def ServoFilter0CoeffD1(self): # Allows access to the ServoFilter0CoeffD1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter0CoeffD1,float)
     @property
     def ServoFilter0CoeffD2(self): # Allows access to the ServoFilter0CoeffD2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter0CoeffD2,float)
     @property
     def ServoFilter0CoeffN0(self): # Allows access to the ServoFilter0CoeffN0 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter0CoeffN0,float)
     @property
     def ServoFilter0CoeffN1(self): # Allows access to the ServoFilter0CoeffN1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter0CoeffN1,float)
     @property
     def ServoFilter0CoeffN2(self): # Allows access to the ServoFilter0CoeffN2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter0CoeffN2,float)
     @property
     def ServoFilter1CoeffD1(self): # Allows access to the ServoFilter1CoeffD1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter1CoeffD1,float)
     @property
     def ServoFilter1CoeffD2(self): # Allows access to the ServoFilter1CoeffD2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter1CoeffD2,float)
     @property
     def ServoFilter1CoeffN0(self): # Allows access to the ServoFilter1CoeffN0 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter1CoeffN0,float)
     @property
     def ServoFilter1CoeffN1(self): # Allows access to the ServoFilter1CoeffN1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter1CoeffN1,float)
     @property
     def ServoFilter1CoeffN2(self): # Allows access to the ServoFilter1CoeffN2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter1CoeffN2,float)
     @property
     def ServoFilter2CoeffD1(self): # Allows access to the ServoFilter2CoeffD1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter2CoeffD1,float)
     @property
     def ServoFilter2CoeffD2(self): # Allows access to the ServoFilter2CoeffD2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter2CoeffD2,float)
     @property
     def ServoFilter2CoeffN0(self): # Allows access to the ServoFilter2CoeffN0 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter2CoeffN0,float)
     @property
     def ServoFilter2CoeffN1(self): # Allows access to the ServoFilter2CoeffN1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter2CoeffN1,float)
     @property
     def ServoFilter2CoeffN2(self): # Allows access to the ServoFilter2CoeffN2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter2CoeffN2,float)
     @property
     def ServoFilter3CoeffD1(self): # Allows access to the ServoFilter3CoeffD1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter3CoeffD1,float)
     @property
     def ServoFilter3CoeffD2(self): # Allows access to the ServoFilter3CoeffD2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter3CoeffD2,float)
     @property
     def ServoFilter3CoeffN0(self): # Allows access to the ServoFilter3CoeffN0 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter3CoeffN0,float)
     @property
     def ServoFilter3CoeffN1(self): # Allows access to the ServoFilter3CoeffN1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter3CoeffN1,float)
     @property
     def ServoFilter3CoeffN2(self): # Allows access to the ServoFilter3CoeffN2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter3CoeffN2,float)
     @property
     def ServoFilter4CoeffD1(self): # Allows access to the ServoFilter4CoeffD1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter4CoeffD1,float)
     @property
     def ServoFilter4CoeffD2(self): # Allows access to the ServoFilter4CoeffD2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter4CoeffD2,float)
     @property
     def ServoFilter4CoeffN0(self): # Allows access to the ServoFilter4CoeffN0 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter4CoeffN0,float)
     @property
     def ServoFilter4CoeffN1(self): # Allows access to the ServoFilter4CoeffN1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter4CoeffN1,float)
     @property
     def ServoFilter4CoeffN2(self): # Allows access to the ServoFilter4CoeffN2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter4CoeffN2,float)
     @property
     def ServoFilter5CoeffD1(self): # Allows access to the ServoFilter5CoeffD1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter5CoeffD1,float)
     @property
     def ServoFilter5CoeffD2(self): # Allows access to the ServoFilter5CoeffD2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter5CoeffD2,float)
     @property
     def ServoFilter5CoeffN0(self): # Allows access to the ServoFilter5CoeffN0 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter5CoeffN0,float)
     @property
     def ServoFilter5CoeffN1(self): # Allows access to the ServoFilter5CoeffN1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter5CoeffN1,float)
     @property
     def ServoFilter5CoeffN2(self): # Allows access to the ServoFilter5CoeffN2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter5CoeffN2,float)
     @property
     def ServoFilter6CoeffD1(self): # Allows access to the ServoFilter6CoeffD1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter6CoeffD1,float)
     @property
     def ServoFilter6CoeffD2(self): # Allows access to the ServoFilter6CoeffD2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter6CoeffD2,float)
     @property
     def ServoFilter6CoeffN0(self): # Allows access to the ServoFilter6CoeffN0 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter6CoeffN0,float)
     @property
     def ServoFilter6CoeffN1(self): # Allows access to the ServoFilter6CoeffN1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter6CoeffN1,float)
     @property
     def ServoFilter6CoeffN2(self): # Allows access to the ServoFilter6CoeffN2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter6CoeffN2,float)
     @property
     def ServoFilter7CoeffD1(self): # Allows access to the ServoFilter7CoeffD1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter7CoeffD1,float)
     @property
     def ServoFilter7CoeffD2(self): # Allows access to the ServoFilter7CoeffD2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter7CoeffD2,float)
     @property
     def ServoFilter7CoeffN0(self): # Allows access to the ServoFilter7CoeffN0 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter7CoeffN0,float)
     @property
     def ServoFilter7CoeffN1(self): # Allows access to the ServoFilter7CoeffN1 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter7CoeffN1,float)
     @property
     def ServoFilter7CoeffN2(self): # Allows access to the ServoFilter7CoeffN2 Parameter
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilter7CoeffN2,float)
     @property
     def ServoFilterSetup(self): # Allows access to the ServoFilterSetup Parameter 
-
+        return TypedParameter(self._AxisServoLoopFiltersParameterCategoryNET.ServoFilterSetup,int)
+    
 # ! DONE  
 class AxisServoLoopGainsParameterCategory(ParameterCategory):  # Contains the Gains Parameters
     _AxisServoLoopGainsParameterCategoryNET=None
@@ -1614,31 +1779,6 @@ class ControllerParameters(BaseParameters):  # Root parameter category that hand
     def SendToController(self,parameterCategories:ParameterCategory,progressChangedEventhandler:ProgressChangedEventHandler):  # Sends parameters from a parameter category 
         return self._ControllerParametersNET.SendToController(parameterCategories, progressChangedEventhandler)
     
-    # @multimethod
-    # def SendToController<(Of <<'(TType>)>>)(IEnumerable<(Of <<'(TType>)>>)):  # Sends parameters from parameter categories 
-
-    
-    # @multimethod
-    # def SendToController<(Of <<'(TType>)>>)(IEnumerable<(Of <<'(TType>)>>), ProgressChangedEventHandler):  # Sends parameters from parameter categories  
-
-# ! DONE 
-class HomeType(Enum):  # Represents the home type
-    PastLimittoMarker=AerotechEnsembleParametersNET.HomeType.PastLimittoMarker  # Home Past Limit to Marker
-    ToLimitandReversetoMarker=AerotechEnsembleParametersNET.HomeType.ToLimitandReversetoMarker # Home to Limit and Reverse to Marker
-    ToMarkerOnly=AerotechEnsembleParametersNET.HomeType.ToMarkerOnly  # Home to Marker Only
-    ToLimitOnly=AerotechEnsembleParametersNET.HomeType.ToLimitOnly # Home to Limit Only
-    AtCurrentPosition=AerotechEnsembleParametersNET.HomeType.AtCurrentPosition  # Home at Current Position
-    AtCurrentPositionAbsolute=AerotechEnsembleParametersNET.HomeType.AtCurrentPositionAbsolute  # Home at Current Position Absolute 
-
-# ! DONE 
-class MotorType(Enum):  # Represents the motor type
-    ACBrushlessHallEffect=AerotechEnsembleParametersNET.MotorType.ACBrushlessHallEffect  # AC Brushless (Hall-Effect Switches)
-    ACBrushlessAutoMSET=AerotechEnsembleParametersNET.MotorType.ACBrushlessAutoMSET  # AC Brushless (Auto-MSET)
-    DCBrush=AerotechEnsembleParametersNET.MotorType.DCBrush  # DC Brush
-    StepperMotor=AerotechEnsembleParametersNET.MotorType.StepperMotor  # Stepper Motor
-    TwoPhaseACBrushless=AerotechEnsembleParametersNET.MotorType.TwoPhaseACBrushless  # 2-Phase AC Brushless
-    ACBrushlessCommutationSearch=AerotechEnsembleParametersNET.MotorType.ACBrushlessCommutationSearch  # AC Brushless (Commutation Search)
-    PiezoActuator=AerotechEnsembleParametersNET.MotorType.PiezoActuator  # Piezo Actuator 
 
 # * This class will be completed in the future
 class NamedXmlSections():  # Provides name based access to UserDataSections.
@@ -1703,30 +1843,6 @@ class ParameterBounds():  # Represents the bounds of a generic parameter
     def Min(self):  # The parameter minimum value, if any 
         return self._ParameterBoundsNET.Min
 
-# ! DONE
-class ParameterCategory(CommonCollections.NamedConstantCollection):  # The base type for categories containing parameters 
-    _ParameterCategoryNET=None
-    def __init__(self,ParameterCategoryNET):
-        self._ParameterCategoryNET=ParameterCategoryNET
-        CommonCollections.NamedConstantCollection.__init__(self,ParameterCategoryNET,Parameter)
-    
-    @property
-    def All(self):  # Contains all the parameters in this category and its child categories 
-        return ParametersAllCollection(self._ParameterCategoryNET.All)
-    
-    @property
-    def Categories(self):  # Gets the subcategories of this category. 
-        return CommonCollections.NamedConstantCollection(self._ParameterCategoryNET.Categories,ParameterCategory)
-    
-    @property
-    def Name(self):  # The name of the category 
-        return self._ParameterCategoryNET.Name
-
-# ! DONE
-class ParameterContext(Enum):  # Represents the context of a parameter (system, axis, or task) 
-    System=AerotechEnsembleParametersNET.ParameterContext.System  # A system parameter 
-    Axis=AerotechEnsembleParametersNET.ParameterContext.Axis  # An axis parameter 
-    Task=AerotechEnsembleParametersNET.ParameterContext.Task # A task parameter  
 
 # ! DONE
 class ParameterFile(BaseParameters):  # Root parameter category that handles parameters from a file 
@@ -1812,40 +1928,6 @@ class ParametersAllCollection(CommonCollections.NamedConstantCollection):  # Rep
         self._ParametersAllCollectionNET=ParametersAllCollectionNET
         CommonCollections.NamedConstantCollection.__init__(self,ParametersAllCollectionNET,Parameter)
 
-# ! DONE
-class PiezoDefaultServoState(Enum):  # Represents the piezo default servo state.
-    Off=AerotechEnsembleParametersNET.PiezoDefaultServoState.Off  # Servo Off
-    On=AerotechEnsembleParametersNET.PiezoDefaultServoState.Off  # Servo On 
-
-# ! DONE
-class PositionFeedbackChannel(Enum):  # Represents the position feedback channel type
-    Default=AerotechEnsembleParametersNET.PositionFeedbackChannel.Default  # Default
-    Channel0=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel0  # Channel 0
-    Channel1=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel1  # Channel 1
-    Channel2=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel2  # Channel 2
-    Channel3=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel3  # Channel 3
-    Channel4=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel4  # Channel 4 
-
-# ! DONE
-class PositionFeedbackType(Enum):  # Represents the position feedback type
-    LocalEncoderCounter=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # Local Encoder Counter
-    EncoderMultiplier=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # Encoder Multiplier
-    AnalogInput=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # Analog Input
-    EnDatAbsoluteEncoder=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # EnDat Absolute Encoder
-    HallEffectSwitches=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # Hall-Effect Switches
-    Resolver=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # Resolver
-    ResoluteAbsoluteEncoder=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # Resolute Absolute Encoder
-    CapacitanceSensor=AerotechEnsembleParametersNET.PositionFeedbackType.LocalEncoderCounter  # Capacitance Sensor 
-extend_enum(PositionFeedbackType,'None',getattr(AerotechEnsembleParametersNET.PositionFeedbackType,'None'))
-
-# ! DONE
-class PrimitiveType(Enum):  # Represents a primitive type in AeroBasic 
-    Integer=AerotechEnsembleParametersNET.PrimitiveType.Integer  # 32-bit integer 
-    Double=AerotechEnsembleParametersNET.PrimitiveType.Double  # 64-bit floating point, ANSI/IEEE Standard 754-1985 
-    Single=AerotechEnsembleParametersNET.PrimitiveType.Single  # 32-bit floating point, ANSI/IEEE Standard 754-1985 
-    Long=AerotechEnsembleParametersNET.PrimitiveType.Long  # 64-bit integer 
-    String=AerotechEnsembleParametersNET.PrimitiveType.String  # ASCII null-terminated string 
-    
 # ! DONE
 class SystemCalibrationParameterCategory(ParameterCategory):  # Contains the Calibration Parameters
     _SystemCalibrationParameterCategoryNET=None
@@ -2529,20 +2611,3 @@ class TypedParameterBounds(ParameterBounds):  # Represents bounds of a typed par
     @property
     def Min(self):  # Parameter minimum value  
         return self._pyClass(self._TypedParameterBoundsNET.Min)
-        
-# ! DONE
-class VelocityFeedbackChannel(Enum):  # Represents the velocity feedback channel type
-    Default=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Default  # Default
-    Channel0=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel0  #   Channel 0
-    Channel1=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel1  #   Channel 1
-    Channel2=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel2  #   Channel 2
-    Channel3=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel3  #   Channel 3
-    Channel4=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel4  #   Channel 4 
-
-# ! DONE
-class VelocityFeedbackType(Enum):  # Represents the velocity feedback type 
-    LocalEncoderCounter=AerotechEnsembleParametersNET.VelocityFeedbackType.LocalEncoderCounter # Encoder Counter
-    EncoderMultiplier=AerotechEnsembleParametersNET.VelocityFeedbackType.EncoderMultiplier  # Encoder Multiplier
-    AnalogInput=AerotechEnsembleParametersNET.VelocityFeedbackType.AnalogInput  # Analog Input
-    Resolver=AerotechEnsembleParametersNET.VelocityFeedbackType.Resolver # Resolver 
-extend_enum(VelocityFeedbackType,'None',getattr(AerotechEnsembleParametersNET.VelocityFeedbackType,'None'))
