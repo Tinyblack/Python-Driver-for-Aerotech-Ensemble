@@ -211,7 +211,7 @@ class AxisDiagPacket():
 
     @property
     def VelocityCommand(self):  # The velocity command, in user units 
-        return self._AxisDiagPacketNET.AelocityCommand
+        return self._AxisDiagPacketNET.VelocityCommand
 
     @property
     def VelocityCommandCounts(self):  # The velocity command, in counts 
@@ -236,7 +236,7 @@ class AxisDiagPacket():
 class AxisFault():  # Represents the faults of an axis
     _AxisFaultNET=None
     @multimethod
-    def __init__(self,AxisFaultNET=AerotechEnsembleStatusNET.AxisFault):
+    def __init__(self,AxisFaultNET:object):
         self._AxisFaultNET=AxisFaultNET
         
     @multimethod
@@ -366,7 +366,7 @@ class AxisFault():  # Represents the faults of an axis
 class AxisStatus():  # Represents an axis status
     _AxisStatusNET=None
     @multimethod
-    def __init__(self,AxisStatusNET:AerotechEnsembleStatusNET.AxisStatus=AerotechEnsembleStatusNET.AxisStatus):
+    def __init__(self,AxisStatusNET:object):
         self._AxisStatusNET=AxisStatusNET
         
     @multimethod
@@ -620,9 +620,9 @@ class ControllerEventArgs():  # The base class for classes containing event data
         
 class DebugFlags():  # Represents the debug flags on the controller
     _DebugFlagsNET=None
-    
+
     @multimethod
-    def __init__(self,DebugFlagsNET=AerotechEnsembleStatusNET.DebugFlags):
+    def __init__(self,DebugFlagsNET):
         self._DebugFlagsNET=DebugFlagsNET
         
     @multimethod

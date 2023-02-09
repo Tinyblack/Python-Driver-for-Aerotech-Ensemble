@@ -58,16 +58,16 @@ class ParameterContext(Enum):  # Represents the context of a parameter (system, 
 # ! DONE
 class PiezoDefaultServoState(Enum):  # Represents the piezo default servo state.
     Off=AerotechEnsembleParametersNET.PiezoDefaultServoState.Off  # Servo Off
-    On=AerotechEnsembleParametersNET.PiezoDefaultServoState.Off  # Servo On 
+    On=AerotechEnsembleParametersNET.PiezoDefaultServoState.On  # Servo On 
 
 # ! DONE
-class PositionFeedbackChannel(Enum):  # Represents the position feedback channel type
+'''class PositionFeedbackChannel(Enum):  # Represents the position feedback channel type
     Default=AerotechEnsembleParametersNET.PositionFeedbackChannel.Default  # Default
     Channel0=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel0  # Channel 0
     Channel1=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel1  # Channel 1
     Channel2=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel2  # Channel 2
     Channel3=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel3  # Channel 3
-    Channel4=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel4  # Channel 4 
+    Channel4=AerotechEnsembleParametersNET.PositionFeedbackChannel.Channel4  # Channel 4 '''
 
 # ! DONE
 class PositionFeedbackType(Enum):  # Represents the position feedback type
@@ -90,13 +90,13 @@ class PrimitiveType(Enum):  # Represents a primitive type in AeroBasic
     String=AerotechEnsembleParametersNET.PrimitiveType.String  # ASCII null-terminated string 
     
 # ! DONE
-class VelocityFeedbackChannel(Enum):  # Represents the velocity feedback channel type
+'''class VelocityFeedbackChannel(Enum):  # Represents the velocity feedback channel type
     Default=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Default  # Default
     Channel0=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel0  #   Channel 0
     Channel1=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel1  #   Channel 1
     Channel2=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel2  #   Channel 2
     Channel3=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel3  #   Channel 3
-    Channel4=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel4  #   Channel 4 
+    Channel4=AerotechEnsembleParametersNET.VelocityFeedbackChannel.Channel4  #   Channel 4 '''
 
 # ! DONE
 class VelocityFeedbackType(Enum):  # Represents the velocity feedback type 

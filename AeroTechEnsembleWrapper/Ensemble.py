@@ -52,15 +52,15 @@ extend_enum(AxisMask,'None',getattr(AerotechEnsembleNET.AxisMask,'None'))
 # * Checked
 class Controller():
     _ControllerNET:AerotechEnsembleNET.Controller=None
-    def __init__(self,controller):
-        self._ControllerNET=controller
+    def __init__(self,controllerNET=AerotechEnsembleNET.Controller):
+        self._ControllerNET=controllerNET
 
     def ChangePassword(self,oldPassword:str,newPassword:str):
         self._ControllerNET.ChangePassword(oldPassword,newPassword)
 
     @property
     def Commands(self):
-        return EnsembleCommands.RootCommands(self._ControllerNET)
+        return EnsembleCommands.RootCommands(self._ControllerNET.Commands)
 
     @classmethod
     @property
@@ -78,7 +78,7 @@ class Controller():
 
     @property
     def ControlCenter(self):
-        return EnsembleStatus.ControlCenter(self._ControllerNET.DataCollection)
+        return EnsembleStatus.ControlCenter(self._ControllerNET.ControlCenter)
     
     @property
     def DataCollection(self):
@@ -101,11 +101,11 @@ class Controller():
 
     @property
     def Information(self):
-        EnsembleInformation.ControllerInformation(self._ControllerNET.Information)
+        return EnsembleInformation.ControllerInformation(self._ControllerNET.Information)
     
     @property
     def IsConnected(self):
-        return self._ControllerNET.IsConnected()
+        return self._ControllerNET.IsConnected
 
     #def IsConnectedChanged  Raised when IsConnected changes 
 
@@ -113,7 +113,7 @@ class Controller():
     
     @property
     def Parameters(self):
-        EnsembleParameters.ControllerParameters(self._ControllerNET.Parameters)
+        return EnsembleParameters.ControllerParameters(self._ControllerNET.Parameters)
 
     @multimethod
     def Reset(self):
@@ -185,7 +185,9 @@ if __name__=='__main__':
     print(SoftwareEnvironment.Version)
 
     Controller.Connect()
-    controller=Controller.ConnectedControllers[0]
+    controller:Controller=Controller.ConnectedControllers[0]
+    
+    Axis_Data=controller.DataCollection.RetrieveDiagnostics(True)
     controller.Commands.Motion.Enable(0)
     controller.Commands.Motion.Enable("Y")
     controller.Commands.Motion.Enable(AxisMask.A2)

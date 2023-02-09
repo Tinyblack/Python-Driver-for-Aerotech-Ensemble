@@ -73,7 +73,7 @@ class OptionalDataSource(Enum):  # Optional items for a specific axis
     ServoUpdateRate=AerotechEnsembleDataCollectionNET.OptionalDataSource.ServoUpdateRate  # Servo Update Rate
     FirmwareVersionMajor=AerotechEnsembleDataCollectionNET.OptionalDataSource.FirmwareVersionMajor  # Firmware Version Major
     FirmwareVersionMinor=AerotechEnsembleDataCollectionNET.OptionalDataSource.FirmwareVersionMinor  # Firmware Version Minor
-    FirmwareVersionPatc=AerotechEnsembleDataCollectionNET.OptionalDataSource.FirmwareVersionPatc  # Firmware Version Patch
+    FirmwareVersionPatch=AerotechEnsembleDataCollectionNET.OptionalDataSource.FirmwareVersionPatch  # Firmware Version Patch
     FirmwareVersionBuild=AerotechEnsembleDataCollectionNET.OptionalDataSource.FirmwareVersionBuild  # Firmware Version Build
     DriveTimerMax=AerotechEnsembleDataCollectionNET.OptionalDataSource.DriveTimerMax  # Drive Timer Max
     MarkerSearchDistance=AerotechEnsembleDataCollectionNET.OptionalDataSource.MarkerSearchDistance  # Marker Search Distance
@@ -271,7 +271,7 @@ class AxesOptionalRetriever():  # Allows retrieval of Optional Data for several 
     def Select(self,axisName:str, optionalNumber:OptionalDataNumber, dataSource:OptionalDataSource):  # Selects which data to collect for optional data 
         self._AxesOptionalRetrieverNET.Select(axisName, optionalNumber, dataSource)
     @multimethod
-    def Select(self,axisMask:Ensemble.AxisMask, optionalNumber:OptionalDataNumber, dataSource:OptionalDataSource):  # Selects which data to collect for optional data
+    def Select(self,axisMask, optionalNumber:OptionalDataNumber, dataSource:OptionalDataSource):  # Selects which data to collect for optional data
         self._AxesOptionalRetrieverNET.Select(axisMask, optionalNumber, dataSource)
      
     @multimethod
@@ -281,7 +281,7 @@ class AxesOptionalRetriever():  # Allows retrieval of Optional Data for several 
     def SelectMemory(self,axisName:str, optionalNumber:OptionalDataNumber, dataSource:OptionalMemoryDataSource, memoryLocation:int):  # Selects which memory location to collect for optional data 
         self._AxesOptionalRetrieverNET.SelectMemory(axisName, optionalNumber, dataSource ,memoryLocation)
     @multimethod
-    def SelectMemory(self,axisMask:Ensemble.AxisMask, optionalNumber:OptionalDataNumber, dataSource:OptionalMemoryDataSource, memoryLocation:int):  # Selects which memory location to collect for optional data 
+    def SelectMemory(self,axisMask, optionalNumber:OptionalDataNumber, dataSource:OptionalMemoryDataSource, memoryLocation:int):  # Selects which memory location to collect for optional data 
         self._AxesOptionalRetrieverNET.SelectMemory(axisMask, optionalNumber, dataSource ,memoryLocation)
 
 # * Checked
@@ -528,7 +528,7 @@ class Data(AxesData):  # Provides access to all the data of the controller
     _DataNET=None
     def __init__(self,DataNET=AerotechEnsembleDataCollectionNET.Data):
         self._DataNET=DataNET
-        super(AxesData,self).__init__(self._DataNET)
+        AxesData.__init__(self._DataNET)
     
     @property
     def PointsAllocated(self):   # Specifies the maximum number of points to collect  
@@ -536,15 +536,15 @@ class Data(AxesData):  # Provides access to all the data of the controller
     
     @multimethod
     def RetrieveDiagnostics(self,previous:EnsembleStatus.ControllerDiagPacket):   # Retrieves diagnostic information for the controller 
-        self._DataNET.RetrieveDiagnostics(previous.value)
+        return EnsembleStatus.ControllerDiagPacket(self._DataNET.RetrieveDiagnostics(previous.value))
     
     @multimethod 
     def RetrieveDiagnostics(self):  # Retrieves diagnostic information for the controller 
-        self._DataNET.RetrieveDiagnostics()
+        return EnsembleStatus.ControllerDiagPacket(self._DataNET.RetrieveDiagnostics())
         
     @multimethod
     def RetrieveDiagnostics(self,allInfo:bool):   # Retrieves diagnostic information for the controller 
-        self._DataNET.RetrieveDiagnostics(allInfo)
+        return EnsembleStatus.ControllerDiagPacket(self._DataNET.RetrieveDiagnostics(allInfo))
  
     def StartCollection(self,period:float):   # Starts the data collection at a specified rate
         self._DataNET.StartCollection(period)

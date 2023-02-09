@@ -125,6 +125,7 @@ class AdvancedAnalogCommands(CommandCategory):
     _AdvancedAnalogCommandsNET=None
     def __init__(self,AdvancedAnalogCommandsNET=AerotechEnsembleCommandsNET.AdvancedAnalogCommands):
         self._AdvancedAnalogCommandsNET=AdvancedAnalogCommandsNET
+        CommandCategory.__init__(AdvancedAnalogCommandsNET)
 
     @multimethod
     def AnalogControlOff(self,Axis:int):  # Configures an axis to generate its position command based on an analog input signal.
@@ -167,6 +168,7 @@ class AdvancedCommands(CommandCategory):
     _AdvancedCommandsNET=None
     def __init__(self,AdvancedCommandsNET=AerotechEnsembleCommandsNET.AdvancedCommands):
         self._AdvancedCommandsNET=AdvancedCommandsNET
+        CommandCategory.__init__(AdvancedCommandsNET)
     
     @property
     def Analog(self):  # Contains the Analog Commands 
@@ -176,6 +178,7 @@ class AxesIOCommands(CommandCategory):
     _AxesIOCommandsNET=None
     def __init__(self,AxesIOCommandsNET=AerotechEnsembleCommandsNET.AxesIOCommands):
         self._AxesIOCommandsNET=AxesIOCommandsNET
+        CommandCategory.__init__(AxesIOCommandsNET)
         
     def Brake(self,OnOff:OnOff):  # Controls the brake output of axes. 
         return self._AxesIOCommandsNET.Brake(OnOff.value)
@@ -184,6 +187,7 @@ class AxesMotionCommands(CommandCategory):
     _AxesMotionCommandsNET=None
     def __init__(self,AxesMotionCommandsNET=AerotechEnsembleCommandsNET.AxesMotionCommands):
         self._AxesMotionCommandsNET=AxesMotionCommandsNET
+        CommandCategory.__init__(AxesMotionCommandsNET)
         
             
     def Abort(self):  # Aborts motion on the selected axes 
@@ -256,6 +260,7 @@ class AxesMotionSetupCommands(CommandCategory):
     _AxesMotionSetupCommandsNET=None
     def __init__(self,AxesMotionSetupCommandsNET=AerotechEnsembleCommandsNET.AxesMotionSetupCommands):
         self._AxesMotionSetupCommandsNET=AxesMotionSetupCommandsNET
+        CommandCategory.__init__(AxesMotionSetupCommandsNET)
         
     @multimethod
     def PosCap(self):  # Retrieves the POSCAP positions.
@@ -268,7 +273,7 @@ class AxesMotionSetupCommands(CommandCategory):
     def RampDist(self,Value:list[float]):  # Specifies distance-based acceleration and deceleration.
         self._AxesMotionSetupCommandsNET.RampDist(Value)
         
-    def RampMode(self,Mode:RampMode):  # Specifies the ramp mode calculation type to use.
+    def RampMode(self,Mode:Enum):  # Specifies the ramp mode calculation type to use.
         self._AxesMotionSetupCommandsNET.RampMode(Mode.value)
         
     def RampRate(self,Value:list[float]):  # Specifies rate-based acceleration and deceleration.
@@ -284,6 +289,7 @@ class AxesRootCommands(CommandCategory):
     _AxesRootCommandsNET=None
     def __init__(self,AxesRootCommandsNET=AerotechEnsembleCommandsNET.AxesRootCommands):
         self._AxesRootCommandsNET=AxesRootCommandsNET
+        CommandCategory.__init__(AxesRootCommandsNET)
         
     @property
     def IO(self):  # Contains the IO Commands 
@@ -306,7 +312,7 @@ class AxesSelectionCommands(Sequence):
         pass
 
     @multimethod
-    def Select(self, axisMasks:list[Ensemble.AxisMask]):  # Allows the selection of axes on which to execute the command 
+    def Select(self, axisMasks:list[Enum]):  # Allows the selection of axes on which to execute the command 
         _axisMasks=[mask.value for mask in axisMasks]
         return AxesRootCommands(self._AxesSelectionCommandsNET.Select(_axisMasks))
     
@@ -322,6 +328,7 @@ class DataAcquisitionCommands(CommandCategory):
     _DataAcquisitionCommandsNET=None
     def __init__(self,DataAcquisitionCommandsNET=AerotechEnsembleCommandsNET.DataAcquisitionCommands):
         self._DataAcquisitionCommandsNET=DataAcquisitionCommandsNET
+        CommandCategory.__init__(DataAcquisitionCommandsNET)
 
     @multimethod
     def ArrayRead(self,Axis:int, VariableStart:int, NumberOfElements:int):  # Transfers drive array values into the specified controller array variables.
@@ -367,6 +374,7 @@ class IOCommands(CommandCategory):
     _IOCommandsNET=None
     def __init__(self,IOCommandsNET=AerotechEnsembleCommandsNET.IOCommands):
         self._IOCommandsNET=IOCommandsNET
+        CommandCategory.__init__(IOCommandsNET)
 
     @multimethod
     def AnalogInput(self,Axis:int, Channel:int):  # Reads the analog input voltage.
@@ -401,7 +409,7 @@ class IOCommands(CommandCategory):
         self._IOCommandsNET.Brake(axisName,OnOff.value)
         
     @multimethod
-    def Brake(self,axisMask:Ensemble.AxisMask, OnOff:OnOff):  # Controls the brake output of axes.
+    def Brake(self,axisMask:Enum, OnOff:OnOff):  # Controls the brake output of axes.
         self._IOCommandsNET.Brake(axisMask,OnOff.value)
         
     @multimethod
@@ -440,6 +448,7 @@ class MotionAdvancedCommands(CommandCategory):
     _MotionAdvancedCommandsNET=None
     def __init__(self,MotionAdvancedCommandsNET:AerotechEnsembleCommandsNET.MotionAdvancedCommands):
         self._MotionAdvancedCommandsNET=MotionAdvancedCommandsNET
+        CommandCategory.__init__(MotionAdvancedCommandsNET)
         
     @multimethod
     def MoveOutLim(self,Axis:int):
@@ -467,8 +476,9 @@ class MotionAdvancedCommands(CommandCategory):
 
 class MotionCommands(CommandCategory):
     _MotionCommandNET=None
-    def __init__(self,MotionCommandNET:AerotechEnsembleCommandsNET.MotionCommand):
+    def __init__(self,MotionCommandNET:AerotechEnsembleCommandsNET.MotionCommands):
         self._MotionCommandNET=MotionCommandNET
+        CommandCategory.__init__(MotionCommandNET)
     
     # ! Abort
     @multimethod  
@@ -488,7 +498,7 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.Abort(axes)
     
     @multimethod
-    def Abort(self,AxisMask:Ensemble.AxisMask):
+    def Abort(self,AxisMask:Enum):
         self._MotionCommandNET.Abort(AxisMask.value)
         
     @property
@@ -513,7 +523,7 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.AutoFocus(axes,OnOff.value)
     
     @multimethod
-    def AutoFocus(self,AxisMask:Ensemble.AxisMask, OnOff:OnOff):
+    def AutoFocus(self,AxisMask:Enum, OnOff:OnOff):
         self._MotionCommandNET.AutoFocus(AxisMask.value,OnOff.value)
         
     # ! BlockMotion 
@@ -534,7 +544,7 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.BlockMotion(axes,OnOff.value)
     
     @multimethod
-    def BlockMotion(self,AxisMask:Ensemble.AxisMask, OnOff:OnOff):
+    def BlockMotion(self,AxisMask:Enum, OnOff:OnOff):
         self._MotionCommandNET.BlockMotion(AxisMask.value,OnOff.value)
         
     # ! CCWCenter
@@ -611,7 +621,7 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.Disable(axes)
     
     @multimethod
-    def Disable(self,AxisMask:Ensemble.AxisMask):
+    def Disable(self,AxisMask:Enum):
         self._MotionCommandNET.Disable(AxisMask.value)
 
     # ! Enable
@@ -632,7 +642,7 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.Enable(axes)
     
     @multimethod
-    def Enable(self,AxisMask:Ensemble.AxisMask):
+    def Enable(self,AxisMask:Enum):
         self._MotionCommandNET.Enable(AxisMask.value)
         
     # ! FaultAck
@@ -653,7 +663,7 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.FaultAck(axes)
     
     @multimethod
-    def FaultAck(self,AxisMask:Ensemble.AxisMask):
+    def FaultAck(self,AxisMask:Enum):
         self._MotionCommandNET.FaultAck(AxisMask.value)
         
     # ! FreeRun
@@ -674,11 +684,11 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.FreeRun(axes,speed)
     
     @multimethod
-    def FreeRun(self,AxisMask:Ensemble.AxisMask,speed:float):
+    def FreeRun(self,AxisMask:Enum,speed:float):
         self._MotionCommandNET.FreeRun(AxisMask.value,speed)
         
     @multimethod
-    def FreeRun(self,AxisMask:Ensemble.AxisMask,speed:list[float]):
+    def FreeRun(self,AxisMask:Enum,speed:list[float]):
         self._MotionCommandNET.FreeRun(AxisMask.value,speed)
         
     # ! FreeRunStop
@@ -699,7 +709,7 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.FreeRunStop(axes)
     
     @multimethod
-    def FreeRunStop(self,AxisMask:Ensemble.AxisMask):
+    def FreeRunStop(self,AxisMask:Enum):
         self._MotionCommandNET.FreeRunStop(AxisMask.value)
         
     # ! Home
@@ -720,7 +730,7 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.Home(axes)
     
     @multimethod
-    def Home(self,AxisMask:Ensemble.AxisMask):
+    def Home(self,AxisMask:Enum):
         self._MotionCommandNET.Home(AxisMask.value)
             
     # ! HomeConditional
@@ -741,7 +751,7 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.HomeConditional(axes)
     
     @multimethod
-    def HomeConditional(self,AxisMask:Ensemble.AxisMask):
+    def HomeConditional(self,AxisMask:Enum):
         self._MotionCommandNET.HomeConditional(AxisMask.value)
         
         
@@ -763,11 +773,11 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.Linear(axes,distance)
     
     @multimethod
-    def Linear(self,AxisMask:Ensemble.AxisMask,distance:float):
+    def Linear(self,AxisMask:Enum,distance:float):
         self._MotionCommandNET.Linear(AxisMask.value,distance)
         
     @multimethod
-    def Linear(self,AxisMask:Ensemble.AxisMask,distance:list[float]):
+    def Linear(self,AxisMask:Enum,distance:list[float]):
         self._MotionCommandNET.Linear(AxisMask.value,distance)
 
     @multimethod
@@ -787,11 +797,11 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.Linear(axes,distance,coordinatedSpeed)
     
     @multimethod
-    def Linear(self,AxisMask:Ensemble.AxisMask,distance:float,coordinatedSpeed:float):
+    def Linear(self,AxisMask:Enum,distance:float,coordinatedSpeed:float):
         self._MotionCommandNET.Linear(AxisMask.value,distance,coordinatedSpeed)
         
     @multimethod
-    def Linear(self,AxisMask:Ensemble.AxisMask,distance:list[float],coordinatedSpeed:float):
+    def Linear(self,AxisMask:Enum,distance:list[float],coordinatedSpeed:float):
         self._MotionCommandNET.Linear(AxisMask.value,distance,coordinatedSpeed)
         
     # ! MoveAbs
@@ -812,11 +822,11 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.MoveAbs(axes,distance)
     
     @multimethod
-    def MoveAbs(self,AxisMask:Ensemble.AxisMask,distance:float):
+    def MoveAbs(self,AxisMask:Enum,distance:float):
         self._MotionCommandNET.MoveAbs(AxisMask.value,distance)
         
     @multimethod
-    def MoveAbs(self,AxisMask:Ensemble.AxisMask,distance:list[float]):
+    def MoveAbs(self,AxisMask:Enum,distance:list[float]):
         self._MotionCommandNET.MoveAbs(AxisMask.value,distance)
 
     @multimethod
@@ -836,11 +846,11 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.MoveAbs(axes,distance,speed)
     
     @multimethod
-    def MoveAbs(self,AxisMask:Ensemble.AxisMask,distance:float,speed:float):
+    def MoveAbs(self,AxisMask:Enum,distance:float,speed:float):
         self._MotionCommandNET.MoveAbs(AxisMask.value,distance,speed)
         
     @multimethod
-    def MoveAbs(self,AxisMask:Ensemble.AxisMask,distance:list[float],speed:float):
+    def MoveAbs(self,AxisMask:Enum,distance:list[float],speed:float):
         self._MotionCommandNET.MoveAbs(AxisMask.value,distance,speed)
         
     # ! MoveInc
@@ -861,11 +871,11 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.MoveInc(axes,distance)
     
     @multimethod
-    def MoveInc(self,AxisMask:Ensemble.AxisMask,distance:float):
+    def MoveInc(self,AxisMask:Enum,distance:float):
         self._MotionCommandNET.MoveInc(AxisMask.value,distance)
         
     @multimethod
-    def MoveInc(self,AxisMask:Ensemble.AxisMask,distance:list[float]):
+    def MoveInc(self,AxisMask:Enum,distance:list[float]):
         self._MotionCommandNET.MoveInc(AxisMask.value,distance)
 
     @multimethod
@@ -885,16 +895,16 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.MoveInc(axes,distance,speed)
     
     @multimethod
-    def MoveInc(self,AxisMask:Ensemble.AxisMask,distance:float,speed:float):
+    def MoveInc(self,AxisMask:Enum,distance:float,speed:float):
         self._MotionCommandNET.MoveInc(AxisMask.value,distance,speed)
         
     @multimethod
-    def MoveInc(self,AxisMask:Ensemble.AxisMask,distance:list[float],speed:float):
+    def MoveInc(self,AxisMask:Enum,distance:list[float],speed:float):
         self._MotionCommandNET.MoveInc(AxisMask.value,distance,speed)
 
     @property
     def Setup(self):
-        return self._Setup
+        return self._MotionCommandNET.Setup
 
     def Start(self):
         self._ControllerNET.Commands.Start()
@@ -917,7 +927,7 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.WaitForMotionDone(waitOption.value,axes)
     
     @multimethod
-    def WaitForMotionDone (self,waitOption:WaitOption,AxisMask:Ensemble.AxisMask):
+    def WaitForMotionDone (self,waitOption:WaitOption,AxisMask:Enum):
         self._MotionCommandNET.WaitForMotionDone(waitOption.value,AxisMask.value)
         
     @multimethod
@@ -937,7 +947,7 @@ class MotionCommands(CommandCategory):
         self._MotionCommandNET.WaitForMotionDone(waitOption.value,axes,timeout)
     
     @multimethod
-    def WaitForMotionDone (self,waitOption:WaitOption,AxisMask:Ensemble.AxisMask,timeout:int):
+    def WaitForMotionDone (self,waitOption:WaitOption,AxisMask:Enum,timeout:int):
         self._MotionCommandNET.WaitForMotionDone(waitOption.value,AxisMask.value,timeout)
         
     def WaitMode(self,type:WaitType):
@@ -947,6 +957,7 @@ class MotionSetupCommands(CommandCategory):
     _MotionSetupCommandsNET=None
     def __init__(self,MotionSetupCommandsNET:AerotechEnsembleCommandsNET.MotionSetupCommands):
         self._MotionSetupCommandsNET=MotionSetupCommandsNET
+        CommandCategory.__init__(MotionSetupCommandsNET)
         
 
 
@@ -976,11 +987,11 @@ class MotionSetupCommands(CommandCategory):
         return CommonCollections.NamedMaskedConstantCollection(self._MotionSetupCommandsNET.PosCap(axisIndexes,reArm),float,Ensemble.AxisMask)
  
     @multimethod
-    def PosCap(self,axisMask:Ensemble.AxisMask):  # Retrieves the POSCAP positions.
+    def PosCap(self,axisMask:Enum):  # Retrieves the POSCAP positions.
         return CommonCollections.NamedMaskedConstantCollection(self._MotionSetupCommandsNET.PosCap(axisMask.value),float,Ensemble.AxisMask)
  
     @multimethod
-    def PosCap(self,axisMask:Ensemble.AxisMask, reArm:bool):  # Retrieves the POSCAP positions.
+    def PosCap(self,axisMask:Enum, reArm:bool):  # Retrieves the POSCAP positions.
         return CommonCollections.NamedMaskedConstantCollection(self._MotionSetupCommandsNET.PosCap(axisMask.value,reArm),float,Ensemble.AxisMask)
  
     @multimethod
@@ -1036,11 +1047,11 @@ class MotionSetupCommands(CommandCategory):
         self._MotionSetupCommandsNET.RampDist(axisName,Value)
         
     @multimethod
-    def RampDist(self,axisMask:Ensemble.AxisMask,Value:list[float]):  # Specifies distance-based acceleration and deceleration.
+    def RampDist(self,axisMask:Enum,Value:list[float]):  # Specifies distance-based acceleration and deceleration.
         self._MotionSetupCommandsNET.RampDist(axisMask.value,Value)
         
     @multimethod
-    def RampDist(self,axisMask:Ensemble.AxisMask,Value:float):  # Specifies distance-based acceleration and deceleration.
+    def RampDist(self,axisMask:Enum,Value:float):  # Specifies distance-based acceleration and deceleration.
         self._MotionSetupCommandsNET.RampDist(axisMask.value,Value)
         
     def RampDistAccel(self,Value:float):  # Specifies distance-based acceleration and deceleration.
@@ -1050,27 +1061,27 @@ class MotionSetupCommands(CommandCategory):
         self._MotionSetupCommandsNET.RampDistDecel(Value)
         
     @multimethod
-    def RampMode(self,Mode:RampMode):  # Specifies the ramp mode calculation type to use.
+    def RampMode(self,Mode:Enum):  # Specifies the ramp mode calculation type to use.
         self._MotionSetupCommandsNET.RampMode(Mode.value)
         
     @multimethod
-    def RampMode(self,axisIndexes:list[int], Mode:RampMode):  # Specifies the ramp mode calculation type to use.
+    def RampMode(self,axisIndexes:list[int], Mode:Enum):  # Specifies the ramp mode calculation type to use.
         self._MotionSetupCommandsNET.RampMode(axisIndexes,Mode.value)
         
     @multimethod
-    def RampMode(self,axisIndex:int, Mode:RampMode):  # Specifies the ramp mode calculation type to use.
+    def RampMode(self,axisIndex:int, Mode:Enum):  # Specifies the ramp mode calculation type to use.
         self._MotionSetupCommandsNET.RampMode(axisIndex,Mode.value)
         
     @multimethod
-    def RampMode(self,axisNames:list[str], Mode:RampMode):  # Specifies the ramp mode calculation type to use.
+    def RampMode(self,axisNames:list[str], Mode:Enum):  # Specifies the ramp mode calculation type to use.
         self._MotionSetupCommandsNET.RampMode(axisNames,Mode.value)
         
     @multimethod
-    def RampMode(self,axisName:str, Mode:RampMode):  # Specifies the ramp mode calculation type to use.
+    def RampMode(self,axisName:str, Mode:Enum):  # Specifies the ramp mode calculation type to use.
         self._MotionSetupCommandsNET.RampMode(axisName,Mode.value)
         
     @multimethod
-    def RampMode(self,axisMask:Ensemble.AxisMask, Mode:RampMode):  # Specifies the ramp mode calculation type to use.
+    def RampMode(self,axisMask:Enum, Mode:Enum):  # Specifies the ramp mode calculation type to use.
         self._MotionSetupCommandsNET.RampMode(axisMask.value,Mode.value)
         
     @multimethod
@@ -1094,11 +1105,11 @@ class MotionSetupCommands(CommandCategory):
         self._MotionSetupCommandsNET.RampRate(axisName,Value)
         
     @multimethod
-    def RampRate(self,axisMask:Ensemble.AxisMask, Value:float):  # Specifies the ramp mode calculation type to use.
+    def RampRate(self,axisMask:Enum, Value:float):  # Specifies the ramp mode calculation type to use.
         self._MotionSetupCommandsNET.RampRate(axisMask.value,Value)
         
     @multimethod
-    def RampRate(self,axisMask:Ensemble.AxisMask, Value:list[float]):  # Specifies the ramp mode calculation type to use.
+    def RampRate(self,axisMask:Enum, Value:list[float]):  # Specifies the ramp mode calculation type to use.
         self._MotionSetupCommandsNET.RampRate(axisMask.value,Value)
 
     def RampRateAccel(self,Value:float):  # Specifies distance-based acceleration and deceleration.
@@ -1128,11 +1139,11 @@ class MotionSetupCommands(CommandCategory):
         self._MotionSetupCommandsNET.RampTime(axisName,Value)
         
     @multimethod
-    def RampTime(self,axisMask:Ensemble.AxisMask, Value:float):  # Specifies the ramp mode calculation type to use.
+    def RampTime(self,axisMask:Enum, Value:float):  # Specifies the ramp mode calculation type to use.
         self._MotionSetupCommandsNET.RampTime(axisMask.value,Value)
         
     @multimethod
-    def RampTime(self,axisMask:Ensemble.AxisMask, Value:list[float]):  # Specifies the ramp mode calculation type to use.
+    def RampTime(self,axisMask:Enum, Value:list[float]):  # Specifies the ramp mode calculation type to use.
         self._MotionSetupCommandsNET.RampTime(axisMask.value,Value)
 
     def RampTimeAccel(self,Value:float):  # Specifies distance-based acceleration and deceleration.
@@ -1158,7 +1169,7 @@ class MotionSetupCommands(CommandCategory):
         self._MotionSetupCommandsNET.Reconcile(axisName)
         
     @multimethod
-    def Reconcile(self,axisMask:Ensemble.AxisMask):  # Reconciles the position of the axes in the list on the plane to servo position.
+    def Reconcile(self,axisMask:Enum):  # Reconciles the position of the axes in the list on the plane to servo position.
         self._MotionSetupCommandsNET.Reconcile(axisMask)
         
     @multimethod
@@ -1203,6 +1214,7 @@ class PSOCommands(CommandCategory):
     _PSOCommandsNET=None
     def __init__(self,PSOCommandsNET:AerotechEnsembleCommandsNET.PSOCommands):
         self._PSOCommandsNET=PSOCommandsNET
+        CommandCategory.__init__(PSOCommandsNET)
     
     @multimethod
     def Array(self,Axis:int, StartIndex:int, NumberOfElements:int):  # Sends data into the PSO array.
@@ -1560,6 +1572,7 @@ class RegisterCommands(CommandCategory):
     _RegisterCommandsNET=None
     def __init__(self,RegisterCommandsNET:AerotechEnsembleCommandsNET.RegisterCommands):
         self._RegisterCommandsNET=RegisterCommandsNET
+        CommandCategory.__init__(RegisterCommandsNET)
         
 
     def Lock(self,Semaphore:Semaphores):  # Locks a specified semaphore.
@@ -1616,6 +1629,7 @@ class RootCommands(CommandCategory):
     _RootCommandsNET=None
     def __init__(self,RootCommandsNET:AerotechEnsembleCommandsNET.RootCommands):
         self._RootCommandsNET=RootCommandsNET
+        CommandCategory.__init__(RootCommandsNET)
 
     def AcknowledgeAll(self):  # Acknowledges all axis faults and clears all task errors.
         self._RootCommandsNET.AcknowledgeAll()

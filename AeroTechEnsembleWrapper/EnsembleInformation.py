@@ -12,7 +12,7 @@ import System
 
 from enum import Enum
 from aenum import extend_enum
-from typing import Union,type
+from typing import Union
 
 from multimethod import multimethod
 
@@ -83,8 +83,8 @@ class AxisInfo():
     
 # * Checked
 class CommandOutputType(Enum):
-    Current=AerotechEnsembleInformationNET.ComponentOutputType.Current  # Current output is generated.
-    Voltage=AerotechEnsembleInformationNET.ComponentOutputType.Voltage  # Voltage output is generated. 
+    Current=AerotechEnsembleInformationNET.CommandOutputType.Current  # Current output is generated.
+    Voltage=AerotechEnsembleInformationNET.CommandOutputType.Voltage  # Voltage output is generated. 
 extend_enum(CommandOutputType,'None',getattr(AerotechEnsembleInformationNET.CommandOutputType,'None'))
 
 # * Checked

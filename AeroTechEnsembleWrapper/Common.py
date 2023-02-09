@@ -15,7 +15,7 @@ from multimethod import multimethod
 from enum import Enum
 
 DEFAULT_DLL_PATH:str=os.path.join(os.path.join(os.path.dirname(__file__),'Aerotech_DotNet_dll'),'')
-DEFAULT_DLL_NAME:str='Aerotech.Common'
+DEFAULT_DLL_NAME:str='Aerotech.Ensemble'
 if DEFAULT_DLL_PATH.upper() not in [path.upper() for path in sys.path]:
     sys.path.extend(DEFAULT_DLL_PATH)
 try:
@@ -100,7 +100,7 @@ class Calibration():  # Processes axis calibration files
 class CalibrationFileFormat(Enum):  # Specifies the calibration file format
     Calibration1D=AerotechCommonNET.CalibrationFileFormat.Calibration1D  # 1 dimensional calibration file format
     Calibration2D=AerotechCommonNET.CalibrationFileFormat.Calibration2D  # 2 dimensional calibration file format
-    Unknown=AerotechCommonNET.CalibrationFileFormat.UnknownD  # Unknown/Invalid calibration file format 
+    Unknown=AerotechCommonNET.CalibrationFileFormat.Unknown  # Unknown/Invalid calibration file format 
     
 # * Checked
 class Camming():  # Processes axis camming files 

@@ -42,7 +42,7 @@ class Debug():  # Provides the ability to debug the firmware
         self._DebugNET=DebugNET
         
     @multimethod
-    def __init__(self,Controller:Ensemble.Controller):
+    def __init__(self,Controller:object):
         self._DebugNET=AerotechEnsembleFirmwareNET.Debug(Controller._ControllerNET)
  
     def CommitFlash(self):  # Commits the flash memory to permanent storage on the master 
@@ -113,7 +113,7 @@ class PluginHandler():  # Helps with managing the plugins
         self._PluginHandlerNET=PluginHandlerNET
         
     @multimethod
-    def __init__(self,Controller:Ensemble.Controller):
+    def __init__(self,Controller):
         self._PluginHandlerNET=AerotechEnsembleFirmwareNET.PluginHandler(Controller._ControllerNET)
  
     def IsRunning(self,pluginType:PluginType): # The plugin type to check if it is running  

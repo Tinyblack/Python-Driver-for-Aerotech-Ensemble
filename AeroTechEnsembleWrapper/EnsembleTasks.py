@@ -156,6 +156,6 @@ class TasksCollection():
         self._TasksCollectionNET.StopPrograms()
         
     @multimethod
-    def StopPrograms(self,taskIds:list[Ensemble.TaskId]):
+    def StopPrograms(self,taskIds:Enum):
         for taskId in taskIds:
             self._TasksCollectionNET.StopPrograms(taskId.value)

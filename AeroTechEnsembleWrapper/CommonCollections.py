@@ -10,7 +10,7 @@ class NamedConstantCollection(Sequence):
 
     def __getitem__(self, TName):
         try:
-            return self.pyClass(self.TObject[TName])
+            return self.pyClass(self.TObject.get_Item(TName))
         except:
             return self.pyClass[self.TObject[TName].ToString()]
     
